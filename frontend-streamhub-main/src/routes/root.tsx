@@ -13,16 +13,16 @@ import { Button } from "@/components/shadcn/ui/button";
 
 const Navbar = () => {
   return (
-    <NavigationMenu>
-      <NavigationMenuList>
+    <NavigationMenu className=" flex justify-center">
+      <NavigationMenuList className="px-2 py-4">
         <NavigationMenuItem>
           <Button variant="secondary" asChild>
-            <Link to={`/watch/one-piece`}>Series Page</Link>
+            <Link to={`/register`}>Register</Link>
           </Button>
         </NavigationMenuItem>
         <NavigationMenuItem>
           <Button variant="secondary" asChild>
-            <Link to={`/watch/one-piece/123`}>Watch Page</Link>
+            <Link to={`/login`}>Login</Link>
           </Button>
         </NavigationMenuItem>
         <NavigationMenuItem>
