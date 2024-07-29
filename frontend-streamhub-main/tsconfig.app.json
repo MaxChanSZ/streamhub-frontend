@@ -24,12 +24,10 @@
     "noUnusedParameters": true,
     "noFallthroughCasesInSwitch": true,
 
-     /* Paths */
+    /* Paths */
     "baseUrl": ".",
     "paths": {
-      "@/*": [
-        "./src/*"
-      ]
+      "@/*": ["./src/*"]
     }
   },
   "include": ["src"]
