@@ -12,9 +12,25 @@ import {
 import { Button } from "@/components/shadcn/ui/button";
 
 const Navbar = () => {
+  const isLoggedIn = false; // verify with backend later
+
+  const conditionalComponent = () => {
+    if (isLoggedIn) {
+      return (
+        <NavigationMenuItem>
+          <Button variant="secondary" asChild>
+            <Link to={`/watch/one-piece`}>View Series</Link>
+          </Button>
+        </NavigationMenuItem>
+      );
+    } else {
+      return <p className="text-white">Not Logged In</p>;
+    }
+  };
+
   return (
-    <NavigationMenu className=" flex justify-center">
-      <NavigationMenuList className="px-2 py-4">
+    <NavigationMenu className="">
+      <NavigationMenuList className="px-2 py-4 flex justify-center">
         <NavigationMenuItem>
           <Button variant="secondary" asChild>
             <Link to={`/register`}>Register</Link>
@@ -30,6 +46,7 @@ const Navbar = () => {
             <Link to={`/watch-party/one-piece/456`}>Join a Watch Party</Link>
           </Button>
         </NavigationMenuItem>
+        {conditionalComponent()}
       </NavigationMenuList>
     </NavigationMenu>
   );

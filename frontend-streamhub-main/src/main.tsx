@@ -9,7 +9,7 @@ import SeriesPage from "@/pages/SeriesPage";
 import WatchPage from "@/pages/WatchPage";
 import WatchPartyPage from "@/pages/WatchPartyPage";
 import LoginPage from "@/pages/LoginPage";
-import RegisterAccountPage from "./pages/RegisterAccountPage";
+import RegisterPage from "./pages/RegisterPage";
 
 const router = createBrowserRouter([
   {
@@ -39,7 +39,7 @@ const router = createBrowserRouter([
       },
       {
         path: "register",
-        element: <RegisterAccountPage />,
+        element: <RegisterPage />,
       },
     ],
   },
