@@ -1,6 +1,8 @@
+import { useForm } from "react-hook-form";
 const UpdateProfilePage = () => {
   const inputFieldFormat =
     "border rounded w-full py-2 px-3.5 my-2 font-normal text-black text-lg";
+  const { register } = useForm();
 
   return (
     <form className="text-white align-center font-bold px-4 py-4">
@@ -18,11 +20,11 @@ const UpdateProfilePage = () => {
       <div className="flex flex-col md:flex-row gap-5">
         <label className="flex-1">
           Password
-          <input className={inputFieldFormat}></input>
+          <input className={inputFieldFormat} type="password"></input>
         </label>
         <label className="flex-1">
           Confirm Password
-          <input className={inputFieldFormat}></input>
+          <input className={inputFieldFormat} type="password"></input>
         </label>
       </div>
     </form>
