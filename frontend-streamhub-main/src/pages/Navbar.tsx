@@ -14,7 +14,7 @@ const Navbar = () => {
             {/*    <Link to={`/`}>Homepage</Link>*/}
             {/*</Button>*/}
             <Button variant="secondary" asChild>
-                <Link to={`/watch/one-piece`}>Login</Link>
+                <Link to={`/watch/one-piece`}>Test</Link>
             </Button>
 
         </div>

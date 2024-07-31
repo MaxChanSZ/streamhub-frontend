@@ -9,7 +9,7 @@ import WatchPartyPage from "@/pages/WatchPartyPage.tsx";
 // import Dashboard from "@/pages/Dashboard.tsx";
 // import UpdateProfilePage from "@/pages/UpdateProfilePage.tsx";
 
-const RootRun = () => {
+const ReactDOMRun = () => {
     const [login, setLogin] = useState(false);
     if (login) {
         return (
@@ -58,4 +58,4 @@ const router = createBrowserRouter([
     },
 ]);
 
-export default RootRun;
+export default ReactDOMRun;
