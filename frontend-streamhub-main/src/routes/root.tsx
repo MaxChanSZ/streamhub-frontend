@@ -10,7 +10,6 @@ import {
   NavigationMenuViewport,
 } from "@/components/shadcn/ui/navigation-menu.tsx";
 import { Button } from "@/components/shadcn/ui/button";
-import { Logo } from "@/components/Logo";
 import logo from "/public/streamhub-logo.svg";
 
 const Navbar = () => {
@@ -34,7 +33,7 @@ const Navbar = () => {
 
   return (
     <NavigationMenu className="font-alatsi text-white">
-      <div className="pl-20 pr-0">
+      <div className="pl-20 pr-0 max-w-64">
         <img src={logo} alt="StreamHub Logo" />
       </div>
 
@@ -68,7 +67,7 @@ const Navbar = () => {
 const Footer = () => {
   return (
     <div className="h-[7.5vh] bg-black flex justify-center items-center">
-      <p className="text-white">Footer Mock</p>
+      <p className="text-white">© 2024 StreamHub</p>
     </div>
   );
 };
@@ -77,7 +76,7 @@ const Root = () => {
   return (
     <div className="bg-[#08081d]">
       <Navbar />
-      <div className="min-h-[80vh] mx-20 my-4 border-2">
+      <div className="min-h-[80vh] mx-20 my-4">
         <Outlet />
       </div>
       <Footer />
