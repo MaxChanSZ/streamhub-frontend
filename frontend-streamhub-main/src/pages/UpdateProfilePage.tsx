@@ -1,4 +1,6 @@
 import { useForm } from "react-hook-form";
+import { Button } from "@/components/shadcn/ui/button";
+import { Link } from "react-router-dom";
 
 type UpdateFormData = {
   userName: string;
@@ -10,7 +12,7 @@ type UpdateFormData = {
 const UpdateProfilePage = () => {
   const inputFieldFormat =
     "border rounded w-full py-2 px-3.5 my-2 font-normal text-black text-lg";
-  const { register, watch } = useForm<UpdateFormData>();
+  const { register, watch, handleSubmit } = useForm<UpdateFormData>();
 
   return (
     <form className="text-white align-center font-bold px-4 py-4">
@@ -22,7 +24,11 @@ const UpdateProfilePage = () => {
         </label>
         <label className="flex-1">
           Email Address
-          <input className={inputFieldFormat} {...register("email")}></input>
+          <input
+            className={inputFieldFormat}
+            {...register("email")}
+            type="email"
+          ></input>
         </label>
       </div>
       <div className="flex flex-col md:flex-row gap-5">
@@ -56,7 +62,11 @@ const UpdateProfilePage = () => {
           ></input>
         </label>
       </div>
-      <button type="submit">Submit</button>
+      <span>
+        <Button type="submit" variant="secondary">
+          Submit
+        </Button>
+      </span>
     </form>
   );
 };
