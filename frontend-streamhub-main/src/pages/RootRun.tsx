@@ -7,7 +7,6 @@ import SeriesPage from "@/pages/SeriesPage.tsx";
 import WatchPage from "@/pages/WatchPage.tsx";
 import WatchPartyPage from "@/pages/WatchPartyPage.tsx";
 // import Dashboard from "@/pages/Dashboard.tsx";
-import Navbar from "@/pages/Navbar.tsx";
 // import UpdateProfilePage from "@/pages/UpdateProfilePage.tsx";
 
 const RootRun = () => {
