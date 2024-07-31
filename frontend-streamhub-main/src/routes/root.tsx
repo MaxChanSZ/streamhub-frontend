@@ -10,9 +10,13 @@ import {
   NavigationMenuViewport,
 } from "@/components/shadcn/ui/navigation-menu.tsx";
 import { Button } from "@/components/shadcn/ui/button";
+import { Logo } from "@/components/Logo";
+import logo from "/public/streamhub-logo.svg";
 
 const Navbar = () => {
   const isLoggedIn = false; // verify with backend later
+
+  const buttonTextFormat = "text-base";
 
   const conditionalComponent = () => {
     if (isLoggedIn) {
@@ -24,30 +28,34 @@ const Navbar = () => {
         </NavigationMenuItem>
       );
     } else {
-      return <p className="text-white">Not Logged In</p>;
+      return <p className="text-slate-400 underline italic">Not Logged In</p>;
     }
   };
 
   return (
-    <NavigationMenu className="">
+    <NavigationMenu className="font-alatsi text-white">
+      <div className="pl-20 pr-0">
+        <img src={logo} alt="StreamHub Logo" />
+      </div>
+
       <NavigationMenuList className="px-2 py-4 flex justify-center">
         <NavigationMenuItem>
-          <Button variant="secondary" asChild>
+          <Button variant="ghost" className={buttonTextFormat} asChild>
             <Link to={`/register`}>Register</Link>
           </Button>
         </NavigationMenuItem>
         <NavigationMenuItem>
-          <Button variant="secondary" asChild>
+          <Button variant="ghost" className={buttonTextFormat} asChild>
             <Link to={`/login`}>Login</Link>
           </Button>
         </NavigationMenuItem>
         <NavigationMenuItem>
-          <Button variant="secondary" asChild>
+          <Button variant="ghost" className={buttonTextFormat} asChild>
             <Link to={`/watch-party/one-piece/456`}>Join a Watch Party</Link>
           </Button>
         </NavigationMenuItem>
         <NavigationMenuItem>
-          <Button variant="secondary" asChild>
+          <Button variant="ghost" className={buttonTextFormat} asChild>
             <Link to={`/update-profile`}>Update Profile</Link>
           </Button>
         </NavigationMenuItem>
