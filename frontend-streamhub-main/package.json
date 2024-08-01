@@ -21,7 +21,8 @@
     "react-router-dom": "^6.24.1",
     "tailwind-merge": "^2.3.0",
     "tailwindcss-animate": "^1.0.7",
-    "vaul": "^0.9.1"
+    "vaul": "^0.9.1",
+    "videojs-contrib-quality-levels": "^3.0.0"
   },
   "devDependencies": {
     "@testing-library/dom": "^10.3.1",
@@ -30,6 +31,8 @@
     "@types/node": "^20.14.10",
     "@types/react": "^18.3.3",
     "@types/react-dom": "^18.3.0",
+    "@types/video.js": "^7.3.3",
+    "@types/videojs-contrib-quality-levels": "^2.0.4",
     "@typescript-eslint/eslint-plugin": "^7.13.1",
     "@typescript-eslint/parser": "^7.13.1",
     "@vitejs/plugin-react": "^4.3.1",
@@ -47,6 +50,7 @@
     "storybook": "^8.1.11",
     "tailwindcss": "^3.4.4",
     "typescript": "^5.2.2",
+    "video.js": "^7.6.5",
     "vite": "^5.3.1",
     "vitest": "^1.6.0"
   }

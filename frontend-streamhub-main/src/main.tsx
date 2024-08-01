@@ -26,7 +26,7 @@ const router = createBrowserRouter([
       },
       {
         path: "watch/:seriesId/:episodeId",
-        element: <WatchPage />,
+        element: <WatchPage videoSource={""}/>,
       },
       {
         path: "watch-party/:sessionId",
