@@ -10,7 +10,7 @@ import {
   NavigationMenuViewport,
 } from "@/components/shadcn/ui/navigation-menu.tsx";
 import { Button } from "@/components/shadcn/ui/button";
-import logo from "/public/streamhub-logo.svg";
+import logo from "/streamhub-logo.svg";
 
 const Navbar = () => {
   const isLoggedIn = false; // verify with backend later
@@ -34,7 +34,9 @@ const Navbar = () => {
   return (
     <NavigationMenu className="font-alatsi text-white">
       <div className="pl-20 pr-0 max-w-64">
-        <img src={logo} alt="StreamHub Logo" />
+        <Link to={`/`}>
+          <img src={logo} alt="StreamHub Logo" />
+        </Link>
       </div>
 
       <NavigationMenuList className="px-2 py-4 flex justify-center">
