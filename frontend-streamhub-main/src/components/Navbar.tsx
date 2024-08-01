@@ -12,6 +12,7 @@ import {
 import { Button } from "@/components/shadcn/ui/button.tsx";
 import { Link } from "react-router-dom";
 import logo from "/streamhub-logo.svg";
+import TestApiButton from "@/components/TestApiButton";
 
 const Navbar = () => {
   const buttonTextFormat = "text-base";
@@ -24,6 +25,7 @@ const Navbar = () => {
             <img src={logo} alt="StreamHub Logo" />
           </Link>
         </div>
+        <TestApiButton />
 
         <NavigationMenuList className="px-2 py-4 flex justify-center">
           <NavigationMenuItem>

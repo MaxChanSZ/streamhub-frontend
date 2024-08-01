@@ -8,25 +8,25 @@ import WatchPage from "@/pages/WatchPage.tsx";
 import WatchPartyPage from "@/pages/WatchPartyPage.tsx";
 // import Dashboard from "@/pages/Dashboard.tsx";
 import UpdateProfilePage from "@/pages/UpdateProfilePage.tsx";
+import LandingPage from "../pages/LandingPage";
 
-const ReactDOMRun = () => {
-  const [login, setLogin] = useState(false);
+interface ReactDOMRunProps {
+  login: boolean;
+  setLogin: React.Dispatch<React.SetStateAction<boolean>>;
+}
+
+const ReactDOMRun: React.FC<ReactDOMRunProps> = ({ login, setLogin }) => {
   if (login) {
     return (
-      <div>
-        {/*<Navbar></Navbar>*/}
+      <>
         <RouterProvider router={router} />
-      </div>
+      </>
     );
   } else {
     return (
-      <div>
-        <p>username:</p>
-        <input />
-        <p>password:</p>
-        <input />
-        <button onClick={(event) => setLogin(true)}>Login</button>
-      </div>
+      <>
+        <LandingPage login={login} setLogin={setLogin} />
+      </>
     );
   }
 };
