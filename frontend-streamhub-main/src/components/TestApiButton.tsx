@@ -1,4 +1,3 @@
-import React from "react";
 import axios from "axios";
 import { Button } from "./shadcn/ui/button";
 
@@ -18,7 +17,11 @@ const TestApiButton = () => {
       });
   };
 
-  return <Button onClick={test}>test api</Button>;
+  return (
+    <Button onClick={test} variant="ghost" className="text-white">
+      test api
+    </Button>
+  );
 };
 
 export default TestApiButton;

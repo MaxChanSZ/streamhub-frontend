@@ -9,6 +9,7 @@ import WatchPartyPage from "@/pages/WatchPartyPage.tsx";
 // import Dashboard from "@/pages/Dashboard.tsx";
 import UpdateProfilePage from "@/pages/UpdateProfilePage.tsx";
 import LandingPage from "../pages/LandingPage";
+import RegisterPage from "@/pages/RegisterPage";
 
 interface ReactDOMRunProps {
   login: boolean;
@@ -56,11 +57,10 @@ const router = createBrowserRouter([
         path: "update-profile",
         element: <UpdateProfilePage />,
       },
-
-      // {
-      //     path: "dashboard",
-      //     element: <Dashboard />,
-      // },
+      {
+        path: "register",
+        element: <RegisterPage />,
+      },
     ],
   },
 ]);
