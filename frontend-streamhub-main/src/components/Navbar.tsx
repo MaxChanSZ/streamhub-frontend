@@ -14,18 +14,18 @@ import { Link } from "react-router-dom";
 import logo from "/streamhub-logo.svg";
 
 const Navbar = () => {
-  const buttonTextFormat = "text-base";
+  const buttonTextFormat = "text-base mx-4";
 
   return (
     <div className="h-[12.5vh] bg-black flex">
       <NavigationMenu className="font-alatsi text-white">
-        <div className="pl-20 pr-0 max-w-64">
+        <div className="pl-20 pr-0 max-w-64 mr-4">
           <Link to={`/`}>
             <img src={logo} alt="StreamHub Logo" />
           </Link>
         </div>
 
-        <NavigationMenuList className="px-2 py-4 flex justify-center">
+        <NavigationMenuList className="py-4 flex justify-center">
           <NavigationMenuItem>
             <Button variant="ghost" className={buttonTextFormat} asChild>
               <Link to={`/watch-party/1456`}>Create a Watch Party</Link>
