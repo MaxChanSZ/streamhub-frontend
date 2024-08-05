@@ -3,7 +3,8 @@ import axios from "axios";
 import { useForm } from "react-hook-form";
 import { useMutation } from "react-query";
 import * as apiClient from "@/api-client";
-import { redirect } from "react-router-dom";
+import { redirect, useNavigate } from "react-router-dom";
+import { useAppContext } from "@/contexts/AppContext";
 export type RegisterFormData = {
   username: string;
   email: string;
@@ -12,12 +13,14 @@ export type RegisterFormData = {
 };
 
 const RegisterPage = () => {
+  const { showToast } = useAppContext();
   const {
     register,
     watch,
     handleSubmit,
     formState: { errors },
   } = useForm<RegisterFormData>();
+  const navigate = useNavigate();
   const inputFieldFormat =
     "border rounded w-full py-2 px-3.5 my-2 font-normal text-black text-lg";
   const errorTextFormat = "text-red-500";
@@ -25,16 +28,23 @@ const RegisterPage = () => {
   // Send form submit data to API client for registration
   const mutation = useMutation(apiClient.register, {
     onSuccess: () => {
+      showToast({
+        message: "Registration success",
+        type: "SUCCESS",
+      });
+      navigate("/");
       console.log("Registration success");
     },
     onError: (error: Error) => {
-      console.log(error.message);
+      showToast({
+        message: error.message,
+        type: "ERROR",
+      });
     },
   });
   const onFormSubmit = handleSubmit((data) => {
     console.log(data);
     mutation.mutate(data);
-    redirect("/login");
   });
 
   return (
