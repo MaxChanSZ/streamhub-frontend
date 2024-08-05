@@ -15,7 +15,7 @@ const WatchPage = ( {videoSource} : WatchPageProps ) => {
     sources: [
       {
         // replace src with videoSource once that functionality has been created
-        src: "http://localhost:8080/hls/test2/output.m3u8",
+        src: "http://localhost:8080/encoded/steamboatwillie_001/master.m3u8",
         type: "application/x-mpegURL"
       }
     ]
