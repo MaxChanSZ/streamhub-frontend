@@ -6,10 +6,18 @@ type ToastMessage = {
   type: "SUCCESS" | "ERROR";
 };
 
+type User = {
+  id: number;
+  username: string;
+  email: string;
+};
+
 type AppContext = {
   showToast: (toastMessage: ToastMessage) => void;
   login: boolean;
   setLogin: React.Dispatch<React.SetStateAction<boolean>>;
+  user: User | null;
+  setUser: React.Dispatch<React.SetStateAction<User | null>>;
 };
 
 const AppContext = React.createContext<AppContext | undefined>(undefined);
@@ -21,6 +29,7 @@ export const AppContextProvider = ({
 }) => {
   const [toast, setToast] = useState<ToastMessage | undefined>(undefined);
   const [login, setLogin] = useState(false);
+  const [user, setUser] = useState<User | null>(null);
 
   return (
     <AppContext.Provider
@@ -30,6 +39,8 @@ export const AppContextProvider = ({
         },
         login,
         setLogin,
+        user,
+        setUser,
       }}
     >
       {toast && (

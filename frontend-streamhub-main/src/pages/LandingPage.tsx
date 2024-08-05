@@ -9,11 +9,23 @@ interface LandingPageProps {
 }
 
 const LandingPage: React.FC<LandingPageProps> = () => {
-  const { setLogin } = useAppContext();
+  const { setLogin, setUser } = useAppContext();
 
   const div =
     "bg-[#08081d] h-screen w-screen flex flex-col items-center justify-center";
   const buttonTextFormat = "text-base mx-2 px-4 py-1 font-alatsi";
+
+  const handleLogin = () => {
+    // Simulate login process
+    const userData = {
+      id: 12345,
+      username: "may_lwin",
+      email: "john_doe@example.com",
+    };
+    // TODO: add request to backend
+    setUser(userData);
+    setLogin(true);
+  };
 
   return (
     <div className={div}>
@@ -21,7 +33,7 @@ const LandingPage: React.FC<LandingPageProps> = () => {
       <div className="text-white">
         <div className="py-4">
           <Button
-            onClick={() => setLogin(true)}
+            onClick={handleLogin}
             variant="ghost"
             className={buttonTextFormat}
           >

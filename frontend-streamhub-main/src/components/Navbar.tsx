@@ -16,7 +16,13 @@ import { useAppContext } from "@/contexts/AppContext";
 
 const Navbar = () => {
   const buttonTextFormat = "text-base mx-4";
-  const { setLogin } = useAppContext();
+  const { setLogin, user, setUser } = useAppContext();
+
+  const handleLogout = () => {
+    // TODO: add request to backend
+    setUser(null);
+    setLogin(false);
+  };
 
   return (
     <div className="h-[12.5vh] bg-black flex">
@@ -47,13 +53,14 @@ const Navbar = () => {
             <Button
               variant="destructive"
               className={buttonTextFormat}
-              onClick={() => setLogin(false)}
+              onClick={handleLogout}
             >
               Logout
             </Button>
           </NavigationMenuItem>
         </NavigationMenuList>
       </NavigationMenu>
+      <p className="text-white">Hello {user?.username}</p>
     </div>
   );
 };
