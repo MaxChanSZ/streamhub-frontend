@@ -1,6 +1,10 @@
 import { Button } from "@/components/shadcn/ui/button";
+import axios from "axios";
 import { useForm } from "react-hook-form";
-type RegisterFormData = {
+import { useMutation } from "react-query";
+import * as apiClient from "@/api-client";
+import { redirect } from "react-router-dom";
+export type RegisterFormData = {
   username: string;
   email: string;
   password: string;
@@ -17,6 +21,22 @@ const RegisterPage = () => {
   const inputFieldFormat =
     "border rounded w-full py-2 px-3.5 my-2 font-normal text-black text-lg";
   const errorTextFormat = "text-red-500";
+
+  // Send form submit data to API client for registration
+  const mutation = useMutation(apiClient.register, {
+    onSuccess: () => {
+      console.log("Registration success");
+    },
+    onError: (error: Error) => {
+      console.log(error.message);
+    },
+  });
+  const onFormSubmit = handleSubmit((data) => {
+    console.log(data);
+    mutation.mutate(data);
+    redirect("/login");
+  });
+
   return (
     <>
       <h1 className="text-3xl text-white px-4 font-bold">Create an account</h1>;
