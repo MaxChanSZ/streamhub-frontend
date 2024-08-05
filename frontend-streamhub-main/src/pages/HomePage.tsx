@@ -4,28 +4,14 @@ import { Button } from "@/components/shadcn/ui/button";
 
 const HomePage = () => {
   return (
-    <>
-      <div className="flex flex-col p-2 border-none">
-        <h1 className="text-white text-3xl my-4">Home Page</h1>
-        <ul>
-          <li>
-            <Button variant="secondary" asChild>
-              <Link to={`/watch/one-piece`}>Series Page</Link>
-            </Button>
-          </li>
-          <li>
-            <Button variant="secondary" asChild>
-              <Link to={`/watch-party/one-piece/456`}>Watch Party Page</Link>
-            </Button>
-          </li>
-          <li>
-            <Button variant="destructive" asChild>
-              <Link to={`/hahaha`}>Error Page</Link>
-            </Button>
-          </li>
-        </ul>
-      </div>
-    </>
+    <div className="flex flex-col text-white">
+      <p>Home Page Placeholder</p>
+      <br />
+      {/* <Link to={`/watch/one-piece`}>Click to route to Series Page</Link>
+      <Link to={`/watch/one-piece/123`}>Click to route to Watch Page</Link>
+      <Link to={`/watch-party/1456`}>Click to route to Watch Party Page</Link>
+      <Link to={`/hahaha`}>Click to route to Error Page</Link> */}
+    </div>
   );
 };
 
