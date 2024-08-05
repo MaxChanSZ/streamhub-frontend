@@ -8,28 +8,43 @@ type RegisterFormData = {
 };
 
 const RegisterPage = () => {
-  const { register, watch, handleSubmit } = useForm<RegisterFormData>();
+  const {
+    register,
+    watch,
+    handleSubmit,
+    formState: { errors },
+  } = useForm<RegisterFormData>();
   const inputFieldFormat =
     "border rounded w-full py-2 px-3.5 my-2 font-normal text-black text-lg";
+  const errorTextFormat = "text-red-500";
   return (
     <>
       <h1 className="text-3xl text-white px-4 font-bold">Create an account</h1>;
-      <form className="text-white align-center font-bold px-4 py-4">
+      <form
+        className="text-white align-center font-bold px-4 py-4"
+        onSubmit={onFormSubmit}
+      >
         <div className="flex flex-col md:flex-row gap-5">
           <label className="flex-1">
             Username
             <input
               className={inputFieldFormat}
-              {...register("username")}
+              {...register("username", { required: "This field is required" })}
             ></input>
+            {errors.username && (
+              <span className={errorTextFormat}>{errors.username.message}</span>
+            )}
           </label>
           <label className="flex-1">
             Email Address
             <input
               className={inputFieldFormat}
-              {...register("email")}
+              {...register("email", { required: "This field is required" })}
               type="email"
             ></input>
+            {errors.email && (
+              <span className={errorTextFormat}>{errors.email.message}</span>
+            )}
           </label>
         </div>
         <div className="flex flex-col md:flex-row gap-5">
@@ -45,6 +60,9 @@ const RegisterPage = () => {
               })}
               type="password"
             ></input>
+            {errors.password && (
+              <span className={errorTextFormat}>{errors.password.message}</span>
+            )}
           </label>
           <label className="flex-1">
             Confirm Password
@@ -61,6 +79,11 @@ const RegisterPage = () => {
               })}
               type="password"
             ></input>
+            {errors.confirmPassword && (
+              <span className={errorTextFormat}>
+                {errors.confirmPassword.message}
+              </span>
+            )}
           </label>
         </div>
         <span>
