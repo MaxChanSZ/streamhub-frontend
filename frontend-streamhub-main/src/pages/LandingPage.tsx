@@ -1,16 +1,20 @@
 import { Button } from "@/components/shadcn/ui/button.tsx";
 import logo from "/streamhub-logo.svg";
 import React from "react";
+import { useAppContext } from "@/contexts/AppContext";
 
 interface LandingPageProps {
   login: boolean;
   setLogin: React.Dispatch<React.SetStateAction<boolean>>;
 }
 
-const LandingPage: React.FC<LandingPageProps> = ({ login, setLogin }) => {
+const LandingPage: React.FC<LandingPageProps> = () => {
+  const { setLogin } = useAppContext();
+
   const div =
     "bg-[#08081d] h-screen w-screen flex flex-col items-center justify-center";
   const buttonTextFormat = "text-base mx-2 px-4 py-1 font-alatsi";
+
   return (
     <div className={div}>
       <img src={logo} alt="StreamHub Logo" className="py-2" />

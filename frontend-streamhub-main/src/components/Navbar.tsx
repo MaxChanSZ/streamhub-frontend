@@ -12,9 +12,11 @@ import {
 import { Button } from "@/components/shadcn/ui/button.tsx";
 import { Link } from "react-router-dom";
 import logo from "/streamhub-logo.svg";
+import { useAppContext } from "@/contexts/AppContext";
 
 const Navbar = () => {
   const buttonTextFormat = "text-base mx-4";
+  const { setLogin } = useAppContext();
 
   return (
     <div className="h-[12.5vh] bg-black flex">
@@ -34,6 +36,20 @@ const Navbar = () => {
           <NavigationMenuItem>
             <Button variant="ghost" className={buttonTextFormat} asChild>
               <Link to={`/update-profile`}>Update Profile</Link>
+            </Button>
+          </NavigationMenuItem>
+          <NavigationMenuItem>
+            <Button variant="ghost" className={buttonTextFormat} asChild>
+              <Link to={`/register`}>Register Account</Link>
+            </Button>
+          </NavigationMenuItem>
+          <NavigationMenuItem>
+            <Button
+              variant="destructive"
+              className={buttonTextFormat}
+              onClick={() => setLogin(false)}
+            >
+              Logout
             </Button>
           </NavigationMenuItem>
         </NavigationMenuList>

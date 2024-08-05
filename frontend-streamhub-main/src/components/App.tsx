@@ -1,13 +1,14 @@
 import { useState } from "react";
 import ReactDOMRun from "./ReactDOMRun";
 import LandingPage from "@/pages/LandingPage";
+import { useAppContext } from "@/contexts/AppContext";
 
 const App = () => {
-  const [login, setLogin] = useState(false);
+  const { login, setLogin } = useAppContext();
   if (login) {
     return (
       <div>
-        <ReactDOMRun login={login} setLogin={setLogin} />
+        <ReactDOMRun />
       </div>
     );
   } else {

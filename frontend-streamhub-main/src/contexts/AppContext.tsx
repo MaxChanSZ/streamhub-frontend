@@ -8,6 +8,8 @@ type ToastMessage = {
 
 type AppContext = {
   showToast: (toastMessage: ToastMessage) => void;
+  login: boolean;
+  setLogin: React.Dispatch<React.SetStateAction<boolean>>;
 };
 
 const AppContext = React.createContext<AppContext | undefined>(undefined);
@@ -18,6 +20,7 @@ export const AppContextProvider = ({
   children: React.ReactNode;
 }) => {
   const [toast, setToast] = useState<ToastMessage | undefined>(undefined);
+  const [login, setLogin] = useState(false);
 
   return (
     <AppContext.Provider
@@ -25,6 +28,8 @@ export const AppContextProvider = ({
         showToast: (toastMessage: ToastMessage) => {
           console.log(toastMessage);
         },
+        login,
+        setLogin,
       }}
     >
       {toast && (
@@ -41,5 +46,8 @@ export const AppContextProvider = ({
 
 export const useAppContext = () => {
   const context = useContext(AppContext);
+  if (!context) {
+    throw new Error("useAppContext must be used within an AppContextProvider");
+  }
   return context as AppContext;
 };

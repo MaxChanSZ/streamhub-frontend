@@ -11,25 +11,14 @@ import UpdateProfilePage from "@/pages/UpdateProfilePage.tsx";
 import LandingPage from "../pages/LandingPage";
 import RegisterPage from "@/pages/RegisterPage";
 
-interface ReactDOMRunProps {
-  login: boolean;
-  setLogin: React.Dispatch<React.SetStateAction<boolean>>;
-}
+interface ReactDOMRunProps {}
 
-const ReactDOMRun: React.FC<ReactDOMRunProps> = ({ login, setLogin }) => {
-  if (login) {
-    return (
-      <>
-        <RouterProvider router={router} />
-      </>
-    );
-  } else {
-    return (
-      <>
-        <LandingPage login={login} setLogin={setLogin} />
-      </>
-    );
-  }
+const ReactDOMRun: React.FC<ReactDOMRunProps> = () => {
+  return (
+    <>
+      <RouterProvider router={router} />
+    </>
+  );
 };
 const router = createBrowserRouter([
   {
