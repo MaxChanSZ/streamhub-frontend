@@ -1,8 +1,13 @@
 import VideoJS from "@/components/VideoJS";
+import VideoPlayer from "@/components/VideoPlayer";
 
 interface WatchPageProps {
   videoSource: string;
 }
+
+type videoOptions = {
+  url: string
+};
 
 const WatchPage = ( {videoSource} : WatchPageProps ) => {
 
@@ -19,7 +24,7 @@ const WatchPage = ( {videoSource} : WatchPageProps ) => {
   return (
     <>
       <h3>Watch Video</h3>
-      <VideoJS options={videoJsOptions} />
+    <VideoJS options={videoJsOptions} />
     </>
   );
 };
