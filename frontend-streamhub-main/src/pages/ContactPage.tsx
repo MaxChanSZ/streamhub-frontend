@@ -1,5 +1,5 @@
 const ContactPage = () => {
-  return <p>Series Page</p>;
+  return <p className="text-white">Contact Page</p>;
 };
 
 export default ContactPage;
