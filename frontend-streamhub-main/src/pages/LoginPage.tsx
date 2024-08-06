@@ -42,7 +42,7 @@ const LoginPage = () => {
 
   return (
     <div className="text-white font-alatsi text-semibold flex flex-col justify-center">
-      <h2 className="text-2xl my-5 text-center">Login Page</h2>
+      <h2 className="text-2xl text-center">Login Page</h2>
       <div className="justify-center">
         <form
           className="text-white align-center font-bold px-4 py-4"
@@ -97,7 +97,7 @@ const LoginPage = () => {
       <Button
         onClick={() => handleLogin()}
         variant="secondary"
-        className="text-base mx-2 px-4 py-1 font-alatsi text-center"
+        className="text-base mx-2 px-4 py-1 font-alatsi flex-none"
       >
         Login
       </Button>

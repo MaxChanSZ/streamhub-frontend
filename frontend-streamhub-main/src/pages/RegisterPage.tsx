@@ -42,8 +42,8 @@ const RegisterPage = () => {
   });
 
   return (
-    <div className="flex-col justify-center">
-      <h1 className="text-3xl text-white px-4 font-bold text-center">
+    <div className="text-white font-alatsi text-semibold flex flex-col justify-center">
+      <h1 className="text-2xl text-white px-4 text-center">
         Create an account
       </h1>
 

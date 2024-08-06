@@ -15,8 +15,7 @@ const LandingPage: React.FC<LandingPageProps> = () => {
   const [optionSelected, setOptionSelected] = useState<string | null>(null);
   const [transitioning, setTransitioning] = useState(false);
 
-  const div =
-    "bg-[#08081d] h-screen w-screen flex flex-col items-center justify-center";
+  const div = `bg-[#08081d] h-screen w-screen flex flex-col items-center justify-center transition-all duration-300 `;
   const buttonTextFormat = "text-base mx-2 px-4 py-1 font-alatsi";
   const handleButtonClick = (option: string) => {
     if (optionSelected === option) return; // Avoid re-selecting the same option
@@ -43,34 +42,37 @@ const LandingPage: React.FC<LandingPageProps> = () => {
   return (
     <>
       <div className={div}>
-        <img src={logo} alt="StreamHub Logo" className="py-2" />
         <div
-          className={`text-white transition-all duration-300 ${transitioning ? "" : "opacity-100"}`}
+          className={`flex flex-col transition-all duration-300 ${optionSelected === null ? " " : " "}`}
         >
-          <div className="py-4">
-            <Button
-              onClick={() => handleButtonClick("login")}
-              variant="ghost"
-              className={buttonTextFormat}
-            >
-              Login
-            </Button>
-            <Button
-              variant="ghost"
-              className={buttonTextFormat}
-              onClick={() => handleButtonClick("register")}
-            >
-              Register
-            </Button>
-            <Button
-              variant="ghost"
-              className={buttonTextFormat}
-              onClick={() => handleButtonClick("watch")}
-            >
-              Join a Watch Party
-            </Button>
+          <img src={logo} alt="StreamHub Logo" className={`py-2 `} />
+          <div className={`text-white `}>
+            <div className="py-4">
+              <Button
+                onClick={() => handleButtonClick("login")}
+                variant="ghost"
+                className={buttonTextFormat}
+              >
+                Login
+              </Button>
+              <Button
+                variant="ghost"
+                className={buttonTextFormat}
+                onClick={() => handleButtonClick("register")}
+              >
+                Register
+              </Button>
+              <Button
+                variant="ghost"
+                className={buttonTextFormat}
+                onClick={() => handleButtonClick("watch")}
+              >
+                Join a Watch Party
+              </Button>
+            </div>
           </div>
         </div>
+
         <div
           className={`flex items-center justify-center transition-opacity duration-300 ${
             transitioning ? "opacity-0" : "opacity-100"
