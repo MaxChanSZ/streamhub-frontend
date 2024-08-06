@@ -17,7 +17,6 @@ const RegisterPage = () => {
     handleSubmit,
     formState: { errors },
   } = useForm<RegisterFormData>();
-  // const navigate = useNavigate();
   const inputFieldFormat =
     "border rounded w-full py-2 px-3.5 my-2 font-sans font-medium text-black text-lg";
   const errorTextFormat = "text-red-500";

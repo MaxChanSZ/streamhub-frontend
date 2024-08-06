@@ -20,12 +20,10 @@ const Navbar = () => {
   const { setIsLoggedIn, user, setUser } = useAppContext();
 
   const handleLogout = () => {
-    // TODO: add request to backend
     setUser(null);
     setIsLoggedIn(false);
     toast({
       title: "Logged out",
-      // description: "Friday, February 10, 2023 at 5:57 PM",
     });
   };
 
