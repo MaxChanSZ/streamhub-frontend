@@ -67,6 +67,11 @@ const Navbar = () => {
               </NavigationMenuItem>
               <NavigationMenuItem>
                 <Button variant="ghost" className={buttonTextFormat} asChild>
+                  <Link to={`/join-watch-party`}>Join Watch Party</Link>
+                </Button>
+              </NavigationMenuItem>
+              <NavigationMenuItem>
+                <Button variant="ghost" className={buttonTextFormat} asChild>
                   <Link to={`/update-profile`}>Update Profile</Link>
                 </Button>
               </NavigationMenuItem>
