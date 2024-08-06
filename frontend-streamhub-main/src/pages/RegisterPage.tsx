@@ -14,7 +14,6 @@ export type RegisterFormData = {
 };
 
 const RegisterPage = () => {
-  // const { showToast } = useAppContext();
   const {
     register,
     watch,
