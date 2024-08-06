@@ -17,13 +17,20 @@ const LandingPage: React.FC<LandingPageProps> = () => {
 
   const div = `bg-[#08081d] h-screen w-screen flex flex-col items-center justify-center transition-all duration-300 `;
   const buttonTextFormat = "text-base mx-2 px-4 py-1 font-alatsi";
+  const TRANSITION_DURATION = 300;
+
   const handleButtonClick = (option: string) => {
     if (optionSelected === option) return; // Avoid re-selecting the same option
     setTransitioning(true);
-    setTimeout(() => {
-      setOptionSelected(option);
+    try {
+      setTimeout(() => {
+        setOptionSelected(option);
+        setTransitioning(false);
+      }, TRANSITION_DURATION); // Match the timeout with the transition duration
+    } catch (error) {
+      console.error(`Error in handleButtonClick: ${error}`);
       setTransitioning(false);
-    }, 300); // Match the timeout with the transition duration
+    }
   };
 
   const renderContent = () => {

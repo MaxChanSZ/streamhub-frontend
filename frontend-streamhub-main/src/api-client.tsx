@@ -1,7 +1,7 @@
 import { LoginFormData } from "./pages/LoginPage";
 import { RegisterFormData } from "./pages/RegisterPage";
 import axios from "axios";
-import { User } from "@/types";
+import { User } from "@/utils/types";
 import { UpdateFormData } from "./pages/UpdateProfilePage";
 import { useAppContext } from "./contexts/AppContext";
 

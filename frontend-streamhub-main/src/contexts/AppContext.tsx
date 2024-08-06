@@ -1,6 +1,6 @@
 import React, { useContext, useEffect, useState } from "react";
 import { Toaster } from "@/components/shadcn/ui/toaster";
-import { User } from "@/types";
+import { User } from "@/utils/types";
 
 type AppContext = {
   isLoggedIn: boolean;
