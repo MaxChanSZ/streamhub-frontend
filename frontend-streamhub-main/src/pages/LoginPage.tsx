@@ -3,7 +3,7 @@ import { toast } from "@/components/shadcn/ui/use-toast";
 import { useAppContext } from "@/contexts/AppContext";
 import { useForm } from "react-hook-form";
 import { useMutation } from "react-query";
-import * as apiClient from "@/api-client";
+import * as apiClient from "@/utils/api-client";
 import { User } from "@/utils/types";
 
 export type LoginFormData = {

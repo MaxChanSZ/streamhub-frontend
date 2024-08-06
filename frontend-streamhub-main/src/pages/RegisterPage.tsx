@@ -1,7 +1,7 @@
 import { Button } from "@/components/shadcn/ui/button";
 import { useForm } from "react-hook-form";
 import { useMutation } from "react-query";
-import * as apiClient from "@/api-client";
+import * as apiClient from "@/utils/api-client";
 import { toast } from "@/components/shadcn/ui/use-toast";
 export type RegisterFormData = {
   username: string;

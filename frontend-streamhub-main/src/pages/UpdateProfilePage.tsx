@@ -3,7 +3,7 @@ import { Button } from "@/components/shadcn/ui/button";
 import { Link, useNavigate } from "react-router-dom";
 import { useMutation } from "react-query";
 import { toast } from "@/components/shadcn/ui/use-toast";
-import * as apiClient from "@/api-client";
+import * as apiClient from "@/utils/api-client";
 import { useAppContext } from "@/contexts/AppContext";
 
 export type UpdateFormData = {
