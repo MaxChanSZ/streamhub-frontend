@@ -28,7 +28,13 @@ const RegisterPage = () => {
       console.log("Registration success");
       window.location.pathname = "/";
     },
-    onError: (error: Error) => {},
+    onError: (error: Error) => {
+      toast({
+        title: "Error",
+        description: `${error.message}`,
+      });
+      console.log(error);
+    },
   });
 
   // Send form submit data to API client for registration
@@ -54,7 +60,7 @@ const RegisterPage = () => {
               {...register("username", {
                 required: "This field is required",
               })}
-            ></input>
+            />
             {errors.username && (
               <span className={errorTextFormat}>{errors.username.message}</span>
             )}
@@ -65,7 +71,7 @@ const RegisterPage = () => {
               className={inputFieldFormat}
               {...register("email", { required: "This field is required" })}
               type="email"
-            ></input>
+            />
             {errors.email && (
               <span className={errorTextFormat}>{errors.email.message}</span>
             )}
@@ -77,13 +83,25 @@ const RegisterPage = () => {
             <input
               className={inputFieldFormat}
               {...register("password", {
+                required: "This field is required",
                 minLength: {
                   value: 8,
                   message: "Password must be at least 8 characters",
                 },
+                validate: {
+                  hasUpperCase: (value) =>
+                    /[A-Z]/.test(value) ||
+                    "Password must have at least one uppercase letter",
+                  hasNumber: (value) =>
+                    /\d/.test(value) ||
+                    "Password must have at least one number",
+                  hasSymbol: (value) =>
+                    /[!@#$%^&*(),.?":{}|<>]/.test(value) ||
+                    "Password must have at least one symbol",
+                },
               })}
               type="password"
-            ></input>
+            />
             {errors.password && (
               <span className={errorTextFormat}>{errors.password.message}</span>
             )}
@@ -102,7 +120,7 @@ const RegisterPage = () => {
                 },
               })}
               type="password"
-            ></input>
+            />
             {errors.confirmPassword && (
               <span className={errorTextFormat}>
                 {errors.confirmPassword.message}

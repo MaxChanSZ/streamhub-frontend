@@ -16,7 +16,13 @@ export type UpdateFormData = {
 const UpdateProfilePage = () => {
   const inputFieldFormat =
     "border rounded w-full py-2 px-3.5 my-2 text-black text-lg";
-  const { register, watch, handleSubmit } = useForm<UpdateFormData>();
+  const errorTextFormat = "text-red-500";
+  const {
+    register,
+    watch,
+    handleSubmit,
+    formState: { errors },
+  } = useForm<UpdateFormData>();
   const { setIsLoggedIn, setUser } = useAppContext();
   const navigate = useNavigate();
 
@@ -48,8 +54,10 @@ const UpdateProfilePage = () => {
       <div className="flex flex-col md:flex-row gap-5">
         <label className="flex-1">
           Username
-          <input className={inputFieldFormat} {...register("userName")}></input>
           <input className={inputFieldFormat} {...register("username")}></input>
+          {errors.username && (
+            <span className={errorTextFormat}>{errors.username.message}</span>
+          )}
         </label>
         <label className="flex-1">
           Email Address
@@ -58,6 +66,9 @@ const UpdateProfilePage = () => {
             {...register("email")}
             type="email"
           ></input>
+          {errors.email && (
+            <span className={errorTextFormat}>{errors.email.message}</span>
+          )}
         </label>
       </div>
       <div className="flex flex-col md:flex-row gap-5">
@@ -70,9 +81,22 @@ const UpdateProfilePage = () => {
                 value: 8,
                 message: "Password must be at least 8 characters",
               },
+              validate: {
+                hasUpperCase: (value) =>
+                  /[A-Z]/.test(value) ||
+                  "Password must have at least one uppercase letter",
+                hasNumber: (value) =>
+                  /\d/.test(value) || "Password must have at least one number",
+                hasSymbol: (value) =>
+                  /[!@#$%^&*(),.?":{}|<>]/.test(value) ||
+                  "Password must have at least one symbol",
+              },
             })}
             type="password"
           ></input>
+          {errors.password && (
+            <span className={errorTextFormat}>{errors.password.message}</span>
+          )}
         </label>
         <label className="flex-1">
           Confirm Password
@@ -89,6 +113,11 @@ const UpdateProfilePage = () => {
             })}
             type="password"
           ></input>
+          {errors.confirmPassword && (
+            <span className={errorTextFormat}>
+              {errors.confirmPassword.message}
+            </span>
+          )}
         </label>
       </div>
       <span>
