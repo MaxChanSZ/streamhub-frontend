@@ -25,7 +25,7 @@ const Navbar = () => {
   };
 
   return (
-    <div className="h-[12.5vh] bg-black flex">
+    <div className="h-[12.5vh] bg-black flex items-center">
       <NavigationMenu className="font-alatsi text-white">
         <div className="pl-20 pr-0 max-w-64 mr-4">
           <Link to={`/`}>
@@ -60,7 +60,11 @@ const Navbar = () => {
           </NavigationMenuItem>
         </NavigationMenuList>
       </NavigationMenu>
-      <p className="text-white">Hello {user?.username}</p>
+      <span className="">
+        <p className="text-white font-alatsi text-semibold text-lg">
+          Hello {user?.username}
+        </p>
+      </span>
     </div>
   );
 };

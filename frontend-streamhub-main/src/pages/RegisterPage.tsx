@@ -20,7 +20,7 @@ const RegisterPage = () => {
     handleSubmit,
     formState: { errors },
   } = useForm<RegisterFormData>();
-  const navigate = useNavigate();
+  // const navigate = useNavigate();
   const inputFieldFormat =
     "border rounded w-full py-2 px-3.5 my-2 font-normal text-black text-lg";
   const errorTextFormat = "text-red-500";
@@ -32,7 +32,7 @@ const RegisterPage = () => {
         message: "Registration success",
         type: "SUCCESS",
       });
-      navigate("/");
+      // navigate("/");
       console.log("Registration success");
     },
     onError: (error: Error) => {
@@ -48,8 +48,11 @@ const RegisterPage = () => {
   });
 
   return (
-    <>
-      <h1 className="text-3xl text-white px-4 font-bold">Create an account</h1>;
+    <div className="flex-col justify-center">
+      <h1 className="text-3xl text-white px-4 font-bold text-center">
+        Create an account
+      </h1>
+      ;
       <form
         className="text-white align-center font-bold px-4 py-4"
         onSubmit={onFormSubmit}
@@ -59,7 +62,9 @@ const RegisterPage = () => {
             Username
             <input
               className={inputFieldFormat}
-              {...register("username", { required: "This field is required" })}
+              {...register("username", {
+                required: "This field is required",
+              })}
             ></input>
             {errors.username && (
               <span className={errorTextFormat}>{errors.username.message}</span>
@@ -116,13 +121,13 @@ const RegisterPage = () => {
             )}
           </label>
         </div>
-        <span>
+        <div className="text-center">
           <Button type="submit" variant="secondary" className="my-4">
             Submit
           </Button>
-        </span>
+        </div>
       </form>
-    </>
+    </div>
   );
 };
 

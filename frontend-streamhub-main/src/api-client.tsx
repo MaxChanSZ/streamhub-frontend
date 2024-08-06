@@ -7,6 +7,7 @@ export const register = async (formData: RegisterFormData) => {
       headers: {
         "Content-Type": "application/json",
       },
+      withCredentials: true,
     })
     .then((response) => {
       console.log(response);
