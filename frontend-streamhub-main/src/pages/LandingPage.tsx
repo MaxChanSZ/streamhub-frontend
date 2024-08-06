@@ -40,49 +40,46 @@ const LandingPage: React.FC<LandingPageProps> = () => {
   };
 
   return (
-    <>
-      <div className={div}>
-        <div
-          className={`flex flex-col transition-all duration-300 ${optionSelected === null ? " " : " "}`}
-        >
-          <img src={logo} alt="StreamHub Logo" className={`py-2 `} />
-          <div className={`text-white `}>
-            <div className="py-4">
-              <Button
-                onClick={() => handleButtonClick("login")}
-                variant="ghost"
-                className={buttonTextFormat}
-              >
-                Login
-              </Button>
-              <Button
-                variant="ghost"
-                className={buttonTextFormat}
-                onClick={() => handleButtonClick("register")}
-              >
-                Register
-              </Button>
-              <Button
-                variant="ghost"
-                className={buttonTextFormat}
-                onClick={() => handleButtonClick("watch")}
-              >
-                Join a Watch Party
-              </Button>
-            </div>
+    <div className={div}>
+      <div
+        className={`flex flex-col transition-all duration-300 ${optionSelected === null ? " " : " "}`}
+      >
+        <img src={logo} alt="StreamHub Logo" className={`py-2 `} />
+        <div className={`text-white `}>
+          <div className="py-4">
+            <Button
+              onClick={() => handleButtonClick("login")}
+              variant="ghost"
+              className={buttonTextFormat}
+            >
+              Login
+            </Button>
+            <Button
+              variant="ghost"
+              className={buttonTextFormat}
+              onClick={() => handleButtonClick("register")}
+            >
+              Register
+            </Button>
+            <Button
+              variant="ghost"
+              className={buttonTextFormat}
+              onClick={() => handleButtonClick("watch")}
+            >
+              Join a Watch Party
+            </Button>
           </div>
         </div>
-
-        <div
-          className={`flex items-center justify-center transition-opacity duration-300 ${
-            transitioning ? "opacity-0" : "opacity-100"
-          }`}
-        >
-          {renderContent()}
-        </div>
       </div>
-      <p className="text-white text-center">{optionSelected}</p>
-    </>
+
+      <div
+        className={`flex items-center justify-center transition-opacity duration-300 ${
+          transitioning ? "opacity-0" : "opacity-100"
+        }`}
+      >
+        {renderContent()}
+      </div>
+    </div>
   );
 };
 
