@@ -21,20 +21,20 @@ const RegisterPage = () => {
   const inputFieldFormat =
     "border rounded w-full py-2 px-3.5 my-2 font-normal text-black text-lg";
   const errorTextFormat = "text-red-500";
-
-  // Send form submit data to API client for registration
-  const onFormSubmit = handleSubmit((data) => {
-    // console.log(data);
-    mutation.mutate(data);
-  });
   const mutation = useMutation(apiClient.register, {
     onSuccess: () => {
       toast({
-        title: "Success",
+        title: "Registration success, please login",
       });
       console.log("Registration success");
+      window.location.pathname = "/";
     },
     onError: (error: Error) => {},
+  });
+
+  // Send form submit data to API client for registration
+  const onFormSubmit = handleSubmit((data) => {
+    mutation.mutate(data);
   });
 
   return (
