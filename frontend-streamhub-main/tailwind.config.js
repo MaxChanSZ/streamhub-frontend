@@ -10,6 +10,12 @@ module.exports = {
   ],
   prefix: "",
   theme: {
+    fontFamily: {
+      sans: ["ui-sans-serif", "system-ui"],
+      serif: ["ui-serif", "Georgia"],
+      mono: ["ui-monospace", "SFMono-Regular"],
+      alatsi: ["Alatsi"],
+    },
     container: {
       center: true,
       padding: "2rem",
