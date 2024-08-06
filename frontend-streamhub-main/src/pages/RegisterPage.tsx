@@ -5,6 +5,7 @@ import { useMutation } from "react-query";
 import * as apiClient from "@/api-client";
 import { redirect, useNavigate } from "react-router-dom";
 import { useAppContext } from "@/contexts/AppContext";
+import { toast } from "@/components/shadcn/ui/use-toast";
 export type RegisterFormData = {
   username: string;
   email: string;
@@ -13,7 +14,7 @@ export type RegisterFormData = {
 };
 
 const RegisterPage = () => {
-  const { showToast } = useAppContext();
+  // const { showToast } = useAppContext();
   const {
     register,
     watch,
@@ -28,19 +29,13 @@ const RegisterPage = () => {
   // Send form submit data to API client for registration
   const mutation = useMutation(apiClient.register, {
     onSuccess: () => {
-      showToast({
-        message: "Registration success",
-        type: "SUCCESS",
+      toast({
+        title: "Success",
+        description: "Friday, February 10, 2023 at 5:57 PM",
       });
-      // navigate("/");
       console.log("Registration success");
     },
-    onError: (error: Error) => {
-      showToast({
-        message: error.message,
-        type: "ERROR",
-      });
-    },
+    onError: (error: Error) => {},
   });
   const onFormSubmit = handleSubmit((data) => {
     console.log(data);
@@ -52,7 +47,7 @@ const RegisterPage = () => {
       <h1 className="text-3xl text-white px-4 font-bold text-center">
         Create an account
       </h1>
-      ;
+
       <form
         className="text-white align-center font-bold px-4 py-4"
         onSubmit={onFormSubmit}

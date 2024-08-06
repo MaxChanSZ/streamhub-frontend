@@ -1,4 +1,5 @@
 import { Button } from "@/components/shadcn/ui/button";
+import { toast } from "@/components/shadcn/ui/use-toast";
 import { useAppContext } from "@/contexts/AppContext";
 
 const LoginPage = () => {
@@ -14,6 +15,9 @@ const LoginPage = () => {
     // TODO: add request to backend
     setUser(userData);
     setLogin(true);
+    toast({
+      title: "Successful login",
+    });
   };
 
   return (

@@ -13,6 +13,7 @@ import { Button } from "@/components/shadcn/ui/button.tsx";
 import { Link } from "react-router-dom";
 import logo from "/streamhub-logo.svg";
 import { useAppContext } from "@/contexts/AppContext";
+import { toast } from "./shadcn/ui/use-toast";
 
 const Navbar = () => {
   const buttonTextFormat = "text-base mx-4";
@@ -22,6 +23,10 @@ const Navbar = () => {
     // TODO: add request to backend
     setUser(null);
     setLogin(false);
+    toast({
+      title: "Logged out",
+      // description: "Friday, February 10, 2023 at 5:57 PM",
+    });
   };
 
   return (

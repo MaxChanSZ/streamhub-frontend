@@ -1,10 +1,5 @@
-import { Toast } from "@/components/Toast";
 import React, { useContext, useEffect, useState } from "react";
-
-type ToastMessage = {
-  message: string;
-  type: "SUCCESS" | "ERROR";
-};
+import { Toaster } from "@/components/shadcn/ui/toaster";
 
 type User = {
   id: number;
@@ -13,7 +8,6 @@ type User = {
 };
 
 type AppContext = {
-  showToast: (toastMessage: ToastMessage) => void;
   login: boolean;
   setLogin: React.Dispatch<React.SetStateAction<boolean>>;
   user: User | null;
@@ -27,30 +21,20 @@ export const AppContextProvider = ({
 }: {
   children: React.ReactNode;
 }) => {
-  const [toast, setToast] = useState<ToastMessage | undefined>(undefined);
   const [login, setLogin] = useState(false);
   const [user, setUser] = useState<User | null>(null);
 
   return (
     <AppContext.Provider
       value={{
-        showToast: (toastMessage: ToastMessage) => {
-          console.log(toastMessage);
-        },
         login,
         setLogin,
         user,
         setUser,
       }}
     >
-      {toast && (
-        <Toast
-          message={toast.message}
-          type={toast.type}
-          onClose={() => setToast(undefined)}
-        />
-      )}
       {children}
+      <Toaster />
     </AppContext.Provider>
   );
 };
