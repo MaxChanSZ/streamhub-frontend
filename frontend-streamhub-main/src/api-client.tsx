@@ -86,7 +86,7 @@ export const update = async (formData: UpdateFormData) => {
       "http://localhost:8080/account/api/update",
       {
         id: user?.id, // get ID from app-state
-        username: formData.userName,
+        username: formData.username,
         email: formData.email,
         password: formData.password,
         confirmPassword: formData.confirmPassword,

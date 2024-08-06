@@ -7,7 +7,7 @@ import * as apiClient from "@/api-client";
 import { useAppContext } from "@/contexts/AppContext";
 
 export type UpdateFormData = {
-  userName: string;
+  username: string;
   email: string;
   password: string;
   confirmPassword: string;
@@ -49,6 +49,7 @@ const UpdateProfilePage = () => {
         <label className="flex-1">
           Username
           <input className={inputFieldFormat} {...register("userName")}></input>
+          <input className={inputFieldFormat} {...register("username")}></input>
         </label>
         <label className="flex-1">
           Email Address
