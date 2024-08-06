@@ -21,45 +21,59 @@ const Navbar = () => {
   const buttonTextFormat = "text-base mx-4";
 
   return (
-      <div className="h-[12.5vh] bg-black flex">
-        <NavigationMenu className="font-alatsi text-white">
-          <div className="pl-20 pr-0 max-w-64 mr-4">
-            <Link to={`/`}>
-              <img src={logo} alt="StreamHub Logo"/>
-            </Link>
-          </div>
+      <div className="h-[12.5vh] bg-black flex items-center px-4 mt-3 pb-4"> {/*Change navbar margin/padding here*/}
+        {/* Logo */}
+        <div className="flex-shrink-0 ml-14" >
+          <Link to={`/`}>
+            <img src={logo} alt="StreamHub Logo" />
+          </Link>
+        </div>
 
-          <NavigationMenuList className="py-4 flex justify-center">
-            <NavigationMenuItem>
-              <Button variant="ghost" className={buttonTextFormat} asChild>
-                <Link to={`/watch-party/1456`}>Create a Watch Party</Link>
-              </Button>
-            </NavigationMenuItem>
-            <NavigationMenuItem>
-              <Button variant="ghost" className={buttonTextFormat} asChild>
-                <Link to={`/update-profile`}>Update Profile</Link>
-              </Button>
-            </NavigationMenuItem>
-            <NavigationMenuItem>
-              <Button variant="ghost" className={buttonTextFormat} asChild>
-                <Link to={`/contact`}>Contact</Link>
-              </Button>
-            </NavigationMenuItem>
-          </NavigationMenuList>
-        </NavigationMenu>
+        {/* Centered Navigation Menu */}
+        <div className="flex-grow flex justify-center">
+          <NavigationMenu className="font-alatsi text-white">
+            <NavigationMenuList className="py-4 flex items-center space-x-4">
+              <NavigationMenuItem>
+                <Button variant="ghost" className={buttonTextFormat} asChild>
+                  <Link to={`/watch-party/1456`}>Create a Watch Party</Link>
+                </Button>
+              </NavigationMenuItem>
+              <NavigationMenuItem>
+                <Button variant="ghost" className={buttonTextFormat} asChild>
+                  <Link to={`/update-profile`}>Update Profile</Link>
+                </Button>
+              </NavigationMenuItem>
+              <NavigationMenuItem>
+                <Button variant="ghost" className={buttonTextFormat} asChild>
+                  <Link to={`/contact`}>Contact</Link>
+                </Button>
+              </NavigationMenuItem>
+            </NavigationMenuList>
+          </NavigationMenu>
+        </div>
 
-        <div className="ml-auto flex items-center space-x-8">
+        {/* Search Bar and Profile Icon */}
+        <div className="flex items-center space-x-4 ml-auto">
           <Input
               type="search"
               placeholder="Search"
-              className="w-full max-w-md bg-black text-white placeholder-white "
-              style={{ width: '300px' }} />
-          <div className="relative flex items-center pl-8 pr-20">
-            <div style={{width: '50px', height: '50px'}} className="relative">
-              <img src={profileIcon} alt="Profile Icon Background" style={{width: '50px', height: '50px'}}
-                   className="absolute top-0 left-0"/>
-              <img src={profileIconBg} alt="Profile Icon" style={{width: '50px', height: '50px'}}
-                   className="absolute top-0 left-0"/>
+              className="bg-black text-white placeholder-white"
+              style={{ width: '300px' }}
+          />
+          <div className="relative flex items-center pl-8 pr-14">
+            <div style={{ width: '50px', height: '50px' }} className="relative">
+              <img
+                  src={profileIcon}
+                  alt="Profile Icon"
+                  style={{ width: '50px', height: '50px' }}
+                  className="absolute top-0 left-0"
+              />
+              <img
+                  src={profileIconBg}
+                  alt="Profile Icon Background"
+                  style={{ width: '50px', height: '50px' }}
+                  className="absolute top-0 left-0"
+              />
             </div>
           </div>
         </div>
