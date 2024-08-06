@@ -20,11 +20,16 @@ const Navbar = () => {
   const { setIsLoggedIn, user, setUser } = useAppContext();
 
   const handleLogout = () => {
-    setUser(null);
-    setIsLoggedIn(false);
-    toast({
-      title: "Logged out",
-    });
+    try {
+      setUser(null);
+      setIsLoggedIn(false);
+      toast({
+        title: "Logged out",
+      });
+    } catch (error) {
+      console.error(`Error during logout: ${error}`);
+      // Additional error handling logic can be added here
+    }
   };
 
   return (
@@ -38,12 +43,22 @@ const Navbar = () => {
 
         <NavigationMenuList className="py-4 flex justify-center">
           <NavigationMenuItem>
-            <Button variant="ghost" className={buttonTextFormat} asChild>
+            <Button
+              variant="ghost"
+              className={buttonTextFormat}
+              asChild
+              aria-label="Create a Watch Party"
+            >
               <Link to={`/watch-party/1456`}>Create a Watch Party</Link>
             </Button>
           </NavigationMenuItem>
           <NavigationMenuItem>
-            <Button variant="ghost" className={buttonTextFormat} asChild>
+            <Button
+              variant="ghost"
+              className={buttonTextFormat}
+              asChild
+              aria-label="Update Profile"
+            >
               <Link to={`/update-profile`}>Update Profile</Link>
             </Button>
           </NavigationMenuItem>
@@ -53,6 +68,7 @@ const Navbar = () => {
               variant="destructive"
               className={buttonTextFormat}
               onClick={handleLogout}
+              aria-label="Logout"
             >
               Logout
             </Button>
