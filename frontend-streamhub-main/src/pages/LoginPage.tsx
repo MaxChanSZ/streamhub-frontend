@@ -26,11 +26,10 @@ const LoginPage = () => {
         title: "Success",
         description: "Logged in successfully!",
       });
-      const loggedInUser = {
+      setUser({
         id: data.id,
         username: data.username,
-      };
-      setUser(loggedInUser);
+      });
       setIsLoggedIn(true);
     },
     onError: (error: Error) => {
@@ -47,21 +46,21 @@ const LoginPage = () => {
     mutation.mutate(data);
   });
 
-  const handleLogin = () => {
-    // Simulate login process
-    const userData = {
-      id: 12345,
-      username: "may_lwin",
-      email: "john_doe@example.com",
-    };
-    // TODO: add request to backend
+  // const handleLogin = () => {
+  //   // Simulate login process
+  //   const userData = {
+  //     id: 12345,
+  //     username: "may_lwin",
+  //     email: "john_doe@example.com",
+  //   };
+  //   // TODO: add request to backend
 
-    setUser(userData);
-    setIsLoggedIn(true);
-    toast({
-      title: "Logged in successfully!",
-    });
-  };
+  //   setUser(userData);
+  //   setIsLoggedIn(true);
+  //   toast({
+  //     title: "Logged in successfully!",
+  //   });
+  // };
   const inputFieldFormat =
     "border rounded w-full py-2 px-3.5 my-2 font-normal text-black text-lg";
   const errorTextFormat = "text-red-500";
@@ -107,20 +106,20 @@ const LoginPage = () => {
             </label>
           </div>
           <div className="text-center">
-            {/* <Button
+            <Button
               type="submit"
               variant="secondary"
               className="my-4 font-alatsi text-base"
             >
               Login
-            </Button> */}
-            <Button
+            </Button>
+            {/* <Button
               onClick={handleLogin}
               variant="secondary"
               className="my-4 font-alatsi text-base"
             >
               Login
-            </Button>
+            </Button> */}
           </div>
         </form>
       </div>
