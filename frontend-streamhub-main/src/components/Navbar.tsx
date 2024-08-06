@@ -18,7 +18,7 @@ import logo from "/streamhub-logo.svg";
 
 
 const Navbar = () => {
-  const buttonTextFormat = "text-base mx-4";
+  const buttonTextFormat = "text-base mx-4 bg-black text-white hover:bg-white hover:text-black transition-colors";
 
   return (
       <div className="h-[12.5vh] bg-black flex items-center px-4 mt-3 pb-4"> {/*Change navbar margin/padding here*/}
@@ -33,6 +33,33 @@ const Navbar = () => {
         <div className="flex-grow flex justify-center">
           <NavigationMenu className="font-alatsi text-white">
             <NavigationMenuList className="py-4 flex items-center space-x-4">
+
+              {/* Category */}
+              <NavigationMenuItem>
+                <Button variant="ghost" className={buttonTextFormat} asChild>
+                  <NavigationMenuTrigger>Category</NavigationMenuTrigger>
+                </Button>
+                <NavigationMenuContent className="bg-black">
+                  <ul className="grid w-full gap-2 p-2">
+                    {categories.map((category) => (
+                        <li key={category.title}>
+                          <Button variant="ghost" className={buttonTextFormat} asChild>
+                            <Link
+                                to={category.href}
+                                className="text-white hover:underline block py-2 px-4"
+                            >
+                              <div>
+                                <h3 className="font-bold">{category.title}</h3>
+                              </div>
+                            </Link>
+                          </Button>
+                        </li>
+                    ))}
+                  </ul>
+                </NavigationMenuContent>
+              </NavigationMenuItem>
+
+              {/* Rest of Buttons */}
               <NavigationMenuItem>
                 <Button variant="ghost" className={buttonTextFormat} asChild>
                   <Link to={`/watch-party/1456`}>Create a Watch Party</Link>
@@ -81,4 +108,14 @@ const Navbar = () => {
   );
 };
 
+
 export default Navbar;
+
+const categories: { title: string; href: string; }[] = [
+  { title: "Category 1", href: "/category1" },
+  { title: "Category 2", href: "/category2" },
+  { title: "Category 3", href: "/category3" },
+  { title: "Category 4", href: "/category4" },
+  { title: "Category 5", href: "/category5" },
+  { title: "Category 6", href: "/category6" },
+]
