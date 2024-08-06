@@ -1,10 +1,7 @@
 import { Button } from "@/components/shadcn/ui/button";
-import axios from "axios";
 import { useForm } from "react-hook-form";
 import { useMutation } from "react-query";
 import * as apiClient from "@/api-client";
-import { redirect, useNavigate } from "react-router-dom";
-import { useAppContext } from "@/contexts/AppContext";
 import { toast } from "@/components/shadcn/ui/use-toast";
 export type RegisterFormData = {
   username: string;
@@ -26,19 +23,18 @@ const RegisterPage = () => {
   const errorTextFormat = "text-red-500";
 
   // Send form submit data to API client for registration
+  const onFormSubmit = handleSubmit((data) => {
+    // console.log(data);
+    mutation.mutate(data);
+  });
   const mutation = useMutation(apiClient.register, {
     onSuccess: () => {
       toast({
         title: "Success",
-        description: "Friday, February 10, 2023 at 5:57 PM",
       });
       console.log("Registration success");
     },
     onError: (error: Error) => {},
-  });
-  const onFormSubmit = handleSubmit((data) => {
-    console.log(data);
-    mutation.mutate(data);
   });
 
   return (
