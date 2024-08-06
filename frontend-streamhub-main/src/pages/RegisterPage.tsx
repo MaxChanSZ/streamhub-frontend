@@ -122,7 +122,11 @@ const RegisterPage = () => {
           </label>
         </div>
         <div className="text-center">
-          <Button type="submit" variant="secondary" className="my-4">
+          <Button
+            type="submit"
+            variant="secondary"
+            className="my-4 font-alatsi text-base"
+          >
             Submit
           </Button>
         </div>
