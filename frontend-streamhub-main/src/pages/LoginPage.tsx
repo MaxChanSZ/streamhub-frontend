@@ -46,28 +46,12 @@ const LoginPage = () => {
     mutation.mutate(data);
   });
 
-  // const handleLogin = () => {
-  //   // Simulate login process
-  //   const userData = {
-  //     id: 12345,
-  //     username: "may_lwin",
-  //     email: "john_doe@example.com",
-  //   };
-  //   // TODO: add request to backend
-
-  //   setUser(userData);
-  //   setIsLoggedIn(true);
-  //   toast({
-  //     title: "Logged in successfully!",
-  //   });
-  // };
   const inputFieldFormat =
     "border rounded w-full py-2 px-3.5 my-2 font-normal text-black text-lg";
   const errorTextFormat = "text-red-500";
 
   return (
     <div className="text-white font-alatsi text-semibold flex flex-col justify-center">
-      {/* <h2 className="text-2xl text-center">Login Page</h2> */}
       <div className="justify-center">
         <form
           className="text-white align-center font-bold px-4 py-4"
