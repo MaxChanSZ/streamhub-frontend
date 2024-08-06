@@ -33,7 +33,7 @@ const LoginPage = () => {
     setUser(userData);
     setLogin(true);
     toast({
-      title: "Successful registration",
+      title: "Logged in successfully!",
     });
   };
   const inputFieldFormat =
