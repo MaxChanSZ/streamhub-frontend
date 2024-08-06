@@ -97,7 +97,7 @@ const LoginPage = () => {
       <Button
         onClick={() => handleLogin()}
         variant="secondary"
-        className="text-base mx-2 px-4 py-1 font-alatsi flex-none"
+        className="text-base mx-2 px-4 py-1 w-1/4 self-center"
       >
         Login
       </Button>
