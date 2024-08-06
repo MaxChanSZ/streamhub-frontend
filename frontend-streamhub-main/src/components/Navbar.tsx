@@ -38,7 +38,7 @@ const Navbar = () => {
           </NavigationMenuItem>
           <NavigationMenuItem>
             <Button variant="ghost" className={buttonTextFormat} asChild>
-              <Link to={`/update-profile`}>Contact</Link>
+              <Link to={`/contact`}>Contact</Link>
             </Button>
           </NavigationMenuItem>
         </NavigationMenuList>
