@@ -36,6 +36,11 @@ const Navbar = () => {
               <Link to={`/update-profile`}>Update Profile</Link>
             </Button>
           </NavigationMenuItem>
+          <NavigationMenuItem>
+            <Button variant="ghost" className={buttonTextFormat} asChild>
+              <Link to={`/update-profile`}>Contact</Link>
+            </Button>
+          </NavigationMenuItem>
         </NavigationMenuList>
       </NavigationMenu>
     </div>
