@@ -15,7 +15,7 @@ export type UpdateFormData = {
 
 const UpdateProfilePage = () => {
   const inputFieldFormat =
-    "border rounded w-full py-2 px-3.5 my-2 font-normal text-black text-lg";
+    "border rounded w-full py-2 px-3.5 my-2 text-black text-lg";
   const { register, watch, handleSubmit } = useForm<UpdateFormData>();
   const { setIsLoggedIn, setUser } = useAppContext();
   const navigate = useNavigate();

@@ -47,14 +47,14 @@ const LoginPage = () => {
   });
 
   const inputFieldFormat =
-    "border rounded w-full py-2 px-3.5 my-2 font-normal text-black text-lg";
+    "border rounded w-full py-2 px-3.5 my-2 font-sans font-medium text-black text-lg";
   const errorTextFormat = "text-red-500";
 
   return (
-    <div className="text-white font-alatsi text-semibold flex flex-col justify-center">
+    <div className="text-white font-alatsi flex flex-col justify-center">
       <div className="justify-center">
         <form
-          className="text-white align-center font-bold px-4 py-4"
+          className="text-white align-center font-medium px-4 py-4"
           onSubmit={onFormSubmit}
         >
           <div className="flex flex-col md:flex-row gap-5">

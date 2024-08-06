@@ -2,15 +2,14 @@ import { Button } from "@/components/shadcn/ui/button";
 
 const WatchPartyPage = () => {
   return (
-    <div className="flex flex-col justify-center text-white font-alatsi">
-      {/* <h2 className=" text-2xl text-center">Watch Party Page</h2> */}
+    <div className="flex flex-col justify-center text-white ">
       <form className="flex flex-col justify-center">
-        <label className="text-center flex-1">
+        <label className="text-center flex-1 font-alatsi">
           Watch Party Code:
           <input
             type="number"
             min={0}
-            className="border rounded w-full py-2 px-3.5 my-2 font-normal text-black text-lg text-center"
+            className="border rounded w-full py-2 px-3.5 my-2 font-sans font-medium text-black text-lg text-center"
           ></input>
         </label>
         <Button

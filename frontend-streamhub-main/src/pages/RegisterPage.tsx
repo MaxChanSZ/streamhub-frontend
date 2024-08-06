@@ -19,7 +19,7 @@ const RegisterPage = () => {
   } = useForm<RegisterFormData>();
   // const navigate = useNavigate();
   const inputFieldFormat =
-    "border rounded w-full py-2 px-3.5 my-2 font-normal text-black text-lg";
+    "border rounded w-full py-2 px-3.5 my-2 font-sans font-medium text-black text-lg";
   const errorTextFormat = "text-red-500";
   const mutation = useMutation(apiClient.register, {
     onSuccess: () => {
@@ -38,13 +38,13 @@ const RegisterPage = () => {
   });
 
   return (
-    <div className="text-white font-alatsi text-semibold flex flex-col justify-center">
+    <div className="text-white font-alatsi flex flex-col justify-center">
       <h1 className="text-2xl text-white px-4 text-center">
         Create an account
       </h1>
 
       <form
-        className="text-white align-center font-bold px-4 py-4"
+        className="text-white align-center font-medium px-4 py-4"
         onSubmit={onFormSubmit}
       >
         <div className="flex flex-col md:flex-row gap-5">
