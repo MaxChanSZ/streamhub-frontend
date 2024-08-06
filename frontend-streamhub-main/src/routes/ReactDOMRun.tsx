@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { createBrowserRouter, RouterProvider } from "react-router-dom";
-import Root from "@/routes/root.tsx";
+import Root from "@/utils/root";
 import ErrorPage from "@/pages/ErrorPage.tsx";
 import HomePage from "@/pages/HomePage.tsx";
 import SeriesPage from "@/pages/SeriesPage.tsx";
