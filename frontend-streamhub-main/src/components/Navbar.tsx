@@ -17,12 +17,12 @@ import { toast } from "./shadcn/ui/use-toast";
 
 const Navbar = () => {
   const buttonTextFormat = "text-base mx-4";
-  const { setLogin, user, setUser } = useAppContext();
+  const { setIsLoggedIn, user, setUser } = useAppContext();
 
   const handleLogout = () => {
     // TODO: add request to backend
     setUser(null);
-    setLogin(false);
+    setIsLoggedIn(false);
     toast({
       title: "Logged out",
       // description: "Friday, February 10, 2023 at 5:57 PM",

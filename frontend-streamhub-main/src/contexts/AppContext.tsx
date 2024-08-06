@@ -1,15 +1,10 @@
 import React, { useContext, useEffect, useState } from "react";
 import { Toaster } from "@/components/shadcn/ui/toaster";
-
-type User = {
-  id: number;
-  username: string;
-  email: string;
-};
+import { User } from "@/types";
 
 type AppContext = {
-  login: boolean;
-  setLogin: React.Dispatch<React.SetStateAction<boolean>>;
+  isLoggedIn: boolean;
+  setIsLoggedIn: React.Dispatch<React.SetStateAction<boolean>>;
   user: User | null;
   setUser: React.Dispatch<React.SetStateAction<User | null>>;
 };
@@ -21,14 +16,14 @@ export const AppContextProvider = ({
 }: {
   children: React.ReactNode;
 }) => {
-  const [login, setLogin] = useState(false);
+  const [isLoggedIn, setIsLoggedIn] = useState(false);
   const [user, setUser] = useState<User | null>(null);
 
   return (
     <AppContext.Provider
       value={{
-        login,
-        setLogin,
+        isLoggedIn,
+        setIsLoggedIn,
         user,
         setUser,
       }}

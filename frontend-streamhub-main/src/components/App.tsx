@@ -4,7 +4,7 @@ import LandingPage from "@/pages/LandingPage";
 import { useAppContext } from "@/contexts/AppContext";
 
 const App = () => {
-  const { login, setLogin } = useAppContext();
+  const { isLoggedIn: login, setIsLoggedIn: setLogin } = useAppContext();
   if (login) {
     return (
       <div>

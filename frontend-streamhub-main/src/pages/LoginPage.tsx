@@ -2,6 +2,9 @@ import { Button } from "@/components/shadcn/ui/button";
 import { toast } from "@/components/shadcn/ui/use-toast";
 import { useAppContext } from "@/contexts/AppContext";
 import { useForm } from "react-hook-form";
+import { useMutation } from "react-query";
+import * as apiClient from "@/api-client";
+import { User } from "@/types";
 
 export type LoginFormData = {
   username: string;
@@ -9,17 +12,39 @@ export type LoginFormData = {
 };
 
 const LoginPage = () => {
-  const { setLogin, setUser } = useAppContext();
+  const { setIsLoggedIn, setUser } = useAppContext();
 
   const {
     register,
-    watch,
     handleSubmit,
     formState: { errors },
   } = useForm<LoginFormData>();
 
+  const mutation = useMutation<User, Error, LoginFormData>(apiClient.login, {
+    onSuccess: (data) => {
+      toast({
+        title: "Success",
+        description: "Logged in successfully!",
+      });
+      const loggedInUser = {
+        id: data.id,
+        username: data.username,
+      };
+      setUser(loggedInUser);
+      setIsLoggedIn(true);
+    },
+    onError: (error: Error) => {
+      toast({
+        title: "Error",
+        description: error.message,
+      });
+      console.log(error);
+    },
+  });
+
   const onFormSubmit = handleSubmit((data) => {
     console.log(data);
+    mutation.mutate(data);
   });
 
   const handleLogin = () => {
@@ -30,8 +55,9 @@ const LoginPage = () => {
       email: "john_doe@example.com",
     };
     // TODO: add request to backend
+
     setUser(userData);
-    setLogin(true);
+    setIsLoggedIn(true);
     toast({
       title: "Logged in successfully!",
     });
@@ -42,7 +68,7 @@ const LoginPage = () => {
 
   return (
     <div className="text-white font-alatsi text-semibold flex flex-col justify-center">
-      <h2 className="text-2xl text-center">Login Page</h2>
+      {/* <h2 className="text-2xl text-center">Login Page</h2> */}
       <div className="justify-center">
         <form
           className="text-white align-center font-bold px-4 py-4"
@@ -56,7 +82,7 @@ const LoginPage = () => {
                 {...register("username", {
                   required: "This field is required",
                 })}
-              ></input>
+              />
               {errors.username && (
                 <span className={errorTextFormat}>
                   {errors.username.message}
@@ -69,13 +95,10 @@ const LoginPage = () => {
               <input
                 className={inputFieldFormat}
                 {...register("password", {
-                  minLength: {
-                    value: 8,
-                    message: "Password must be at least 8 characters",
-                  },
+                  required: "This field is required",
                 })}
                 type="password"
-              ></input>
+              />
               {errors.password && (
                 <span className={errorTextFormat}>
                   {errors.password.message}
@@ -89,18 +112,18 @@ const LoginPage = () => {
               variant="secondary"
               className="my-4 font-alatsi text-base"
             >
-              Submit
+              Login
             </Button> */}
+            <Button
+              onClick={handleLogin}
+              variant="secondary"
+              className="my-4 font-alatsi text-base"
+            >
+              Login
+            </Button>
           </div>
         </form>
       </div>
-      <Button
-        onClick={() => handleLogin()}
-        variant="secondary"
-        className="text-base mx-2 px-4 py-1 w-1/4 self-center"
-      >
-        Login
-      </Button>
     </div>
   );
 };
