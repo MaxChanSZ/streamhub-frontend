@@ -3,6 +3,7 @@ import { RegisterFormData } from "./pages/RegisterPage";
 import axios from "axios";
 import { User } from "@/types";
 import { UpdateFormData } from "./pages/UpdateProfilePage";
+import { useAppContext } from "./contexts/AppContext";
 
 export const register = async (formData: RegisterFormData) => {
   const response = await axios
@@ -78,10 +79,13 @@ export const login = async (formData: LoginFormData): Promise<User> => {
 };
 
 export const update = async (formData: UpdateFormData) => {
+  const appContext = useAppContext();
+  const user = appContext.user;
   const response = await axios
     .put(
       "http://localhost:8080/account/api/update",
       {
+        id: user?.id, // get ID from app-state
         username: formData.userName,
         email: formData.email,
         password: formData.password,
