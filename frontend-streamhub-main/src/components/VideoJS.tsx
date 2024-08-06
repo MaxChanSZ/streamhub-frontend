@@ -49,8 +49,18 @@ const VideoJS: React.FC<IVideoPlayerProps> = ({ options }) => {
         //console.log(player.current.qualityLevels());
         playerRef.current = this;
         player = this;
-        player.httpS
-        console.log(player);
+      
+        player.on('play', () => {
+          console.log("Player is played at " + player.currentTime());
+        });
+      
+        player.on('pause', () => {
+          console.log("Player is paused at " + player.currentTime());
+        });
+
+        player.on('seeked', () => {
+          console.log("Player seeked");
+        });
       });
     }
 
