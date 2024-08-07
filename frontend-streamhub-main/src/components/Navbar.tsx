@@ -23,16 +23,16 @@ const Navbar = () => {
   return (
       <div className="h-[12.5vh] bg-black flex items-center px-4 mt-3 pb-4"> {/*Change navbar margin/padding here*/}
         {/* Logo */}
-        <div className="flex-shrink-0 ml-14" >
+        <div className="flex-shrink-0 ml-14 pr-8" >
           <Link to={`/`}>
-            <img src={logo} alt="StreamHub Logo" />
+            <img src={logo} alt="StreamHub Logo" width="300" height="300"/>
           </Link>
         </div>
 
         {/* Centered Navigation Menu */}
         <div className="flex-grow flex justify-center">
           <NavigationMenu className="font-alatsi text-white">
-            <NavigationMenuList className="py-4 flex items-center space-x-4">
+            <NavigationMenuList className="py-4 flex items-center space-x-0">
 
               {/* Category */}
               <NavigationMenuItem>
@@ -85,7 +85,7 @@ const Navbar = () => {
         </div>
 
         {/* Search Bar and Profile Icon */}
-        <div className="flex items-center space-x-4 ml-auto">
+        <div className="flex items-center space-x-4 pl-8 ml-auto">
           <Input
               type="search"
               placeholder="Search"
