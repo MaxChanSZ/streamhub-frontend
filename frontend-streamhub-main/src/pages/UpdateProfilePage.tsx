@@ -120,11 +120,11 @@ const UpdateProfilePage = () => {
           )}
         </label>
       </div>
-      <span>
+      <div className="text-center py-4">
         <Button type="submit" variant="secondary">
           Submit
         </Button>
-      </span>
+      </div>
     </form>
   );
 };
