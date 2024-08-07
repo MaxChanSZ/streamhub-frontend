@@ -73,7 +73,7 @@ export const login = async (formData: LoginFormData): Promise<User> => {
         console.log("Error", error.message);
       }
       console.log(error.config);
-      throw new Error(error);
+      throw new Error(error.message);
     });
   return response.data;
 };
@@ -99,7 +99,7 @@ export const update = async (formData: UpdateFormData) => {
       }
     )
     .then((response) => {
-      console.log(response);
+      console.log(response.data);
     })
     .catch((error) => {
       if (error.response) {

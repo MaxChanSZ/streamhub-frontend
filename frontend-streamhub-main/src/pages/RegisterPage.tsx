@@ -49,6 +49,7 @@ const RegisterPage = () => {
       toast({
         title: "Error",
         description: `${error.message}`,
+        variant: "destructive",
       });
       // Log error to console for debugging
       console.log(error);

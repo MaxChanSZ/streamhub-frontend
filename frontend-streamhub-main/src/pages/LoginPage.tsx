@@ -45,8 +45,9 @@ const LoginPage = () => {
     onError: (error: Error) => {
       // Display error toast with error message
       toast({
-        title: "Error",
+        title: "Login Error",
         description: error.message,
+        variant: "destructive",
       });
       // Log error to console for debugging
       console.log(error);
