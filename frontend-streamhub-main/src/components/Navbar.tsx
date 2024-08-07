@@ -34,8 +34,6 @@ const Navbar = () => {
           <NavigationMenu className="font-alatsi text-white">
             <NavigationMenuList className="py-4 flex items-center space-x-0">
 
-
-
               {/* Rest of Buttons */}
               <NavigationMenuItem>
                 <Button variant="ghost" className={buttonTextFormat} asChild>
@@ -83,7 +81,6 @@ const Navbar = () => {
                 </NavigationMenuContent>
               </NavigationMenuItem>
 
-
             </NavigationMenuList>
           </NavigationMenu>
         </div>
@@ -97,24 +94,26 @@ const Navbar = () => {
               style={{ width: '300px' }}
           />
           <div className="relative flex items-center pl-8 pr-14">
-            <div style={{ width: '50px', height: '50px' }} className="relative">
-              <img
-                  src={profileIcon}
-                  alt="Profile Icon"
-                  style={{ width: '50px', height: '50px' }}
-                  className="absolute top-0 left-0"
-              />
-              <img
-                  src={profileIconBg}
-                  alt="Profile Icon Background"
-                  style={{ width: '50px', height: '50px' }}
-                  className="absolute top-0 left-0"
-              />
-            </div>
+            <Link to={`/update-profile`}>
+              <div style={{width: '50px', height: '50px'}} className="relative">
+                <img
+                    src={profileIcon}
+                    alt="Profile Icon"
+                    style={{width: '50px', height: '50px'}}
+                    className="absolute top-0 left-0"
+                />
+                <img
+                    src={profileIconBg}
+                    alt="Profile Icon Background"
+                    style={{width: '50px', height: '50px'}}
+                    className="absolute top-0 left-0"
+                />
+              </div>
+            </Link>
           </div>
         </div>
       </div>
-  );
+);
 };
 
 
