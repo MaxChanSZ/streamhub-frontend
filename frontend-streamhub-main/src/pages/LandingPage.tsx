@@ -19,29 +19,52 @@ const LandingPage: React.FC<LandingPageProps> = () => {
   const buttonTextFormat = "text-base mx-2 px-4 py-1 font-alatsi";
   const TRANSITION_DURATION = 300;
 
+  /**
+   * Handles the button click event.
+   *
+   * @param {string} option - The option selected by the user.
+   * @return {void}
+   */
   const handleButtonClick = (option: string) => {
-    if (optionSelected === option) return; // Avoid re-selecting the same option
+    // If the same option is selected, do nothing
+    if (optionSelected === option) return;
+
+    // Set the transitioning state to true to indicate that a transition is in progress
     setTransitioning(true);
+
     try {
+      // After a delay of the transition duration, update the selected option and reset the transitioning state
       setTimeout(() => {
         setOptionSelected(option);
         setTransitioning(false);
-      }, TRANSITION_DURATION); // Match the timeout with the transition duration
+      }, TRANSITION_DURATION);
     } catch (error) {
+      // Log and handle any errors that occur during the transition
       console.error(`Error in handleButtonClick: ${error}`);
       setTransitioning(false);
     }
   };
 
+  /**
+   * Renders the content based on the selected option.
+   *
+   * @return {JSX.Element | null} The rendered content or null if no option is selected.
+   */
   const renderContent = () => {
+    // Using a switch statement to render different components based on the selected option.
+    // Returns null if no option is selected.
     switch (optionSelected) {
       case "login":
+        // Render the LoginPage component if the option is "login".
         return <LoginPage />;
       case "register":
+        // Render the RegisterPage component if the option is "register".
         return <RegisterPage />;
       case "watch":
+        // Render the WatchPartyPage component if the option is "watch".
         return <WatchPartyPage />;
       default:
+        // Return null if no option is selected.
         return null;
     }
   };

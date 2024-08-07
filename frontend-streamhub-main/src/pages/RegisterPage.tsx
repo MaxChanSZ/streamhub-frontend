@@ -26,38 +26,58 @@ const RegisterPage = () => {
   const labelFormat = "flex flex-col"; // each input field, title, and error message is wrapped by a label
   const subDivFormat = "grid grid-cols-2 gap-5"; // first two and last two fields are in each subdiv
 
+  /**
+   * Mutation hook for registering a user.
+   * On success, shows a success toast and redirects to the login page.
+   * On error, shows an error toast with the error message.
+   */
   const mutation = useMutation(apiClient.register, {
+    // Callback function to handle successful registration
     onSuccess: () => {
+      // Show success toast
       toast({
         title: "Registration success, please login",
       });
+      // Log success message to console
       console.log("Registration success");
+      // Redirect to login page
       window.location.pathname = "/";
     },
+    // Callback function to handle registration error
     onError: (error: Error) => {
+      // Show error toast with error message
       toast({
         title: "Error",
         description: `${error.message}`,
       });
+      // Log error to console for debugging
       console.log(error);
     },
   });
 
   // Send form submit data to API client for registration
+  /**
+   * Handles form submission by calling the mutation with the form data.
+   * @param {RegisterFormData} data - Form data containing username, email, password, and confirm password.
+   */
   const onFormSubmit = handleSubmit((data) => {
     mutation.mutate(data);
   });
 
   return (
     <div className={mainDivFormat}>
+      {/* Page heading */}
       <h1 className="text-2xl text-white px-4 text-center">
         Create an account
       </h1>
+      {/* Registration form */}
       <form
         className="text-white align-center font-medium px-4 py-4 container"
         onSubmit={onFormSubmit}
       >
+        {/* Username and email fields */}
         <div className={subDivFormat}>
+          {/* Username field */}
           <label className={labelFormat}>
             Username
             <input
@@ -66,10 +86,12 @@ const RegisterPage = () => {
                 required: "This field is required",
               })}
             />
+            {/* Error message for username field */}
             {errors.username && (
               <span className={errorTextFormat}>{errors.username.message}</span>
             )}
           </label>
+          {/* Email field */}
           <label className={labelFormat}>
             Email Address
             <input
@@ -77,12 +99,15 @@ const RegisterPage = () => {
               {...register("email", { required: "This field is required" })}
               type="email"
             />
+            {/* Error message for email field */}
             {errors.email && (
               <span className={errorTextFormat}>{errors.email.message}</span>
             )}
           </label>
         </div>
+        {/* Password and confirm password fields */}
         <div className={subDivFormat}>
+          {/* Password field */}
           <label className={labelFormat}>
             Password
             <input
@@ -107,10 +132,12 @@ const RegisterPage = () => {
               })}
               type="password"
             />
+            {/* Error message for password field */}
             {errors.password && (
               <span className={errorTextFormat}>{errors.password.message}</span>
             )}
           </label>
+          {/* Confirm Password field */}
           <label className={labelFormat}>
             Confirm Password
             <input
@@ -126,6 +153,7 @@ const RegisterPage = () => {
               })}
               type="password"
             />
+            {/* Error message for confirm password field */}
             {errors.confirmPassword && (
               <span className={errorTextFormat}>
                 {errors.confirmPassword.message}
@@ -133,6 +161,7 @@ const RegisterPage = () => {
             )}
           </label>
         </div>
+        {/* Submit button */}
         <div className="text-center">
           <Button
             type="submit"

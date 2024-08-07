@@ -20,28 +20,46 @@ const LoginPage = () => {
     formState: { errors },
   } = useForm<LoginFormData>();
 
+  /**
+   * React query mutation hook for login API endpoint.
+   * On success, sets user in context and navigates to home page.
+   * On error, displays an error message.
+   */
   const mutation = useMutation<User, Error, LoginFormData>(apiClient.login, {
+    // Callback function to handle successful login
     onSuccess: (data) => {
+      // Display success toast
       toast({
         title: "Success",
         description: "Logged in successfully!",
       });
+      // Set user in context
       setUser({
         id: data.id,
         username: data.username,
       });
+      // Set isLoggedIn flag in context to true
       setIsLoggedIn(true);
     },
+    // Callback function to handle login error
     onError: (error: Error) => {
+      // Display error toast with error message
       toast({
         title: "Error",
         description: error.message,
       });
+      // Log error to console for debugging
       console.log(error);
     },
   });
 
+  /**
+   * Callback function to handle form submission.
+   * Calls login mutation with form data.
+   * @param {LoginFormData} data - Form data containing username and password.
+   */
   const onFormSubmit = handleSubmit((data) => {
+    // Call login mutation with form data
     mutation.mutate(data);
   });
 
@@ -54,27 +72,37 @@ const LoginPage = () => {
 
   return (
     <div className={mainDivFormat}>
+      {/* Heading for the login page */}
       <h1 className="text-2xl text-white px-4 text-center">Welcome Back!</h1>
+
+      {/* Form for user login */}
       <form
         className="text-white align-center font-medium px-4 py-4"
         onSubmit={onFormSubmit}
       >
+        {/* Username input field */}
         <div className={subDivFormat}>
           <label className={labelFormat}>
+            {/* Label for the username input field */}
             Username
+            {/* Input field for the username */}
             <input
               className={inputFieldFormat}
               {...register("username", {
                 required: "This field is required",
               })}
             />
+            {/* Display error message if username is required */}
             {errors.username && (
               <span className={errorTextFormat}>{errors.username.message}</span>
             )}
           </label>
 
+          {/* Password input field */}
           <label className={labelFormat}>
+            {/* Label for the password input field */}
             Password
+            {/* Input field for the password */}
             <input
               className={inputFieldFormat}
               {...register("password", {
@@ -82,17 +110,21 @@ const LoginPage = () => {
               })}
               type="password"
             />
+            {/* Display error message if password is required */}
             {errors.password && (
               <span className={errorTextFormat}>{errors.password.message}</span>
             )}
           </label>
         </div>
+
+        {/* Submit button for login */}
         <div className="text-center">
           <Button
             type="submit"
             variant="secondary"
             className="my-4 font-alatsi text-base"
           >
+            {/* Text for the login button */}
             Login
           </Button>
         </div>
