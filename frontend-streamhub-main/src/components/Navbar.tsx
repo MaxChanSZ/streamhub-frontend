@@ -34,30 +34,7 @@ const Navbar = () => {
           <NavigationMenu className="font-alatsi text-white">
             <NavigationMenuList className="py-4 flex items-center space-x-0">
 
-              {/* Category */}
-              <NavigationMenuItem>
-                <Button variant="ghost" className={buttonTextFormat} asChild>
-                  <NavigationMenuTrigger>Category</NavigationMenuTrigger>
-                </Button>
-                <NavigationMenuContent className="bg-black">
-                  <ul className="grid w-full gap-2 p-2">
-                    {categories.map((category) => (
-                        <li key={category.title}>
-                          <Button variant="ghost" className={buttonTextFormat} asChild>
-                            <Link
-                                to={category.href}
-                                className="text-white hover:underline block py-2 px-4"
-                            >
-                              <div>
-                                <h3 className="font-bold">{category.title}</h3>
-                              </div>
-                            </Link>
-                          </Button>
-                        </li>
-                    ))}
-                  </ul>
-                </NavigationMenuContent>
-              </NavigationMenuItem>
+
 
               {/* Rest of Buttons */}
               <NavigationMenuItem>
@@ -80,6 +57,33 @@ const Navbar = () => {
                   <Link to={`/contact`}>Contact</Link>
                 </Button>
               </NavigationMenuItem>
+
+              {/* Category */}
+              <NavigationMenuItem className="relative">
+                <Button variant="ghost" className={buttonTextFormat} asChild>
+                  <NavigationMenuTrigger className="relative z-10">Category</NavigationMenuTrigger>
+                </Button>
+                <NavigationMenuContent className="bg-black">
+                  <ul className="grid w-full gap-2 p-2">
+                    {categories.map((category) => (
+                        <li key={category.title}>
+                          <Button variant="ghost" className={buttonTextFormat} asChild>
+                            <Link
+                                to={category.href}
+                                className="text-white hover:underline block py-2 px-4"
+                            >
+                              <div>
+                                <h3 className="font-bold">{category.title}</h3>
+                              </div>
+                            </Link>
+                          </Button>
+                        </li>
+                    ))}
+                  </ul>
+                </NavigationMenuContent>
+              </NavigationMenuItem>
+
+
             </NavigationMenuList>
           </NavigationMenu>
         </div>
