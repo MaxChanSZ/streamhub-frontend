@@ -52,61 +52,48 @@ const LoginPage = () => {
 
   return (
     <div className="text-white font-alatsi flex flex-col justify-center">
-      <div className="justify-center">
-        <form
-          className="text-white align-center font-medium px-4 py-4"
-          onSubmit={onFormSubmit}
-        >
-          <div className="flex flex-col md:flex-row gap-5">
-            <label className="flex-1">
-              Username
-              <input
-                className={inputFieldFormat}
-                {...register("username", {
-                  required: "This field is required",
-                })}
-              />
-              {errors.username && (
-                <span className={errorTextFormat}>
-                  {errors.username.message}
-                </span>
-              )}
-            </label>
+      <form
+        className="text-white align-center font-medium px-4 py-4"
+        onSubmit={onFormSubmit}
+      >
+        <div className="flex flex-col md:flex-row gap-5">
+          <label className="flex-1">
+            Username
+            <input
+              className={inputFieldFormat}
+              {...register("username", {
+                required: "This field is required",
+              })}
+            />
+            {errors.username && (
+              <span className={errorTextFormat}>{errors.username.message}</span>
+            )}
+          </label>
 
-            <label className="flex-1">
-              Password
-              <input
-                className={inputFieldFormat}
-                {...register("password", {
-                  required: "This field is required",
-                })}
-                type="password"
-              />
-              {errors.password && (
-                <span className={errorTextFormat}>
-                  {errors.password.message}
-                </span>
-              )}
-            </label>
-          </div>
-          <div className="text-center">
-            <Button
-              type="submit"
-              variant="secondary"
-              className="my-4 font-alatsi text-base"
-            >
-              Login
-            </Button>
-            {/* <Button
-              onClick={handleLogin}
-              variant="secondary"
-              className="my-4 font-alatsi text-base"
-            >
-              Login
-            </Button> */}
-          </div>
-        </form>
-      </div>
+          <label className="flex-1">
+            Password
+            <input
+              className={inputFieldFormat}
+              {...register("password", {
+                required: "This field is required",
+              })}
+              type="password"
+            />
+            {errors.password && (
+              <span className={errorTextFormat}>{errors.password.message}</span>
+            )}
+          </label>
+        </div>
+        <div className="text-center">
+          <Button
+            type="submit"
+            variant="secondary"
+            className="my-4 font-alatsi text-base"
+          >
+            Login
+          </Button>
+        </div>
+      </form>
     </div>
   );
 };
