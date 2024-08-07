@@ -74,7 +74,15 @@ const LandingPage: React.FC<LandingPageProps> = () => {
       <div
         className={`flex flex-col transition-all duration-300 ${optionSelected === null ? " " : " "}`}
       >
-        <img src={logo} alt="StreamHub Logo" className={`py-2 `} />
+        <img
+          src={logo}
+          alt="StreamHub Logo"
+          className={`py-2 `}
+          onClick={() => {
+            handleButtonClick("");
+          }}
+        />
+
         <div className={`text-white `}>
           <div className="py-4">
             <Button
