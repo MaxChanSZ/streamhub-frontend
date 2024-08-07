@@ -1,5 +1,6 @@
 import axios from "axios";
 import { Button } from "./shadcn/ui/button";
+import { toast } from "./shadcn/ui/use-toast";
 
 const TestApiButton = () => {
   const test = () => {
@@ -11,6 +12,10 @@ const TestApiButton = () => {
       })
       .then((response) => {
         console.log(response);
+        toast({
+          title: "Success",
+          description: `Status: ${response.status} | Message: ${response.data.message} `,
+        });
       })
       .catch((error) => {
         console.log(error);
