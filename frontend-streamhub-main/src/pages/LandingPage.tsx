@@ -80,7 +80,7 @@ const LandingPage: React.FC<LandingPageProps> = () => {
       </div>
 
       <div
-        className={`flex items-center justify-center transition-opacity duration-300 ${
+        className={`w-7/12 items-center justify-center transition-opacity duration-300 ${
           transitioning ? "opacity-0" : "opacity-100"
         }`}
       >

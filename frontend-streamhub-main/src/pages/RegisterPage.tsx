@@ -17,9 +17,15 @@ const RegisterPage = () => {
     handleSubmit,
     formState: { errors },
   } = useForm<RegisterFormData>();
+
+  // Format strings
+  const mainDivFormat = "text-white font-alatsi justify-center w-full"; // format for main div
   const inputFieldFormat =
-    "border rounded w-full py-2 px-3.5 my-2 font-sans font-medium text-black text-lg";
+    "border rounded py-2 px-3.5 my-2 font-sans font-medium text-black text-lg"; // format for input field
   const errorTextFormat = "text-red-500";
+  const labelFormat = "flex flex-col"; // each input field, title, and error message is wrapped by a label
+  const subDivFormat = "grid grid-cols-2 gap-5"; // first two and last two fields are in each subdiv
+
   const mutation = useMutation(apiClient.register, {
     onSuccess: () => {
       toast({
@@ -43,17 +49,16 @@ const RegisterPage = () => {
   });
 
   return (
-    <div className="text-white font-alatsi flex flex-col justify-center">
+    <div className={mainDivFormat}>
       <h1 className="text-2xl text-white px-4 text-center">
         Create an account
       </h1>
-
       <form
-        className="text-white align-center font-medium px-4 py-4"
+        className="text-white align-center font-medium px-4 py-4 container"
         onSubmit={onFormSubmit}
       >
-        <div className="flex flex-col md:flex-row gap-5">
-          <label className="flex-1">
+        <div className={subDivFormat}>
+          <label className={labelFormat}>
             Username
             <input
               className={inputFieldFormat}
@@ -65,7 +70,7 @@ const RegisterPage = () => {
               <span className={errorTextFormat}>{errors.username.message}</span>
             )}
           </label>
-          <label className="flex-1">
+          <label className={labelFormat}>
             Email Address
             <input
               className={inputFieldFormat}
@@ -77,8 +82,8 @@ const RegisterPage = () => {
             )}
           </label>
         </div>
-        <div className="flex flex-col md:flex-row gap-5">
-          <label className="flex-1">
+        <div className={subDivFormat}>
+          <label className={labelFormat}>
             Password
             <input
               className={inputFieldFormat}
@@ -106,7 +111,7 @@ const RegisterPage = () => {
               <span className={errorTextFormat}>{errors.password.message}</span>
             )}
           </label>
-          <label className="flex-1">
+          <label className={labelFormat}>
             Confirm Password
             <input
               className={inputFieldFormat}
