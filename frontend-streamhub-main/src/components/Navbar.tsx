@@ -190,7 +190,7 @@ const Navbar = () => {
 export default Navbar;
 
 const categories: { title: string; href: string; }[] = [
-    { title: "Category 1", href: "/category1" },
+    { title: "Category 1", href: "/watch/1/1" },
     { title: "Category 2", href: "/category2" },
     { title: "Category 3", href: "/category3" },
     { title: "Category 4", href: "/category4" },
