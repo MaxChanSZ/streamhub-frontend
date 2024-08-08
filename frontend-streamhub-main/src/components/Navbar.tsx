@@ -70,7 +70,7 @@ const Navbar = () => {
                               </Button>
                               <NavigationMenuContent className="bg-black">
                                   <ul className="grid w-full gap-2 p-2">
-                                      {watchpartybutton.map((wp) => (
+                                      {watchpartydetails.map((wp) => (
                                           <li key={wp.title}>
                                               <Button variant="ghost" className={buttonTextFormat} asChild>
                                                   <Link
@@ -88,6 +88,7 @@ const Navbar = () => {
                               </NavigationMenuContent>
                           </NavigationMenuItem>
                       </NavigationMenuItem>
+
                       {/* Rest of Buttons */}
                       <NavigationMenuItem>
                           <Button
@@ -141,7 +142,6 @@ const Navbar = () => {
                           Logout
                         </Button>
                       </NavigationMenuItem>
-
 
                   </NavigationMenuList>
               </NavigationMenu>
@@ -198,7 +198,7 @@ const categories: { title: string; href: string; }[] = [
     { title: "Category 6", href: "/category6" },
 ]
 
-const watchpartybutton: { title: string; href: string; }[] = [
+const watchpartydetails: { title: string; href: string; }[] = [
     { title: "Create a Watch Party", href: "/watch-party" },
     { title: "Join Watch Party", href: "/join-watch-party" },
 ]
