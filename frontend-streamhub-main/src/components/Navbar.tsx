@@ -62,17 +62,33 @@ const Navbar = () => {
               <NavigationMenu className="font-alatsi text-white">
                   <NavigationMenuList className="py-4 flex items-center space-x-0">
 
+                      {/* Watch Party */}
+                      <NavigationMenuItem>
+                          <NavigationMenuItem className="relative">
+                              <Button variant="ghost" className={buttonTextFormat} asChild>
+                                  <NavigationMenuTrigger className="relative z-10">Watch Party</NavigationMenuTrigger>
+                              </Button>
+                              <NavigationMenuContent className="bg-black">
+                                  <ul className="grid w-full gap-2 p-2">
+                                      {watchpartybutton.map((wp) => (
+                                          <li key={wp.title}>
+                                              <Button variant="ghost" className={buttonTextFormat} asChild>
+                                                  <Link
+                                                      to={wp.href}
+                                                      className="text-white hover:underline block py-2 px-4"
+                                                  >
+                                                      <div>
+                                                          <h3 className="font-bold">{wp.title}</h3>
+                                                      </div>
+                                                  </Link>
+                                              </Button>
+                                          </li>
+                                      ))}
+                                  </ul>
+                              </NavigationMenuContent>
+                          </NavigationMenuItem>
+                      </NavigationMenuItem>
                       {/* Rest of Buttons */}
-                      <NavigationMenuItem>
-                          <Button variant="ghost" className={buttonTextFormat} asChild>
-                              <Link to={`/watch-party/1456`}>Create a Watch Party</Link>
-                          </Button>
-                      </NavigationMenuItem>
-                      <NavigationMenuItem>
-                          <Button variant="ghost" className={buttonTextFormat} asChild>
-                              <Link to={`/join-watch-party`}>Join Watch Party</Link>
-                          </Button>
-                      </NavigationMenuItem>
                       <NavigationMenuItem>
                           <Button
                               variant="ghost"
@@ -114,29 +130,30 @@ const Navbar = () => {
                           </NavigationMenuContent>
                       </NavigationMenuItem>
 
-          {/* The "Logout" button triggers the logout functionality when clicked. */}
-          <NavigationMenuItem>
-            <Button
-              variant="destructive"
-              className={buttonTextFormat}
-              onClick={handleLogout}
-              aria-label="Logout"
-            >
-              Logout
-            </Button>
-          </NavigationMenuItem>
+                      {/* The "Logout" button triggers the logout functionality when clicked. */}
+                      <NavigationMenuItem>
+                        <Button
+                          variant="destructive"
+                          className={buttonTextFormat}
+                          onClick={handleLogout}
+                          aria-label="Logout"
+                        >
+                          Logout
+                        </Button>
+                      </NavigationMenuItem>
 
-                      {/* Display the username of the logged-in user. */}
-                      <span className="">
-        <p className="text-white font-alatsi text-semibold text-lg">
-          {/* The username is retrieved from the user context. */}
-            Hello {user?.username}
-        </p>
-      </span>
 
-        </NavigationMenuList>
-      </NavigationMenu>
+                  </NavigationMenuList>
+              </NavigationMenu>
           </div>
+
+          {/* Display the username of the logged-in user. */}
+              <span className="flex justify-center items-center">
+                  <p className="text-white font-alatsi font-semibold text-lg px-4">
+                  {/* The username is retrieved from the user context. */}
+                      Hello {user?.username}
+                  </p>
+              </span>
 
           {/* Search Bar and Profile Icon */}
           <div className="flex items-center space-x-4 pl-8 ml-auto">
@@ -179,4 +196,9 @@ const categories: { title: string; href: string; }[] = [
     { title: "Category 4", href: "/category4" },
     { title: "Category 5", href: "/category5" },
     { title: "Category 6", href: "/category6" },
+]
+
+const watchpartybutton: { title: string; href: string; }[] = [
+    { title: "Create a Watch Party", href: "/watch-party" },
+    { title: "Join Watch Party", href: "/join-watch-party" },
 ]
