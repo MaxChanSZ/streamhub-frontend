@@ -9,6 +9,7 @@ import WatchPartyPage from "@/pages/WatchPartyPage.tsx";
 import UpdateProfilePage from "@/pages/UpdateProfilePage.tsx";
 
 import RegisterPage from "@/pages/RegisterPage";
+import ContactPage from "@/pages/ContactPage.tsx";
 
 interface ReactDOMRunProps {}
 
@@ -48,6 +49,10 @@ const router = createBrowserRouter([
       {
         path: "register",
         element: <RegisterPage />,
+      },
+      {
+        path: "contact",
+        element: <ContactPage />,
       },
     ],
   },
