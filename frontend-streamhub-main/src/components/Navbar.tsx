@@ -63,7 +63,6 @@ const Navbar = () => {
                   <NavigationMenuList className="py-4 flex items-center space-x-0">
 
                       {/* Watch Party */}
-                      <NavigationMenuItem>
                           <NavigationMenuItem className="relative">
                               <Button variant="ghost" className={buttonTextFormat} asChild>
                                   <NavigationMenuTrigger className="relative z-10">Watch Party</NavigationMenuTrigger>
@@ -87,7 +86,6 @@ const Navbar = () => {
                                   </ul>
                               </NavigationMenuContent>
                           </NavigationMenuItem>
-                      </NavigationMenuItem>
 
                       {/* Rest of Buttons */}
                       <NavigationMenuItem>
