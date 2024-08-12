@@ -5,6 +5,7 @@ import { useForm } from "react-hook-form";
 import { useMutation } from "react-query";
 import * as apiClient from "@/utils/api-client";
 import { User } from "@/utils/types";
+import ForceLoginButtonMay from "@/components/ForceLoginButtonMay";
 
 export type LoginFormData = {
   username: string;
@@ -130,6 +131,9 @@ const LoginPage = () => {
           </Button>
         </div>
       </form>
+      <div className="text-center">
+        <ForceLoginButtonMay />
+      </div>
     </div>
   );
 };
