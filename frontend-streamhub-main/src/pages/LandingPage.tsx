@@ -104,7 +104,7 @@ const LandingPage: React.FC<LandingPageProps> = () => {
               className={buttonTextFormat}
               onClick={() => handleButtonClick("watch")}
             >
-              Join a Watch Party
+              Join Watch Party
             </Button>
           </div>
         </div>
