@@ -1,5 +1,4 @@
 import VideoJS from "@/components/VideoJS";
-import VideoPlayer from "@/components/VideoPlayer";
 
 interface WatchPageProps {
   videoSource: string;

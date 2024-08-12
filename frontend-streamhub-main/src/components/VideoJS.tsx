@@ -67,17 +67,17 @@ const VideoJS: React.FC<IVideoPlayerProps> = ({ options }) => {
     return () => {
       if (player) {
         console.log("Disposing player");
-        player.dispose();
+        //player.dispose();
       }
     };
   }, [options]);
 
 
   return (
-    <>
+    <div>
         <video ref={videoNode} className="video-js vjs-big-play-centered" />
         <button onClick={playVideo}>Play</button>
-    </>
+    </div>
   );
 };
 
