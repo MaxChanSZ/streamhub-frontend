@@ -10,6 +10,7 @@ import WatchPartyPage from "@/pages/WatchPartyPage.tsx";
 import UpdateProfilePage from "@/pages/UpdateProfilePage.tsx";
 
 import RegisterPage from "@/pages/RegisterPage";
+import ContactPage from "@/pages/ContactPage.tsx";
 
 interface ReactDOMRunProps {}
 
@@ -36,7 +37,7 @@ const router = createBrowserRouter([
       },
       {
         path: "watch/:seriesId/:episodeId",
-        element: <WatchPage />,
+        element: <WatchPage videoSource="" />,
       },
       {
         path: "watch-party/:sessionId",
@@ -53,6 +54,10 @@ const router = createBrowserRouter([
       {
         path: "carousel",
         element: <CarouselPage />,
+      },
+      {
+        path: "contact",
+        element: <ContactPage />,
       },
     ],
   },
