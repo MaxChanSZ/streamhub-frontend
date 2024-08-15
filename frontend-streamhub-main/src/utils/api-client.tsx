@@ -7,7 +7,7 @@ import { useAppContext } from "../contexts/AppContext";
 
 export const register = async (formData: RegisterFormData) => {
   const response = await axios
-    .post("http://localhost:8080/registration/submit", formData, {
+    .post("http://localhost:8080/account/registration/submit", formData, {
       headers: {
         "Content-Type": "application/json",
       },

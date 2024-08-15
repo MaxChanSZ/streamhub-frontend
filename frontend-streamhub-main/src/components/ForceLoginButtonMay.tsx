@@ -5,9 +5,6 @@ const ForceLoginButtonMay = () => {
   const { setIsLoggedIn, setUser } = useAppContext();
 
   const handleForceLogin = () => {
-    if (Math.random() < 0.5) {
-      window.location.href = "https://www.linkedin.com/company/fdm-group/";
-    }
     // Set user in context
     setUser({
       id: 9999,
