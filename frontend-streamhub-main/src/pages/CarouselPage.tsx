@@ -40,39 +40,44 @@ const CarouselPage = () => {
   };
   return (
     <div className="flex justify-center items-center flex-col">
-      <div className="aspect-video max-w-3xl">
-        <Carousel className="w-full max-w-XL">
-          <CarouselContent>
-            {imageDetails.map((imageDetail, index) => (
-              <CarouselItem key={index} className="relative group">
-                <div className="p-0">
-                  <Card className="rounded-lg overflow-hidden border-none">
-                    <CardContent className="relative flex aspect-video items-center justify-center p-0 rounded-lg overflow-hidden">
-                      <img
-                        src={imageDetail.src}
-                        alt={`Carousel image ${index + 1}`}
-                        className="w-full h-full object-cover transition-opacity duration-300"
-                      />
-                      <div className="absolute inset-0 flex items-end justify-start text-white bg-black bg-opacity-50 opacity-0 group-hover:opacity-100 transition-opacity duration-300 p-4">
-                        <div>
-                          <h3 className="text-3xl font-bold">
-                            {imageDetail.title}
-                          </h3>
-                          <p>{imageDetail.description}</p>
-                        </div>
-                      </div>
-                    </CardContent>
-                  </Card>
-                </div>
-              </CarouselItem>
-            ))}
-          </CarouselContent>
-          <CarouselPrevious2 className="absolute left-4 z-20 flex h-24 w-24" />
-          <CarouselNext2 className="absolute right-4 z-20 flex h-24 w-24" />
-        </Carousel>
-      </div>
-      <div className="pt-4">
-        <h1 className="text-2xl text-white px-4 font-bold pb-5">Discover</h1>
+        <div className="aspect-video max-w-3xl">
+            <h1 className="text-2xl text-white px-4 font-bold pb-5">
+                Top Movies/Series of the Month
+            </h1>
+            <Carousel className="w-full max-w-XL">
+                <CarouselContent>
+                    {imageDetails.map((imageDetail, index) => (
+                        <CarouselItem key={index} className="relative group">
+                            <div className="p-0">
+                                <Card className="rounded-lg overflow-hidden border-none">
+                                    <CardContent
+                                        className="relative flex aspect-video items-center justify-center p-0 rounded-lg overflow-hidden">
+                                        <img
+                                            src={imageDetail.src}
+                                            alt={`Carousel image ${index + 1}`}
+                                            className="w-full h-full object-cover transition-opacity duration-300"
+                                        />
+                                        <div
+                                            className="absolute inset-0 flex items-end justify-start text-white bg-black bg-opacity-50 opacity-0 group-hover:opacity-100 transition-opacity duration-300 p-4">
+                                            <div>
+                                                <h3 className="text-3xl font-bold">
+                                                    {imageDetail.title}
+                                                </h3>
+                                                <p>{imageDetail.description}</p>
+                                            </div>
+                                        </div>
+                                    </CardContent>
+                                </Card>
+                            </div>
+                        </CarouselItem>
+                    ))}
+                </CarouselContent>
+                <CarouselPrevious2 className="absolute left-4 z-20 flex h-24 w-24"/>
+                <CarouselNext2 className="absolute right-4 z-20 flex h-24 w-24"/>
+            </Carousel>
+        </div>
+        <div className="pt-4">
+            <h1 className="text-2xl text-white px-4 font-bold pb-5">Discover</h1>
         <Carousel
           opts={{
             align: "center",
