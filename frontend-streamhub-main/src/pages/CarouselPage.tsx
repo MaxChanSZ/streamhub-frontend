@@ -47,8 +47,8 @@ const CarouselPage = () => {
                             </CarouselItem>
                         ))}
                     </CarouselContent>
-                    <CarouselPrevious2 className="absolute left-4 z-20 flex"/>
-                    <CarouselNext2 className="absolute right-4 z-20 flex" />
+                    <CarouselPrevious2 className="absolute left-0 z-20 flex"/>
+                    <CarouselNext2 className="absolute right-0 z-20 flex" />
                 </Carousel>
 
 

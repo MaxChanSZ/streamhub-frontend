@@ -266,7 +266,6 @@ const CarouselPrevious2 = React.forwardRef<
             onClick={scrollPrev}
             {...props}
             style={{
-                left: '0.2rem', // Adjust based on your layout
                 top: '50%',
                 transform: 'translateY(-50%)',
                 width: '6rem', // Set the button size
@@ -302,7 +301,6 @@ const CarouselNext2 = React.forwardRef<
             onClick={scrollNext}
             {...props}
             style={{
-                right: '0.2rem', // Adjust based on your layout
                 top: '50%',
                 transform: 'translateY(-50%)',
                 width: '6rem', // Set the button size
