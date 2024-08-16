@@ -70,8 +70,8 @@ const CarouselPage = () => {
               </CarouselItem>
             ))}
           </CarouselContent>
-          <CarouselPrevious2 className="absolute left-4 z-20 flex h-24 w-24" />
-          <CarouselNext2 className="absolute right-4 z-20 flex h-24 w-24" />
+          <CarouselPrevious2 className="absolute left-4 z-20 flex h-16 w-16" />
+          <CarouselNext2 className="absolute right-4 z-20 flex h-16 w-16" />
         </Carousel>
       </div>
       <div className="pt-16">
@@ -97,8 +97,8 @@ const CarouselPage = () => {
               </CarouselItem>
             ))}
           </CarouselContent>
-          <CarouselPrevious2 className="absolute left-4 z-20 flex h-12 w-12" />
-          <CarouselNext2 className="absolute right-4 z-20 flex h-12 w-12" />
+          <CarouselPrevious2 className="absolute left-4 z-20 flex h-10 w-10" />
+          <CarouselNext2 className="absolute right-4 z-20 flex h-10 w-10" />
         </Carousel>
       </div>
     </div>

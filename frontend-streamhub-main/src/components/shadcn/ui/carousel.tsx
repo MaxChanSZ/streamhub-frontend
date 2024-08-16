@@ -261,7 +261,7 @@ const CarouselPrevious2 = React.forwardRef<
   return (
     <button
       ref={ref}
-      className={`absolute h-8 w-8 flex items-center justify-center rounded-full bg-transparent text-black ${className} ${!canScrollPrev ? "invisible" : ""}`}
+      className={`absolute flex items-center justify-center rounded-full bg-transparent text-black ${className} ${!canScrollPrev ? "invisible" : ""}`}
       type="button"
       disabled={!canScrollPrev}
       onClick={scrollPrev}
@@ -294,7 +294,7 @@ const CarouselNext2 = React.forwardRef<
   return (
     <button
       ref={ref}
-      className={`absolute h-8 w-8 flex items-center justify-center rounded-full bg-transparent text-black ${className} ${!canScrollNext ? "invisible" : ""}`}
+      className={`absolute flex items-center justify-center rounded-full bg-transparent text-black ${className} ${!canScrollNext ? "invisible" : ""}`}
       type="button"
       disabled={!canScrollNext}
       onClick={scrollNext}
