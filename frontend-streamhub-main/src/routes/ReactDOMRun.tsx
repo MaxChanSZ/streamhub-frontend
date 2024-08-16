@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import { createBrowserRouter, RouterProvider } from "react-router-dom";
 import Root from "@/utils/root";
+import CarouselPage from "@/pages/CarouselPage.tsx";
 import ErrorPage from "@/pages/ErrorPage.tsx";
 import HomePage from "@/pages/HomePage.tsx";
 import SeriesPage from "@/pages/SeriesPage.tsx";
@@ -36,7 +37,7 @@ const router = createBrowserRouter([
       },
       {
         path: "watch/:seriesId/:episodeId",
-        element: <WatchPage videoSource=""/>,
+        element: <WatchPage videoSource="" />,
       },
       {
         path: "watch-party/:sessionId",
@@ -49,6 +50,10 @@ const router = createBrowserRouter([
       {
         path: "register",
         element: <RegisterPage />,
+      },
+      {
+        path: "carousel",
+        element: <CarouselPage />,
       },
       {
         path: "contact",
