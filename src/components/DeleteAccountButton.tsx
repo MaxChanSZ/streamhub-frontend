@@ -14,10 +14,9 @@ import {
 } from "@/components/shadcn/ui/alert-dialog";
 
 const DeleteAccountButton = () => {
+  const { setIsLoggedIn, user, setUser } = useAppContext();
+  const navigate = useNavigate();
   const deleteButtonPress = () => {
-    const { setIsLoggedIn, user, setUser } = useAppContext();
-    const navigate = useNavigate();
-
     if (user !== null) {
       apiClient.deleteUser(user?.id);
       setIsLoggedIn(false);
