@@ -1,6 +1,12 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { Carousel, CarouselContent, CarouselItem, CarouselPrevious2, CarouselNext2 } from '@/components/shadcn/ui/carousel.tsx';
+import {
+    Carousel,
+    CarouselContent,
+    CarouselItem,
+    CarouselPrevious2,
+    CarouselNext2
+} from '@/components/shadcn/ui/carousel.tsx';
 import { Card, CardContent } from '@/components/shadcn/ui/card.tsx';
 
 interface Series {
@@ -14,6 +20,8 @@ const TopRatedSeriesCarousel = () => {
     const [series, setSeries] = useState<Series[]>([]);
     const [loading, setLoading] = useState(true);
     const navigate = useNavigate();
+    const nextButtonRef = useRef<HTMLButtonElement>(null);
+    const carouselApiRef = useRef<any>(null);
 
     const handleClick = (seriesId: number) => {
         const correctSeriesId = seriesId - 999;
@@ -31,12 +39,30 @@ const TopRatedSeriesCarousel = () => {
             .finally(() => setLoading(false));
     }, []);
 
+    useEffect(() => {
+        const intervalId = setInterval(() => {
+            if (nextButtonRef.current) {
+                nextButtonRef.current.click();
+            }
+        }, 4000); // Auto-scroll every 4 seconds
+
+        return () => clearInterval(intervalId);
+    }, []);
+
     if (loading) {
         return <div>Loading...</div>; // Display a loading state or spinner
     }
 
     return (
-        <Carousel className="w-full max-w-XL">
+        <Carousel
+            className="w-full max-w-XL"
+            opts={{ loop: true }} // Ensure loop option is set
+            ref={(el) => {
+                if (el) {
+                    carouselApiRef.current = el;
+                }
+            }}
+        >
             <CarouselContent>
                 {series.map((item) => (
                     <CarouselItem
@@ -67,7 +93,10 @@ const TopRatedSeriesCarousel = () => {
                 ))}
             </CarouselContent>
             <CarouselPrevious2 className="absolute left-4 z-20 flex h-16 w-16" />
-            <CarouselNext2 className="absolute right-4 z-20 flex h-16 w-16" />
+            <CarouselNext2
+                ref={nextButtonRef}
+                className="absolute right-4 z-20 flex h-16 w-16"
+            />
         </Carousel>
     );
 };
