@@ -20,7 +20,7 @@ const TopRatedSeriesCarousel = () => {
     const [series, setSeries] = useState<Series[]>([]);
     const [loading, setLoading] = useState(true);
     const navigate = useNavigate();
-    const nextButtonRef = useRef<HTMLButtonElement>(null);
+    const nextButtonRef = useRef<HTMLButtonElement | null>(null);
     const carouselApiRef = useRef<any>(null);
 
     const handleClick = (seriesId: number) => {
@@ -42,7 +42,9 @@ const TopRatedSeriesCarousel = () => {
     useEffect(() => {
         const intervalId = setInterval(() => {
             if (nextButtonRef.current) {
-                nextButtonRef.current.click();
+                if ("click" in nextButtonRef.current) {
+                    nextButtonRef.current.click();
+                }
             }
         }, 4000); // Auto-scroll every 4 seconds
 
