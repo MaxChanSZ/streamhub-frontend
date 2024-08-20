@@ -1,4 +1,3 @@
-import { useNavigate } from "react-router-dom";
 import NewestSeriesCarousel from "@/components/NewestSeriesCarousel.tsx";
 import TopRatedSeriesCarousel from "@/components/TopRatedSeriesCarousel.tsx";
 
