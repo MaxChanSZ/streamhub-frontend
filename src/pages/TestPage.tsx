@@ -23,6 +23,9 @@ const TestPage = () => {
     client.connect({}, (frame: IFrame) => {
       console.log("Connected: " + frame);
 
+      // client listens to /topic/hello and executes arrow function when new message is received
+      // in this case, the return value of /topic/hello is the list of all messages in the topic
+      // hence, we will save the list of messages in this state
       client.subscribe("/topic/hello", (message) => {
         const newMessages = JSON.parse(message.body);
         setMessages(newMessages); // Update the list of messages
@@ -43,9 +46,10 @@ const TestPage = () => {
       const client = Stomp.over(() => new SockJS("http://localhost:8080/chat"));
       client.connect({}, () => {
         const messagePayload = {
+          type: "CHAT",
           content: messageToSend,
-          sender: user?.username === undefined ? "anon" : user?.username, // or some identifier for the sender
-          sessionId: "session-id", // or some session identifier
+          sender: user?.username === undefined ? "anon" : user?.username,
+          sessionId: 1234, // TODO: chaange later
         };
         client.send("/app/hello", {}, JSON.stringify(messagePayload));
         setMessageToSend(""); // Clear input after sending
@@ -60,8 +64,8 @@ const TestPage = () => {
 
       <form
         className="flex flex-col my-4"
-        onSubmit={(e) => {
-          e.preventDefault();
+        onSubmit={(event) => {
+          event.preventDefault();
           sendMessage();
         }}
       >
