@@ -141,11 +141,11 @@ const TopRatedSeriesCarousel = () => {
             </CarouselContent>
             <CarouselPrevious2
                 ref={prevButtonRef}
-                className="absolute left-4 z-20 flex h-16 w-16"
+                className="absolute left-1 z-20 flex h-16 w-16"
             />
             <CarouselNext2
                 ref={nextButtonRef}
-                className="absolute right-4 z-20 flex h-16 w-16"
+                className="absolute right-1 z-20 flex h-16 w-16"
             />
         </Carousel>
     );
