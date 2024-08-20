@@ -1,6 +1,12 @@
 import React, { useEffect, useState } from 'react';
 import {useNavigate} from "react-router-dom";
-import {CarouselItem} from "@/components/shadcn/ui/carousel.tsx";
+import {
+    Carousel,
+    CarouselContent,
+    CarouselItem,
+    CarouselNext3,
+    CarouselPrevious3
+} from "@/components/shadcn/ui/carousel.tsx";
 
 const NewestSeriesCarousel = () => {
     const [series, setSeries] = useState([]);
@@ -19,7 +25,13 @@ const NewestSeriesCarousel = () => {
     }, []);
 
     return (
-        <>
+        <Carousel
+            opts={{
+                align: "center",
+            }}
+            className="w-full"
+        >
+            <CarouselContent>
             {limitedSeries.map((item) => (
                 <CarouselItem
                     key={item.id}
@@ -33,7 +45,10 @@ const NewestSeriesCarousel = () => {
                     />
                 </CarouselItem>
             ))}
-        </>
+            </CarouselContent>
+            <CarouselPrevious3 className="absolute left-4 z-20 flex h-10 w-10" />
+            <CarouselNext3 className="absolute right-4 z-20 flex h-10 w-10" />
+        </Carousel>
     );
 };
 
