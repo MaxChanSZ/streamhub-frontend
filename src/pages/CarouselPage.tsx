@@ -7,11 +7,14 @@ import {
   CarouselItem,
   CarouselPrevious2,
   CarouselNext2,
+  CarouselPrevious3,
+  CarouselNext3,
 } from "@/components/shadcn/ui/carousel";
 
 import pic1 from "/pic1.jpeg";
 import pic2 from "/pic2.jpeg";
 import pic3 from "/pic3.jpeg";
+import NewestSeriesCarousel from "@/components/NewestSeriesCarousel.tsx";
 const imageDetails = [
   {
     src: pic1,
@@ -77,28 +80,16 @@ const CarouselPage = () => {
       <div className="pt-16">
         <h1 className="text-2xl text-white px-4 font-bold pb-5">Discover</h1>
         <Carousel
-          opts={{
-            align: "center",
-          }}
-          className="w-full"
+            opts={{
+              align: "center",
+            }}
+            className="w-full"
         >
           <CarouselContent>
-            {Array.from({ length: 10 }).map((_, index) => (
-              <CarouselItem
-                key={index}
-                className="flex md:basis-1/3 lg:basis-1/4 xl:basis-1/5 2xl:basis-1/6 justify-center item-center"
-              >
-                <img
-                  src="http://localhost:8080/thumbnails/steamboatwillie_001.jpg"
-                  alt="steamboatwillie_001"
-                  className="max-h-40 rounded-lg"
-                  onClick={handleClick}
-                />
-              </CarouselItem>
-            ))}
+            <NewestSeriesCarousel />
           </CarouselContent>
-          <CarouselPrevious2 className="absolute left-4 z-20 flex h-10 w-10" />
-          <CarouselNext2 className="absolute right-4 z-20 flex h-10 w-10" />
+          <CarouselPrevious3 className="absolute left-4 z-20 flex h-10 w-10" />
+          <CarouselNext3 className="absolute right-4 z-20 flex h-10 w-10" />
         </Carousel>
       </div>
     </div>
