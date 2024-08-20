@@ -1,4 +1,4 @@
-import React, { useEffect, useRef, useState } from 'react';
+import React, { useEffect, useRef, useState, useCallback } from 'react';
 import { useNavigate } from 'react-router-dom';
 import {
     Carousel,
@@ -42,20 +42,28 @@ const TopRatedSeriesCarousel = () => {
         }, 4000); // Auto-scroll every 4 seconds
     };
 
-    const resetAutoScroll = () => {
+    const resetAutoScroll = useCallback(() => {
         startAutoScroll(); // Reset the autoscroll timer
+    }, []);
+
+    const handlePreviousClick = useCallback(() => {
+        resetAutoScroll();
+    }, [resetAutoScroll]);
+
+    const handleNextClick = useCallback(() => {
+        resetAutoScroll();
+    }, [resetAutoScroll]);
+
+    const handleVisibilityChange = () => {
+        if (document.hidden) {
+            if (intervalRef.current) clearInterval(intervalRef.current as number); // Stop auto-scroll when hidden
+        } else {
+            startAutoScroll(); // Restart auto-scroll when visible
+        }
     };
 
     useEffect(() => {
         startAutoScroll(); // Start the autoscroll when the component mounts
-
-        const handlePreviousClick = () => {
-            resetAutoScroll();
-        };
-
-        const handleNextClick = () => {
-            resetAutoScroll();
-        };
 
         const prevButton = prevButtonRef.current;
         const nextButton = nextButtonRef.current;
@@ -65,14 +73,17 @@ const TopRatedSeriesCarousel = () => {
             nextButton.addEventListener('click', handleNextClick);
         }
 
+        document.addEventListener('visibilitychange', handleVisibilityChange);
+
         return () => {
             if (prevButton && nextButton) {
                 prevButton.removeEventListener('click', handlePreviousClick);
                 nextButton.removeEventListener('click', handleNextClick);
             }
+            document.removeEventListener('visibilitychange', handleVisibilityChange);
             if (intervalRef.current) clearInterval(intervalRef.current as number); // Clean up the interval on unmount
         };
-    }, []);
+    }, [handlePreviousClick, handleNextClick, handleVisibilityChange]);
 
     useEffect(() => {
         fetch('http://localhost:8080/api/series/top-rated')
