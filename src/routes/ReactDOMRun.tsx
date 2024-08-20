@@ -11,6 +11,7 @@ import UpdateProfilePage from "@/pages/UpdateProfilePage.tsx";
 
 import RegisterPage from "@/pages/RegisterPage";
 import ContactPage from "@/pages/ContactPage.tsx";
+import TestPage from "@/pages/TestPage";
 
 interface ReactDOMRunProps {}
 
@@ -61,6 +62,7 @@ const router = createBrowserRouter([
       },
     ],
   },
+  { path: "test", element: <TestPage /> },
 ]);
 
 export default ReactDOMRun;
