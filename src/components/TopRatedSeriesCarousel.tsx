@@ -21,12 +21,58 @@ const TopRatedSeriesCarousel = () => {
     const [loading, setLoading] = useState(true);
     const navigate = useNavigate();
     const nextButtonRef = useRef<HTMLButtonElement | null>(null);
+    const prevButtonRef = useRef<HTMLButtonElement | null>(null);
     const carouselApiRef = useRef<any>(null);
+    const intervalRef = useRef<number | null>(null); // Ref to store the interval ID
 
     const handleClick = (seriesId: number) => {
         const correctSeriesId = seriesId - 999;
         navigate(`/watch/${correctSeriesId}/`);
     };
+
+    const startAutoScroll = () => {
+        if (intervalRef.current) clearInterval(intervalRef.current as number);
+
+        intervalRef.current = window.setInterval(() => {
+            if (nextButtonRef.current) {
+                if ("click" in nextButtonRef.current) {
+                    nextButtonRef.current.click();
+                }
+            }
+        }, 4000); // Auto-scroll every 4 seconds
+    };
+
+    const resetAutoScroll = () => {
+        startAutoScroll(); // Reset the autoscroll timer
+    };
+
+    useEffect(() => {
+        startAutoScroll(); // Start the autoscroll when the component mounts
+
+        const handlePreviousClick = () => {
+            resetAutoScroll();
+        };
+
+        const handleNextClick = () => {
+            resetAutoScroll();
+        };
+
+        const prevButton = prevButtonRef.current;
+        const nextButton = nextButtonRef.current;
+
+        if (prevButton && nextButton) {
+            prevButton.addEventListener('click', handlePreviousClick);
+            nextButton.addEventListener('click', handleNextClick);
+        }
+
+        return () => {
+            if (prevButton && nextButton) {
+                prevButton.removeEventListener('click', handlePreviousClick);
+                nextButton.removeEventListener('click', handleNextClick);
+            }
+            if (intervalRef.current) clearInterval(intervalRef.current as number); // Clean up the interval on unmount
+        };
+    }, []);
 
     useEffect(() => {
         fetch('http://localhost:8080/api/series/top-rated')
@@ -37,18 +83,6 @@ const TopRatedSeriesCarousel = () => {
             })
             .catch(error => console.error('Error fetching series:', error))
             .finally(() => setLoading(false));
-    }, []);
-
-    useEffect(() => {
-        const intervalId = setInterval(() => {
-            if (nextButtonRef.current) {
-                if ("click" in nextButtonRef.current) {
-                    nextButtonRef.current.click();
-                }
-            }
-        }, 4000); // Auto-scroll every 4 seconds
-
-        return () => clearInterval(intervalId);
     }, []);
 
     if (loading) {
@@ -94,7 +128,10 @@ const TopRatedSeriesCarousel = () => {
                     </CarouselItem>
                 ))}
             </CarouselContent>
-            <CarouselPrevious2 className="absolute left-4 z-20 flex h-16 w-16" />
+            <CarouselPrevious2
+                ref={prevButtonRef}
+                className="absolute left-4 z-20 flex h-16 w-16"
+            />
             <CarouselNext2
                 ref={nextButtonRef}
                 className="absolute right-4 z-20 flex h-16 w-16"
