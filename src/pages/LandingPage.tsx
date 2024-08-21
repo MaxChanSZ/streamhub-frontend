@@ -1,10 +1,9 @@
 import { Button } from "@/components/shadcn/ui/button.tsx";
 import logo from "/streamhub-logo.svg";
 import React, { useState } from "react";
-import { useAppContext } from "@/contexts/AppContext";
 import LoginPage from "./LoginPage";
 import RegisterPage from "./RegisterPage";
-import WatchPartyPage from "./WatchPartyPage";
+import JoinWatchPartyPage from "./JoinWatchPartyPage";
 
 interface LandingPageProps {
   login: boolean;
@@ -62,7 +61,7 @@ const LandingPage: React.FC<LandingPageProps> = () => {
         return <RegisterPage />;
       case "watch":
         // Render the WatchPartyPage component if the option is "watch".
-        return <WatchPartyPage />;
+        return <JoinWatchPartyPage />;
       default:
         // Return null if no option is selected.
         return null;

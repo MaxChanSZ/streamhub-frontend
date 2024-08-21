@@ -7,7 +7,7 @@ import { useAppContext } from "@/contexts/AppContext";
  *
  * @return {JSX.Element} The rendered WatchPartyPage component.
  */
-const WatchPartyPage = () => {
+const JoinWatchPartyPage = () => {
   var { isLoggedIn } = useAppContext();
 
   if (isLoggedIn) {
@@ -49,4 +49,4 @@ const WatchPartyPage = () => {
   }
 };
 
-export default WatchPartyPage;
+export default JoinWatchPartyPage;
