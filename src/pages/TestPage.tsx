@@ -73,7 +73,7 @@ const TestPage = () => {
         <input
           type="text"
           value={messageToSend}
-          onChange={(e) => setMessageToSend(e.target.value)}
+          onChange={(event) => setMessageToSend(event.target.value)}
           className="flex-none py-2 text-black text-center grow-0"
         />
         <Button className="my-5" type="submit">
