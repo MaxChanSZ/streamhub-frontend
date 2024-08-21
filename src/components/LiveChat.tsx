@@ -49,11 +49,6 @@ const LiveChat = () => {
     };
   }, []);
 
-  //   useEffect(() => {
-  //     messages.forEach((m) => console.log(`Message: ${m.content}`));
-  //     console.log(`messages.length: ${messages.length}`);
-  //   }, [messages]);
-
   const sendMessage = () => {
     if (messageToSend.trim() !== "") {
       const client = Stomp.over(() => new SockJS("http://localhost:8080/chat"));
