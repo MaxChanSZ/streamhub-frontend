@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import {
     Carousel,
@@ -55,9 +55,10 @@ const NewestSeriesCarousel = () => {
                                     src={item.thumbnailURL}
                                     alt={item.seriesTitle}
                                     className="max-h-40 w-full object-cover rounded-lg cursor-pointer"
+                                    style={{ objectFit: 'cover', transform: 'scale(1.05)' }}
                                     />
-                                    <div className="absolute inset-0 flex items-end justify-start text-white bg-black bg-opacity-50 opacity-0 hover:opacity-100 transition-opacity duration-300 p-4">
-                                        <div>
+                                    <div className="absolute inset-0 flex items-end justify-start text-white bg-black bg-opacity-50 opacity-0 hover:opacity-100 transition-opacity duration-300 p-0">
+                                        <div className="p-4">
                                             <h3 className="text-2xl font-bold">
                                                 {item.seriesTitle}
                                             </h3>

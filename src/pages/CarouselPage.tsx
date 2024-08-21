@@ -12,7 +12,7 @@ const CarouselPage = () => {
         </div>
       <div className="pt-16">
         <h1 className="text-2xl text-white px-4 font-bold pb-5">
-          Discover
+          Discover New Series
         </h1>
         <NewestSeriesCarousel/>
       </div>

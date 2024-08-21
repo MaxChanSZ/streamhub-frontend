@@ -1,4 +1,4 @@
-import React, { useEffect, useRef, useState, useCallback } from 'react';
+import { useEffect, useRef, useState, useCallback } from 'react';
 import { useNavigate } from 'react-router-dom';
 import {
     Carousel,
@@ -124,9 +124,10 @@ const TopRatedSeriesCarousel = () => {
                                         src={item.thumbnailURL}
                                         alt={item.seriesTitle}
                                         className="w-full h-full object-cover transition-opacity duration-300"
+                                        style={{ objectFit: 'cover', transform: 'scale(1.05)' }}
                                     />
-                                    <div className="absolute inset-0 flex items-end justify-start text-white bg-black bg-opacity-50 opacity-0 group-hover:opacity-100 transition-opacity duration-300 p-4">
-                                        <div>
+                                    <div className="absolute inset-0 flex items-end justify-start text-white bg-black bg-opacity-50 opacity-0 group-hover:opacity-100 transition-opacity duration-300 p-0">
+                                        <div className="p-4">
                                             <h3 className="text-3xl font-bold">
                                                 {item.seriesTitle}
                                             </h3>
