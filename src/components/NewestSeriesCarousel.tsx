@@ -54,7 +54,7 @@ const NewestSeriesCarousel = () => {
                                     <img
                                     src={item.thumbnailURL}
                                     alt={item.seriesTitle}
-                                    className="max-h-40 w-full object-cover rounded-lg cursor-pointer"
+                                    className="max-h-35 w-full object-cover rounded-lg cursor-pointer"
                                     style={{ objectFit: 'cover', transform: 'scale(1.05)' }}
                                     />
                                     <div className="absolute inset-0 flex items-end justify-start text-white bg-black bg-opacity-50 opacity-0 hover:opacity-100 transition-opacity duration-300 p-0">
