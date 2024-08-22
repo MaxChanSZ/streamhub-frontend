@@ -9,6 +9,7 @@ interface Message {
   messageID: number;
   content: string;
   sender: string;
+  timeStamp: Date;
 }
 
 const LiveChat = () => {
@@ -25,13 +26,16 @@ const LiveChat = () => {
 
     client.connect({}, (frame: IFrame) => {
       const topic = `/topic/chat/${roomID}`;
-      console.log(`Listening to: /topic/chat/${roomID}`);
+      // const topic = `/topic/chat`;
+      console.log(`Listening to: ${topic}`);
       client.subscribe(topic, (message) => {
         const newMessage = JSON.parse(message.body);
         console.log(
           `NewMessage: ${newMessage.content} | ID: ${newMessage.messageID}`
         );
-
+        console.log(
+          `timeStamp: ${new Date(newMessage.timeStamp).toLocaleTimeString([], { hour: "2-digit", minute: "2-digit", second: "2-digit", hour12: false })}`
+        );
         // client listens to /topic/chat and executes arrow function when new message is received
         // in this case, the return value of /topic/chat is the list of all messages in the topic
         // hence, we will save the list of messages in this state
@@ -59,7 +63,7 @@ const LiveChat = () => {
           content: messageToSend,
           sender: user?.username || "anon",
           sessionId: roomID, // TODO: change later
-          timeStamp: Date.now(),
+          // timestamp assigned in server
         };
         client.send("/app/chat", {}, JSON.stringify(messagePayload));
         console.log(messagePayload);
@@ -113,11 +117,34 @@ const LiveChat = () => {
         </Button>
       </form>
 
-      <div>
+      <div className="flex gap-2.5 mb-4">
         {messages.map((msg) => (
-          <p key={msg.messageID}>
-            <strong>{msg.sender}:</strong> {msg.content}
-          </p>
+          // <p key={msg.messageID}>
+          //   <strong>{msg.sender}:</strong> {msg.content} | {msg.timeStamp}
+          // </p>
+
+          <div className="" key={msg.messageID}>
+            <h5 className=" text-sm font-semibold leading-snug pb-1">
+              {msg.sender}
+            </h5>
+            <div className="w-max grid">
+              <div className="px-3.5 py-2 bg-gray-100 rounded justify-start items-center gap-3 inline-flex">
+                <h5 className="text-gray-800 text-sm font-normal leading-snug">
+                  {msg.content}
+                </h5>
+              </div>
+              <div className="justify-end items-center inline-flex mb-2.5">
+                <h6 className="text-xs font-normal leading-4 py-1">
+                  {new Date(msg.timeStamp).toLocaleTimeString([], {
+                    hour: "2-digit",
+                    minute: "2-digit",
+                    second: "2-digit",
+                    hour12: false,
+                  })}
+                </h6>
+              </div>
+            </div>
+          </div>
         ))}
       </div>
       <Button onClick={clearMessages} variant="destructive" className="my-4">
