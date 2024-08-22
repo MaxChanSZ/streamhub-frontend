@@ -8,7 +8,7 @@ import SeriesPage from "@/pages/SeriesPage.tsx";
 import WatchPage from "@/pages/WatchPage.tsx";
 import WatchPartyPage from "@/pages/WatchPartyPage.tsx";
 import UpdateProfilePage from "@/pages/UpdateProfilePage.tsx";
-
+import SearchPage from "@/pages/SearchPage";
 import RegisterPage from "@/pages/RegisterPage";
 import ContactPage from "@/pages/ContactPage.tsx";
 
@@ -52,12 +52,12 @@ const router = createBrowserRouter([
         element: <RegisterPage />,
       },
       {
-        path: "carousel",
-        element: <CarouselPage />,
-      },
-      {
         path: "contact",
         element: <ContactPage />,
+      },
+      {
+        path: "search",
+        element: <SearchPage />,
       },
     ],
   },

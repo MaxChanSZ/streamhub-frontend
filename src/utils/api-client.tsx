@@ -148,3 +148,16 @@ export const deleteUser = async (id: number) => {
       throw new Error(error);
     });
 };
+
+export const searchSeries = async (title: string) => {
+  const url =
+    title == null
+      ? "http://localhost:8080/api/series"
+      : `http://localhost:8080/api/series?title=${title}`;
+  return await axios.get(url, {
+    headers: {
+      "Content-Type": "application/json",
+    },
+    withCredentials: true,
+  });
+};
