@@ -4,6 +4,7 @@ import { IFrame, Stomp } from "@stomp/stompjs";
 import { useEffect, useState } from "react";
 import { useAppContext } from "@/contexts/AppContext";
 import axios from "axios";
+import { Input } from "./shadcn/ui/input";
 
 interface Message {
   messageID: number;
@@ -79,7 +80,7 @@ const LiveChat = () => {
   };
 
   return (
-    <div className="justify-center flex flex-col text-white text-center">
+    <div className="justify-center flex flex-col text-white text-center bg-[#161616]">
       <h1 className="text-5xl font-bold my-4">Test Page</h1>
       <form
         className="flex flex-row text-center justify-center items-center"
@@ -95,45 +96,49 @@ const LiveChat = () => {
           onChange={(event) => setRoomID(Number(event.target.value))}
           className="flex-none text-black text-center grow-0 mx-4 py-2 px-1 font-semibold"
         ></input>
+
         <Button type="submit">Enter</Button>
       </form>
 
       <form
-        className="flex flex-col my-4"
+        className="my-4 flex flex-row items-center"
         onSubmit={(event) => {
           event.preventDefault();
           sendMessage();
         }}
       >
-        <label>Send Message</label>
-        <input
+        {/* <input
           type="text"
           value={messageToSend}
           onChange={(event) => setMessageToSend(event.target.value)}
-          className="flex-none py-2 text-black text-center grow-0"
-        />
-        <Button className="my-5" type="submit">
+          className="flex-none py-2 px-4 text-start grow-0 bg-black"
+          placeholder="Type your message here"
+        /> */}
+        <Input
+          type="text"
+          value={messageToSend}
+          onChange={(event) => setMessageToSend(event.target.value)}
+          className="bg-black font-sans font-medium border-none"
+          placeholder="Type your message here"
+        ></Input>
+        <Button className="mx-5 bg-[#11061F] hover:bg-[#A8A8A8]" type="submit">
           Send
         </Button>
       </form>
 
-      <div className="flex gap-2.5 mb-4">
+      <div className="grid gap-2.5 items-center">
         {messages.map((msg) => (
-          // <p key={msg.messageID}>
-          //   <strong>{msg.sender}:</strong> {msg.content} | {msg.timeStamp}
-          // </p>
-
-          <div className="" key={msg.messageID}>
-            <h5 className=" text-sm font-semibold leading-snug pb-1">
+          <div className="flex justify-self-stretch w-max " key={msg.messageID}>
+            <h5 className=" text-sm font-semibold leading-snug mx-2">
               {msg.sender}
             </h5>
-            <div className="w-max grid">
+            <div className="grid">
               <div className="px-3.5 py-2 bg-gray-100 rounded justify-start items-center gap-3 inline-flex">
                 <h5 className="text-gray-800 text-sm font-normal leading-snug">
                   {msg.content}
                 </h5>
               </div>
-              <div className="justify-end items-center inline-flex mb-2.5">
+              <div className="justify-start items-center inline-flex mb-2.5">
                 <h6 className="text-xs font-normal leading-4 py-1">
                   {new Date(msg.timeStamp).toLocaleTimeString([], {
                     hour: "2-digit",
@@ -147,12 +152,14 @@ const LiveChat = () => {
           </div>
         ))}
       </div>
-      <Button onClick={clearMessages} variant="destructive" className="my-4">
-        Clear Messages
-      </Button>
-      <h2 className="my-4 text-3xl">
-        Room ID: {roomID === 0 ? "None" : roomID}
-      </h2>
+      <div className="flex flex-row items-center justify-center py-4">
+        <Button onClick={clearMessages} variant="destructive" className="mx-4">
+          Clear Messages
+        </Button>
+        <h2 className="mx-4 text-2xl font-bold">
+          Room ID: {roomID === 0 ? "None" : roomID}
+        </h2>
+      </div>
     </div>
   );
 };
