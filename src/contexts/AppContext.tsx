@@ -86,7 +86,7 @@ export const AppContextProvider = ({
 }): JSX.Element => {
   // State variables to manage the login status and user information.
   const [isLoggedIn, setIsLoggedIn] = useLoginStatus("loginStatus");
-  const [user, setUser] = useState<User | null>(null);
+  const [user, setUser] = useLocalStorage("userState");
 
   /**
    * Renders the AppContext.Provider component with the application context value
