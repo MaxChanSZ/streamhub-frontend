@@ -5,6 +5,8 @@ import { useEffect, useState } from "react";
 import { useAppContext } from "@/contexts/AppContext";
 import axios from "axios";
 import { Input } from "./shadcn/ui/input";
+import plus from "/plus-icon.svg";
+import watchParty from "/watch-party.svg";
 
 interface Message {
   messageID: number;
@@ -33,14 +35,7 @@ const LiveChat = () => {
         console.log(
           `NewMessage: ${newMessage.content} | ID: ${newMessage.messageID}`
         );
-        console.log(
-          `timeStamp: ${new Date(newMessage.timeStamp).toLocaleTimeString([], {
-            hour: "2-digit",
-            minute: "2-digit",
-            second: "2-digit",
-            hour12: false,
-          })}`
-        );
+
         // client listens to /topic/chat and executes arrow function when new message is received
         // in this case, the return value of /topic/chat is the list of all messages in the topic
         // hence, we will save the list of messages in this state
@@ -85,7 +80,12 @@ const LiveChat = () => {
 
   return (
     <div className="justify-center flex flex-col text-white text-center bg-[#161616] px-6">
-      <h1 className="text-5xl font-bold my-4">Test Page</h1>
+      {/* <h1 className="text-5xl font-bold my-4">Test Page</h1> */}
+      <div className="place-content-end flex flex-row gap-2">
+        <img src={plus} className="size-1/12 max-w-12 my-2"></img>
+        <img src={watchParty} className="size-1/12 max-w-12 my-2"></img>
+        {/* <p>icon</p> */}
+      </div>
       <form
         className="flex flex-row text-center justify-center items-center"
         onSubmit={(event) => {
@@ -113,13 +113,6 @@ const LiveChat = () => {
           sendMessage();
         }}
       >
-        {/* <input
-          type="text"
-          value={messageToSend}
-          onChange={(event) => setMessageToSend(event.target.value)}
-          className="flex-none py-2 px-4 text-start grow-0 bg-black"
-          placeholder="Type your message here"
-        /> */}
         <Input
           type="text"
           value={messageToSend}
@@ -134,28 +127,6 @@ const LiveChat = () => {
 
       <div className="flex flex-col items-start px-2">
         {messages.map((msg) => (
-          // <div className="flex justify-self-stretch w-max " key={msg.messageID}>
-          //   <h5 className=" text-sm font-semibold leading-snug mx-2">
-          //     {msg.sender}
-          //   </h5>
-          //   <div className="grid">
-          //     <div className="px-3.5 py-2 bg-gray-100 rounded justify-start items-center gap-3 inline-flex">
-          //       <h5 className="text-gray-800 text-sm font-normal leading-snug">
-          //         {msg.content}
-          //       </h5>
-          //     </div>
-          //     <div className="justify-start items-center inline-flex mb-2.5">
-          //       <h6 className="text-xs font-normal leading-4 py-1">
-          //         {new Date(msg.timeStamp).toLocaleTimeString([], {
-          //           hour: "2-digit",
-          //           minute: "2-digit",
-          //           second: "2-digit",
-          //           hour12: false,
-          //         })}
-          //       </h6>
-          //     </div>
-          //   </div>
-          // </div>
           <p
             key={msg.messageID}
             className="my-2 text-[#A8A8A8] text-wrap text-start"
