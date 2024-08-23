@@ -23,11 +23,10 @@ const LiveChat = () => {
     const brokerURL = "http://localhost:8080/chat";
 
     const client = Stomp.over(() => new SockJS(brokerURL));
-    client.reconnectDelay = 50000; // Try to reconnect every 5 seconds
+    client.reconnectDelay = 5000; // Try to reconnect every 5 seconds
 
     client.connect({}, (frame: IFrame) => {
       const topic = `/topic/chat/${roomID}`;
-      // const topic = `/topic/chat`;
       console.log(`Listening to: ${topic}`);
       client.subscribe(topic, (message) => {
         const newMessage = JSON.parse(message.body);
@@ -35,7 +34,12 @@ const LiveChat = () => {
           `NewMessage: ${newMessage.content} | ID: ${newMessage.messageID}`
         );
         console.log(
-          `timeStamp: ${new Date(newMessage.timeStamp).toLocaleTimeString([], { hour: "2-digit", minute: "2-digit", second: "2-digit", hour12: false })}`
+          `timeStamp: ${new Date(newMessage.timeStamp).toLocaleTimeString([], {
+            hour: "2-digit",
+            minute: "2-digit",
+            second: "2-digit",
+            hour12: false,
+          })}`
         );
         // client listens to /topic/chat and executes arrow function when new message is received
         // in this case, the return value of /topic/chat is the list of all messages in the topic
@@ -53,7 +57,7 @@ const LiveChat = () => {
         });
       }
     };
-  }, [roomID]);
+  }, [roomID]); // re-subscribe when roomID changes
 
   const sendMessage = () => {
     if (messageToSend.trim() !== "") {
