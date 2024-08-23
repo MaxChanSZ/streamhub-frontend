@@ -8,6 +8,7 @@ import { Input } from "./shadcn/ui/input";
 import plus from "/plus-icon.svg";
 import watchParty from "/watch-party.svg";
 import ChatHistory from "./ChatHistory";
+import LogoutButton from "./LogoutButton";
 
 export interface Message {
   messageID: number;
@@ -81,15 +82,18 @@ const LiveChat = () => {
 
   return (
     <div className="justify-center flex flex-col text-white text-center bg-[#161616] px-6">
-      <div className="place-content-end flex flex-row gap-2 my-2">
-        <button className="my-2">
-          <img src={plus} className="min-h-8"></img>
-        </button>
-        <button className="my-2">
-          <img src={watchParty} className="min-h-8"></img>
-        </button>
+      <div className="flex flex-row items-center relative py-6 border-b-2 border-[#A8A8A8]">
+        <h2 className="text-lg font-semibold font-alatsi ">Live Chat</h2>
+        <div className="place-content-end flex flex-row gap-2 absolute right-0">
+          <button className="my-2">
+            <img src={plus} className="min-h-8"></img>
+          </button>
+          <button className="my-2">
+            <img src={watchParty} className="min-h-8"></img>
+          </button>
+        </div>
       </div>
-      <form
+      {/* <form
         className="flex text-center justify-center items-center"
         onSubmit={(event) => {
           event.preventDefault();
@@ -107,7 +111,7 @@ const LiveChat = () => {
         <Button type="submit" variant="secondary">
           Enter
         </Button>
-      </form>
+      </form> */}
 
       <ChatHistory chatMessages={messages} />
 
@@ -137,6 +141,7 @@ const LiveChat = () => {
         <h2 className="mx-4 text-2xl font-bold">
           Room ID: {roomID === 0 ? "None" : roomID}
         </h2>
+        <LogoutButton />
       </div>
     </div>
   );
