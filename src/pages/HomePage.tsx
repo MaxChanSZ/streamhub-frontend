@@ -10,11 +10,14 @@ const HomePage = () => {
   };
 
   return (
-    <div className="flex flex-col text-white">
-      <Button variant="destructive" onClick={goToTestPage}>
+    <div className="text-white justify-center items-center">
+      <Button
+        variant="destructive"
+        onClick={goToTestPage}
+        className="flex-none"
+      >
         Go to test page
       </Button>
-      <br />
       <CarouselPage />
     </div>
   );
