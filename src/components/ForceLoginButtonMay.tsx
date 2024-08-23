@@ -1,16 +1,40 @@
 import { useAppContext } from "@/contexts/AppContext";
 import { Button } from "./shadcn/ui/button";
+import { User } from "@/utils/types";
 
 const ForceLoginButtonMay = () => {
   const { setIsLoggedIn, setUser } = useAppContext();
 
-  const handleForceLogin = () => {
-    // Set user in context
-    setUser({
+  const fakeUsers: User[] = [
+    {
       id: 9999,
       username: "maylwin.dev",
-      email: "may.is.the.best@example.com",
-    });
+      email: "watergirl@example.com",
+    },
+    {
+      id: 9998,
+      username: "handythong.dev",
+      email: "phantasm.wing@example.com",
+    },
+    {
+      id: 9997,
+      username: "max.dev",
+      email: "arckey@example.com",
+    },
+    {
+      id: 9996,
+      username: "timothy.dev",
+      email: "geishaboi@example.com",
+    },
+  ];
+
+  function pickRandomUser(): User {
+    return fakeUsers[Math.floor(Math.random() * fakeUsers.length)];
+  }
+
+  const handleForceLogin = () => {
+    // Set user in context
+    setUser(pickRandomUser());
     // Set isLoggedIn flag in context to true
     setIsLoggedIn(true);
   };
