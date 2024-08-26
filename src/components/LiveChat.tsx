@@ -22,16 +22,16 @@ export interface Message {
 }
 
 const LiveChat = () => {
-  const [messages, setMessages] = useState<Message[]>([]);
+  const [messages, setMessages] = useState<Message[]>([]); // messages state
   const [messageToSend, setMessageToSend] = useState<string>("");
-  const [roomID, setRoomID] = useState<number>(0);
+  const [roomID, setRoomID] = useState<string>("");
   const [isLoading, setIsLoading] = useState<boolean>(false); // To handle loading state
-  const TRANSITION_DURATION_MS = 500;
+  const TRANSITION_DURATION_MS = 500; // fixed transition period in milliseconds
   const { user } = useAppContext();
 
   useEffect(() => {
     const fetchMessagesAndSubscribe = async () => {
-      if (roomID === 0) return; // Prevent fetching if no room is selected
+      if (roomID === "") return; // Prevent fetching if no room is selected
 
       setIsLoading(true); // Start loading
 
@@ -52,14 +52,14 @@ const LiveChat = () => {
       const client = Stomp.over(() => new SockJS(brokerURL));
       client.reconnectDelay = 5000; // Try to reconnect every 5 seconds
 
-      client.connect({}, (frame: IFrame) => {
+      client.connect({}, () => {
         const topic = `/topic/chat/${roomID}`;
         console.log(`Listening to: ${topic}`);
 
         client.subscribe(topic, (message) => {
           const newMessage = JSON.parse(message.body);
           console.log(
-            `NewMessage: ${newMessage.content} | ID: ${newMessage.messageID}`
+            `NewMessage: ${newMessage.content} | ID: ${newMessage.messageID} | Timestamp: ${newMessage.timeStamp}`
           );
 
           // Use functional update to prevent race condition
@@ -79,7 +79,7 @@ const LiveChat = () => {
     fetchMessagesAndSubscribe();
   }, [roomID]); // re-subscribe when roomID changes
 
-  const changeRoomID = (newRoomID: number) => {
+  const changeRoomID = (newRoomID: string) => {
     if (newRoomID !== roomID) {
       setMessages([]); // Clear previous messages
       setRoomID(newRoomID);
@@ -102,7 +102,7 @@ const LiveChat = () => {
     }
   };
 
-  const getPastMessages = async (roomID: number): Promise<Message[]> => {
+  const getPastMessages = async (roomID: string): Promise<Message[]> => {
     try {
       const pastMessages: Message[] =
         await apiClient.getChatMessagesByRoomID(roomID);
@@ -133,7 +133,7 @@ const LiveChat = () => {
         </div>
       </div>
 
-      {/* Loading spinner */}
+      {/* Loading overlay */}
       {isLoading && (
         <div className="absolute inset-0 z-10 flex flex-col justify-center items-center bg-black bg-opacity-70">
           <h2 className="text-s font-bold font-alatsi">Loading</h2>
@@ -154,7 +154,7 @@ const LiveChat = () => {
           <input
             type="number"
             value={roomID}
-            onChange={(event) => setRoomID(Number(event.target.value))}
+            onChange={(event) => setRoomID(event.target.value.toString())}
             className="text-black text-center mx-4 py-2 px-1 font-semibold grow-0 border-none"
           ></input>
 
@@ -180,7 +180,7 @@ const LiveChat = () => {
           Clear Messages
         </Button>
         <h2 className="mx-4 text-2xl font-bold">
-          Room ID: {roomID === 0 ? "None" : roomID}
+          Room ID: {roomID === "" ? "None" : roomID}
         </h2>
         <LogoutButton />
       </div>

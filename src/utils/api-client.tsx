@@ -149,7 +149,7 @@ export const deleteUser = async (id: number) => {
     });
 };
 
-export const getChatMessagesByRoomID = async (roomID: number) => {
+export const getChatMessagesByRoomID = async (roomID: string) => {
   const data = await axios
     .get(`http://localhost:8080/api/messages/${roomID}`)
     .then((response) => {
