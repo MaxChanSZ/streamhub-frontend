@@ -1,4 +1,5 @@
 import { Message } from "./LiveChat";
+import { ScrollArea } from "./shadcn/ui/scroll-area";
 
 interface ChatHistoryProps {
   chatMessages: Message[];
@@ -6,7 +7,8 @@ interface ChatHistoryProps {
 
 const ChatHistory: React.FC<ChatHistoryProps> = ({ chatMessages }) => {
   return (
-    <div className="flex flex-col items-start px-2 my-4 mt-4">
+    <ScrollArea className="px-2 my-4 h-48">
+      {/* <div className="flex flex-col items-start px-2 my-4 mt-4"> */}
       {chatMessages.map((msg: Message) => (
         <p
           key={msg.messageID}
@@ -15,7 +17,8 @@ const ChatHistory: React.FC<ChatHistoryProps> = ({ chatMessages }) => {
           <strong>{msg.sender}:</strong> {msg.content}
         </p>
       ))}
-    </div>
+      {/* </div> */}
+    </ScrollArea>
   );
 };
 
