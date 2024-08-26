@@ -9,6 +9,7 @@ import plus from "/plus-icon.svg";
 import watchParty from "/watch-party.svg";
 import ChatHistory from "./ChatHistory";
 import LogoutButton from "./LogoutButton";
+import * as apiClient from "@/utils/api-client";
 
 export interface Message {
   messageID: number;
@@ -24,36 +25,48 @@ const LiveChat = () => {
   const { user } = useAppContext();
 
   useEffect(() => {
-    const brokerURL = "http://localhost:8080/chat";
+    const fetchMessagesAndSubscribe = async () => {
+      if (roomID === 0) return; // Prevent fetching if no room is selected
 
-    const client = Stomp.over(() => new SockJS(brokerURL));
-    client.reconnectDelay = 5000; // Try to reconnect every 5 seconds
-
-    client.connect({}, (frame: IFrame) => {
-      const topic = `/topic/chat/${roomID}`;
-      console.log(`Listening to: ${topic}`);
-      client.subscribe(topic, (message) => {
-        const newMessage = JSON.parse(message.body);
-        console.log(
-          `NewMessage: ${newMessage.content} | ID: ${newMessage.messageID}`
-        );
-
-        // client listens to /topic/chat and executes arrow function when new message is received
-        // in this case, the return value of /topic/chat is the list of all messages in the topic
-        // hence, we will save the list of messages in this state
-
-        // Use functional update to prevent race condition
-        setMessages((prevMessages) => [...prevMessages, newMessage]);
-      });
-    });
-
-    return () => {
-      if (client.connected) {
-        client.disconnect(() => {
-          console.log("Disconnected");
-        });
+      // Fetch past messages
+      var pastMessages = await getPastMessages(roomID);
+      console.log(pastMessages);
+      if (pastMessages.length === 0) {
+        console.log("No past messages found");
+        pastMessages = [];
       }
+      setMessages(pastMessages);
+
+      // Set up WebSocket connection
+      const brokerURL = "http://localhost:8080/chat";
+      const client = Stomp.over(() => new SockJS(brokerURL));
+      client.reconnectDelay = 5000; // Try to reconnect every 5 seconds
+
+      client.connect({}, (frame: IFrame) => {
+        const topic = `/topic/chat/${roomID}`;
+        console.log(`Listening to: ${topic}`);
+
+        client.subscribe(topic, (message) => {
+          const newMessage = JSON.parse(message.body);
+          console.log(
+            `NewMessage: ${newMessage.content} | ID: ${newMessage.messageID}`
+          );
+
+          // Use functional update to prevent race condition
+          setMessages((prevMessages) => [...prevMessages, newMessage]);
+        });
+      });
+
+      return () => {
+        if (client.connected) {
+          client.disconnect(() => {
+            console.log("Disconnected");
+          });
+        }
+      };
     };
+
+    fetchMessagesAndSubscribe();
   }, [roomID]); // re-subscribe when roomID changes
 
   const sendMessage = () => {
@@ -64,14 +77,23 @@ const LiveChat = () => {
           type: "CHAT",
           content: messageToSend,
           sender: user?.username || "anon",
-          sessionId: roomID, // TODO: change later
-          // timestamp assigned in server
+          sessionId: roomID,
         };
         client.send("/app/chat", {}, JSON.stringify(messagePayload));
         console.log(messagePayload);
         setMessageToSend(""); // Clear input after sending
-        console.log(user?.username ? user?.username : "anonymous");
       });
+    }
+  };
+
+  const getPastMessages = async (roomID: number): Promise<Message[]> => {
+    try {
+      const pastMessages: Message[] =
+        await apiClient.getChatMessagesByRoomID(roomID);
+      return pastMessages;
+    } catch (error) {
+      console.error("Failed to fetch past messages:", error);
+      return []; // Return an empty array on failure
     }
   };
 
@@ -83,7 +105,7 @@ const LiveChat = () => {
   return (
     <div className="justify-center flex flex-col text-white text-center bg-[#161616] px-6">
       <div className="flex flex-row items-center relative py-6 border-b-2 border-[#A8A8A8]">
-        <h2 className="text-lg font-semibold font-alatsi ">Live Chat</h2>
+        <h2 className="text-lg font-semibold font-alatsi">Live Chat</h2>
         <div className="place-content-end flex flex-row gap-2 absolute right-0">
           <button className="my-2">
             <img src={plus} className="min-h-8"></img>
@@ -93,7 +115,8 @@ const LiveChat = () => {
           </button>
         </div>
       </div>
-      {/* <form
+
+      <form
         className="flex text-center justify-center items-center"
         onSubmit={(event) => {
           event.preventDefault();
@@ -111,7 +134,7 @@ const LiveChat = () => {
         <Button type="submit" variant="secondary">
           Enter
         </Button>
-      </form> */}
+      </form>
 
       <ChatHistory chatMessages={messages} />
 

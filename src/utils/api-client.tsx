@@ -150,7 +150,7 @@ export const deleteUser = async (id: number) => {
 };
 
 export const getChatMessagesByRoomID = async (roomID: number) => {
-  const response = await axios
+  const data = await axios
     .get(`http://localhost:8080/api/messages/${roomID}`)
     .then((response) => {
       console.log(response.data);
@@ -172,4 +172,5 @@ export const getChatMessagesByRoomID = async (roomID: number) => {
         // Something happened in setting up the request that triggered an Error
       }
     });
+  return data;
 };
