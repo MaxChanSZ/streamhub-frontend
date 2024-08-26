@@ -11,6 +11,8 @@ import ChatHistory from "./ChatHistory";
 import LogoutButton from "./LogoutButton";
 import * as apiClient from "@/utils/api-client";
 import ChatInput from "./ChatInput";
+import { LoadingSpinner } from "./LoadingSpinner";
+// import { LoadingSpinner } from "./LoadingSpinner"; // Uncomment if needed
 
 export interface Message {
   messageID: number;
@@ -23,20 +25,27 @@ const LiveChat = () => {
   const [messages, setMessages] = useState<Message[]>([]);
   const [messageToSend, setMessageToSend] = useState<string>("");
   const [roomID, setRoomID] = useState<number>(0);
+  const [isLoading, setIsLoading] = useState<boolean>(false); // To handle loading state
+  const TRANSITION_DURATION_MS = 500;
   const { user } = useAppContext();
 
   useEffect(() => {
     const fetchMessagesAndSubscribe = async () => {
       if (roomID === 0) return; // Prevent fetching if no room is selected
 
+      setIsLoading(true); // Start loading
+
       // Fetch past messages
-      var pastMessages = await getPastMessages(roomID);
-      console.log(pastMessages);
-      if (pastMessages.length === 0) {
-        console.log("No past messages found");
-        pastMessages = [];
+      try {
+        const pastMessages = await getPastMessages(roomID);
+        setMessages(pastMessages);
+      } catch (error) {
+        console.error("Error fetching past messages:", error);
+      } finally {
+        setTimeout(() => {
+          setIsLoading(false); // End loading
+        }, TRANSITION_DURATION_MS);
       }
-      setMessages(pastMessages);
 
       // Set up WebSocket connection
       const brokerURL = "http://localhost:8080/chat";
@@ -70,6 +79,13 @@ const LiveChat = () => {
     fetchMessagesAndSubscribe();
   }, [roomID]); // re-subscribe when roomID changes
 
+  const changeRoomID = (newRoomID: number) => {
+    if (newRoomID !== roomID) {
+      setMessages([]); // Clear previous messages
+      setRoomID(newRoomID);
+    }
+  };
+
   const sendMessage = () => {
     if (messageToSend.trim() !== "") {
       const client = Stomp.over(() => new SockJS("http://localhost:8080/chat"));
@@ -81,7 +97,6 @@ const LiveChat = () => {
           sessionId: roomID,
         };
         client.send("/app/chat", {}, JSON.stringify(messagePayload));
-        console.log(messagePayload);
         setMessageToSend(""); // Clear input after sending
       });
     }
@@ -118,33 +133,46 @@ const LiveChat = () => {
         </div>
       </div>
 
-      {/* roomID input for development only */}
-      <form
-        className="flex text-center justify-center items-center"
-        onSubmit={(event) => {
-          event.preventDefault();
-          sendMessage();
-        }}
-      >
-        <label className="text-xs font-bold">Enter Room ID:</label>
-        <input
-          type="number"
-          value={roomID}
-          onChange={(event) => setRoomID(Number(event.target.value))}
-          className="text-black text-center mx-4 py-2 px-1 font-semibold grow-0 border-none"
-        ></input>
+      {/* Loading spinner */}
+      {isLoading && (
+        <div className="absolute inset-0 z-10 flex flex-col justify-center items-center bg-black bg-opacity-70">
+          <h2 className="text-s font-bold font-alatsi">Loading</h2>
+          <LoadingSpinner className="size-12 my-2" />
+        </div>
+      )}
 
-        <Button type="submit" variant="secondary">
-          Enter
-        </Button>
-      </form>
+      <>
+        {/* roomID input for development only */}
+        <form
+          className="flex text-center justify-center items-center"
+          onSubmit={(event) => {
+            event.preventDefault();
+            changeRoomID(roomID);
+          }}
+        >
+          <label className="text-xs font-bold">Enter Room ID:</label>
+          <input
+            type="number"
+            value={roomID}
+            onChange={(event) => setRoomID(Number(event.target.value))}
+            className="text-black text-center mx-4 py-2 px-1 font-semibold grow-0 border-none"
+          ></input>
 
-      <ChatHistory chatMessages={messages} />
-      <ChatInput
-        messageToSend={messageToSend}
-        setMessageToSend={setMessageToSend}
-        sendMessage={sendMessage}
-      />
+          <Button type="submit" variant="secondary">
+            Enter
+          </Button>
+        </form>
+        <div
+          className={`${isLoading ? "opacity-50" : "opacity-100"} transition-opacity duration-${TRANSITION_DURATION_MS}`}
+        >
+          <ChatHistory chatMessages={messages} />
+          <ChatInput
+            messageToSend={messageToSend}
+            setMessageToSend={setMessageToSend}
+            sendMessage={sendMessage}
+          />
+        </div>
+      </>
 
       {/* For debugging and dev, remove when done */}
       <div className="flex flex-row items-center justify-center py-4">
