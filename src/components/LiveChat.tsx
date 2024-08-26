@@ -10,6 +10,7 @@ import watchParty from "/watch-party.svg";
 import ChatHistory from "./ChatHistory";
 import LogoutButton from "./LogoutButton";
 import * as apiClient from "@/utils/api-client";
+import ChatInput from "./ChatInput";
 
 export interface Message {
   messageID: number;
@@ -104,6 +105,7 @@ const LiveChat = () => {
 
   return (
     <div className="justify-center flex flex-col text-white text-center bg-[#161616] px-6">
+      {/* Component title and icons */}
       <div className="flex flex-row items-center relative py-6 border-b-2 border-[#A8A8A8]">
         <h2 className="text-lg font-semibold font-alatsi">Live Chat</h2>
         <div className="place-content-end flex flex-row gap-2 absolute right-0">
@@ -116,6 +118,7 @@ const LiveChat = () => {
         </div>
       </div>
 
+      {/* roomID input for development only */}
       <form
         className="flex text-center justify-center items-center"
         onSubmit={(event) => {
@@ -137,26 +140,13 @@ const LiveChat = () => {
       </form>
 
       <ChatHistory chatMessages={messages} />
+      <ChatInput
+        messageToSend={messageToSend}
+        setMessageToSend={setMessageToSend}
+        sendMessage={sendMessage}
+      />
 
-      <form
-        className="my-4 flex flex-row items-center"
-        onSubmit={(event) => {
-          event.preventDefault();
-          sendMessage();
-        }}
-      >
-        <Input
-          type="text"
-          value={messageToSend}
-          onChange={(event) => setMessageToSend(event.target.value)}
-          className="bg-black font-sans font-medium border-none"
-          placeholder="Type your message here"
-        ></Input>
-        <Button className="mx-5 bg-[#11061F] hover:bg-[#A8A8A8]" type="submit">
-          Send
-        </Button>
-      </form>
-
+      {/* For debugging and dev, remove when done */}
       <div className="flex flex-row items-center justify-center py-4">
         <Button onClick={clearMessages} variant="destructive" className="mx-4">
           Clear Messages
