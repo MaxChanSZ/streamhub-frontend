@@ -148,3 +148,32 @@ export const deleteUser = async (id: number) => {
       throw new Error(error);
     });
 };
+
+export const fetchNewestSeries = async () => {
+  try {
+    const response = await fetch('http://localhost:8080/api/series/newest');
+    if (!response.ok) {
+      throw new Error('Failed to fetch newest series');
+    }
+    const data = await response.json();
+    return data;
+  } catch (error) {
+    console.error('Error fetching series:', error);
+    throw error;
+  }
+};
+
+export const fetchTopRatedSeries = async () => {
+  try {
+    const response = await fetch('http://localhost:8080/api/series/top-rated');
+    if (!response.ok) {
+      throw new Error('Failed to fetch top-rated series');
+    }
+    const data = await response.json();
+    const shuffledSeries = data.sort(() => 0.5 - Math.random());
+    return shuffledSeries.slice(0, 5);
+  } catch (error) {
+    console.error('Error fetching series:', error);
+    throw error;
+  }
+};
