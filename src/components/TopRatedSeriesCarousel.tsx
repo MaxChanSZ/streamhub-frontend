@@ -8,6 +8,7 @@ import {
     CarouselNext2
 } from '@/components/shadcn/ui/carousel.tsx';
 import { Card, CardContent } from '@/components/shadcn/ui/card.tsx';
+import {fetchTopRatedSeries} from "@/utils/api-client.tsx";
 
 interface Series {
     id: number;
@@ -86,14 +87,18 @@ const TopRatedSeriesCarousel = () => {
     }, [handlePreviousClick, handleNextClick, handleVisibilityChange]);
 
     useEffect(() => {
-        fetch('http://localhost:8080/api/series/top-rated')
-            .then(response => response.json())
-            .then(data => {
-                const shuffledSeries = data.sort(() => 0.5 - Math.random());
-                setSeries(shuffledSeries.slice(0, 5));
-            })
-            .catch(error => console.error('Error fetching series:', error))
-            .finally(() => setLoading(false));
+        const loadSeries = async () => {
+            try {
+                const data = await fetchTopRatedSeries();
+                setSeries(data);
+            } catch (error) {
+                console.error('Error fetching series:', error);
+            } finally {
+                setLoading(false);
+            }
+        };
+
+        loadSeries();
     }, []);
 
     if (loading) {

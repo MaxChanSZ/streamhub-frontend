@@ -8,6 +8,7 @@ import {
     CarouselPrevious3
 } from '@/components/shadcn/ui/carousel.tsx';
 import { Card, CardContent } from '@/components/shadcn/ui/card.tsx';
+import {fetchNewestSeries} from "@/utils/api-client.tsx";
 
 interface Series {
     id: number;
@@ -26,10 +27,16 @@ const NewestSeriesCarousel = () => {
     };
 
     useEffect(() => {
-        fetch('http://localhost:8080/api/series/newest')
-            .then(response => response.json())
-            .then(data => setSeries(data))
-            .catch(error => console.error('Error fetching series:', error));
+        const loadSeries = async () => {
+            try {
+                const data = await fetchNewestSeries();
+                setSeries(data);
+            } catch (error) {
+                console.error('Error fetching series:', error);
+            }
+        };
+
+        loadSeries();
     }, []);
 
     const limitedSeries = series.slice(0, 8);
@@ -52,10 +59,10 @@ const NewestSeriesCarousel = () => {
                             <Card className="rounded-lg overflow-hidden border-none">
                                 <CardContent className="relative flex aspect-video items-center justify-center p-0 rounded-lg overflow-hidden">
                                     <img
-                                    src={item.thumbnailURL}
-                                    alt={item.seriesTitle}
-                                    className="max-h-35 w-full object-cover rounded-lg cursor-pointer"
-                                    style={{ objectFit: 'cover', transform: 'scale(1.05)' }}
+                                        src={item.thumbnailURL}
+                                        alt={item.seriesTitle}
+                                        className="max-h-35 w-full object-cover rounded-lg cursor-pointer"
+                                        style={{ objectFit: 'cover', transform: 'scale(1.05)' }}
                                     />
                                     <div className="absolute inset-0 flex items-end justify-start text-white bg-black bg-opacity-50 opacity-0 hover:opacity-100 transition-opacity duration-300 p-0">
                                         <div className="p-4">
