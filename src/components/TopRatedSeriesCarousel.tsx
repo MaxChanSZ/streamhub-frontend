@@ -128,10 +128,10 @@ const TopRatedSeriesCarousel = () => {
                                     />
                                     <div className="absolute inset-0 flex items-end justify-start text-white bg-black bg-opacity-50 opacity-0 group-hover:opacity-100 transition-opacity duration-300 p-0">
                                         <div className="p-4">
-                                            <h3 className="text-3xl font-bold">
+                                            <h3 className="text-5xl font-bold">
                                                 {item.seriesTitle}
                                             </h3>
-                                            <p>{item.description}</p>
+                                            <p className="text-2xl">{item.description}</p>
                                         </div>
                                     </div>
                                 </CardContent>
