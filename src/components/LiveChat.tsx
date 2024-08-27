@@ -152,7 +152,7 @@ const LiveChat = () => {
         >
           <label className="text-xs font-bold">Enter Room ID:</label>
           <input
-            type="number"
+            type="text"
             value={roomID}
             onChange={(event) => setRoomID(event.target.value.toString())}
             className="text-black text-center mx-4 py-2 px-1 font-semibold grow-0 border-none"
