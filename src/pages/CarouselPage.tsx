@@ -4,7 +4,7 @@ import TopRatedSeriesCarousel from "@/components/TopRatedSeriesCarousel.tsx";
 const CarouselPage = () => {
   return (
       <div className="flex justify-center items-center flex-col">
-        <div className="aspect-video max-w-3xl">
+        <div className="aspect-video max-w-4xl">
           <h1 className="text-2xl text-white px-4 font-bold pb-5">
             Top Movies/Series of the Month
           </h1>
@@ -12,7 +12,7 @@ const CarouselPage = () => {
         </div>
       <div className="pt-16">
         <h1 className="text-2xl text-white px-4 font-bold pb-5">
-          Discover
+          Discover New Series
         </h1>
         <NewestSeriesCarousel/>
       </div>

@@ -1,4 +1,4 @@
-import React, { useEffect, useRef, useState, useCallback } from 'react';
+import { useEffect, useRef, useState, useCallback } from 'react';
 import { useNavigate } from 'react-router-dom';
 import {
     Carousel,
@@ -8,6 +8,7 @@ import {
     CarouselNext2
 } from '@/components/shadcn/ui/carousel.tsx';
 import { Card, CardContent } from '@/components/shadcn/ui/card.tsx';
+import {fetchTopRatedSeries} from "@/utils/api-client.tsx";
 
 interface Series {
     id: number;
@@ -86,14 +87,18 @@ const TopRatedSeriesCarousel = () => {
     }, [handlePreviousClick, handleNextClick, handleVisibilityChange]);
 
     useEffect(() => {
-        fetch('http://localhost:8080/api/series/top-rated')
-            .then(response => response.json())
-            .then(data => {
-                const shuffledSeries = data.sort(() => 0.5 - Math.random());
-                setSeries(shuffledSeries.slice(0, 5));
-            })
-            .catch(error => console.error('Error fetching series:', error))
-            .finally(() => setLoading(false));
+        const loadSeries = async () => {
+            try {
+                const data = await fetchTopRatedSeries();
+                setSeries(data);
+            } catch (error) {
+                console.error('Error fetching series:', error);
+            } finally {
+                setLoading(false);
+            }
+        };
+
+        loadSeries();
     }, []);
 
     if (loading) {
@@ -124,13 +129,14 @@ const TopRatedSeriesCarousel = () => {
                                         src={item.thumbnailURL}
                                         alt={item.seriesTitle}
                                         className="w-full h-full object-cover transition-opacity duration-300"
+                                        style={{ objectFit: 'cover', transform: 'scale(1.05)' }}
                                     />
-                                    <div className="absolute inset-0 flex items-end justify-start text-white bg-black bg-opacity-50 opacity-0 group-hover:opacity-100 transition-opacity duration-300 p-4">
-                                        <div>
-                                            <h3 className="text-3xl font-bold">
+                                    <div className="absolute inset-0 flex items-end justify-start text-white bg-black bg-opacity-50 opacity-0 group-hover:opacity-100 transition-opacity duration-300 p-0">
+                                        <div className="p-4">
+                                            <h3 className="text-5xl font-bold">
                                                 {item.seriesTitle}
                                             </h3>
-                                            <p>{item.description}</p>
+                                            <p className="text-2xl">{item.description}</p>
                                         </div>
                                     </div>
                                 </CardContent>
