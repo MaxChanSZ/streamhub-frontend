@@ -9,8 +9,6 @@ import { Button } from "@/components/shadcn/ui/button.tsx";
 import { Input } from "@/components/shadcn/ui/input.tsx"
 import { Link } from "react-router-dom";
 import logo from "/streamhub-logo.svg";
-import { useAppContext } from "@/contexts/AppContext";
-import { toast } from "./shadcn/ui/use-toast";
 import NavbarProfile from "@/components/NavbarProfile.tsx";
 
 
@@ -36,26 +34,8 @@ const Navbar = () => {
                       {/* Watch Party */}
                       <NavigationMenuItem className="relative">
                           <Button variant="ghost" className={buttonTextFormat} asChild>
-                              <NavigationMenuTrigger className="relative z-10">Watch Party</NavigationMenuTrigger>
+                              <Link to={`/watch-party`}>Join a Watch Party</Link>
                           </Button>
-                          <NavigationMenuContent className="bg-black">
-                              <ul className="grid w-full gap-2 p-2">
-                                  {watchpartydetails.map((wp) => (
-                                      <li key={wp.title}>
-                                          <Button variant="ghost" className={buttonTextFormat} asChild>
-                                              <Link
-                                                  to={wp.href}
-                                                  className="text-white hover:underline block py-2 px-4"
-                                              >
-                                                  <div>
-                                                      <h3 className="font-bold">{wp.title}</h3>
-                                                  </div>
-                                              </Link>
-                                          </Button>
-                                      </li>
-                                  ))}
-                              </ul>
-                          </NavigationMenuContent>
                       </NavigationMenuItem>
 
                       {/* Rest of Buttons */}
