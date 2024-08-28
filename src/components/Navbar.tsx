@@ -95,7 +95,7 @@ const Navbar = () => {
             </NavigationMenuItem>
 
             {/* Rest of Buttons */}
-            <NavigationMenuItem>
+            {/* <NavigationMenuItem>
               <Button
                 variant="ghost"
                 className={buttonTextFormat}
@@ -104,7 +104,7 @@ const Navbar = () => {
               >
                 <Link to={`/update-profile`}>Update Profile</Link>
               </Button>
-            </NavigationMenuItem>
+            </NavigationMenuItem> */}
 
             {/* Category */}
             <NavigationMenuItem className="relative">

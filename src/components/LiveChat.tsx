@@ -1,10 +1,9 @@
 import { Button } from "./shadcn/ui/button";
 import SockJS from "sockjs-client";
-import { IFrame, Stomp } from "@stomp/stompjs";
+import { Stomp } from "@stomp/stompjs";
 import { useEffect, useState } from "react";
 import { useAppContext } from "@/contexts/AppContext";
 import axios from "axios";
-import { Input } from "./shadcn/ui/input";
 import plus from "/plus-icon.svg";
 import watchParty from "/watch-party.svg";
 import ChatHistory from "./ChatHistory";
