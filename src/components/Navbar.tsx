@@ -100,8 +100,3 @@ const categories: { title: string; href: string; }[] = [
     {title: "Category 5", href: "/category5"},
     {title: "Category 6", href: "/category6" },
 ]
-
-const watchpartydetails: { title: string; href: string; }[] = [
-    { title: "Create a Watch Party", href: "/watch-party" },
-    { title: "Join Watch Party", href: "/join-watch-party" },
-]
