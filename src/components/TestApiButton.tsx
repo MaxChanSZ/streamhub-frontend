@@ -19,6 +19,11 @@ const TestApiButton = () => {
       })
       .catch((error) => {
         console.log(error);
+        toast({
+          title: "Error",
+          description: `Error connecting to server | Error: ${error}`,
+          variant: "destructive",
+        });
       });
   };
 
