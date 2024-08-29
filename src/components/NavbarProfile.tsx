@@ -7,7 +7,7 @@ import { toast } from "./shadcn/ui/use-toast";
 import { Button } from "@/components/shadcn/ui/button.tsx";
 
 const NavbarProfile = () => {
-    const [isMenuOpen, setIsMenuOpen] = useState(false);
+    const [isMenuOpen, setIsProfileMenuOpen] = useState(false);
     const menuRef = useRef<HTMLDivElement>(null);
     const iconRef = useRef<HTMLDivElement>(null);
     const { setIsLoggedIn, user, setUser } = useAppContext();
@@ -19,29 +19,29 @@ const NavbarProfile = () => {
             toast({
                 title: "Logged out",
             });
-            setIsMenuOpen(false); // Close the menu after logout
+            setIsProfileMenuOpen(false); // Close the menu after logout
         } catch (error) {
             console.error(`Error during logout: ${error}`);
         }
     };
 
-    const toggleMenu = () => {
-        setIsMenuOpen(prevState => !prevState);
+    const toggleProfileMenu = () => {
+        setIsProfileMenuOpen(prevState => !prevState);
     };
 
-    const handleClickOutside = (event: MouseEvent) => {
+    const handleProfileClickOutside = (event: MouseEvent) => {
         if (
             menuRef.current && !menuRef.current.contains(event.target as Node) &&
             iconRef.current && !iconRef.current.contains(event.target as Node)
         ) {
-            setIsMenuOpen(false);
+            setIsProfileMenuOpen(false);
         }
     };
 
     useEffect(() => {
-        document.addEventListener('mousedown', handleClickOutside);
+        document.addEventListener('mousedown', handleProfileClickOutside);
         return () => {
-            document.removeEventListener('mousedown', handleClickOutside);
+            document.removeEventListener('mousedown', handleProfileClickOutside);
         };
     }, []);
 
@@ -50,7 +50,7 @@ const NavbarProfile = () => {
             <div
                 ref={iconRef}
                 style={{ width: '50px', height: '50px' }}
-                onClick={toggleMenu}
+                onClick={toggleProfileMenu}
                 className="relative cursor-pointer"
             >
                 <img
@@ -77,10 +77,10 @@ const NavbarProfile = () => {
                         Hello {user?.username}
                     </p>
                     <Button variant="ghost" asChild className="w-full text-left px-4 py-2 text-white">
-                        <Link to={`/update-profile`} onClick={() => setIsMenuOpen(false)}>Update Profile</Link>
+                        <Link to={`/update-profile`} onClick={() => setIsProfileMenuOpen(false)}>Update Profile</Link>
                     </Button>
                     <Button variant="ghost" asChild className="w-full text-left px-4 py-2 text-white">
-                        <Link to={`/contact`} onClick={() => setIsMenuOpen(false)}>TestButton</Link>
+                        <Link to={`/contact`} onClick={() => setIsProfileMenuOpen(false)}>TestButton</Link>
                     </Button>
                     <Button variant="destructive" onClick={handleLogout} className="w-full text-left px-4 py-2 text-white">
                         Logout

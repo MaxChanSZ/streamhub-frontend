@@ -8,13 +8,14 @@ import {
 import { Button } from "@/components/shadcn/ui/button.tsx";
 import { Input } from "@/components/shadcn/ui/input.tsx";
 import { Link } from "react-router-dom";
-import { useState } from "react";
+import {useEffect, useRef, useState} from "react";
 import { Menu, X } from "lucide-react"; // Icons for menu and close
 import logo from "/streamhub-logo.svg";
 import NavbarProfile from "@/components/NavbarProfile.tsx";
 
 const Navbar = () => {
     const [menuOpen, setMenuOpen] = useState(false);
+    const mobileMenuRef = useRef<HTMLDivElement>(null);
 
     const buttonTextFormat =
         "text-xl xl:text-xl 2xl:text-2xl 3xl:text-3xl 4xl:text-4xl 5xl:text-5xl " + // Text size
@@ -23,6 +24,26 @@ const Navbar = () => {
         "bg-black text-white " + // Background and text color
         "hover:bg-white hover:text-black transition-colors" // Hover and transition effects
 
+    const toggleMenu = () => {
+        setMenuOpen(prevState => !prevState);
+    };
+
+    const handleClickOutside = (event: MouseEvent) => {
+        if (
+            mobileMenuRef.current &&
+            !mobileMenuRef.current.contains(event.target as Node) &&
+            menuOpen // Close only if menu is open and click is outside
+        ) {
+            setMenuOpen(false);
+        }
+    };
+
+    useEffect(() => {
+        document.addEventListener('mousedown', handleClickOutside);
+        return () => {
+            document.removeEventListener('mousedown', handleClickOutside);
+        };
+    }, []);
 
     return (
         // The navbar component is a container for the navigation menu and user information.
@@ -103,7 +124,7 @@ const Navbar = () => {
                 <Button
                     variant="ghost"
                     className={`${buttonTextFormat} text-white justify-start`}
-                    onClick={() => setMenuOpen(!menuOpen)}
+                    onClick={toggleMenu}
                 >
                     Menu
                 </Button>
@@ -111,7 +132,10 @@ const Navbar = () => {
 
             {/* Mobile Menu Dropdown */}
             {menuOpen && (
-                <div className="lg:hidden absolute top-[10.5vh] left-0 w-full bg-black z-20">
+                <div
+                    ref={mobileMenuRef} // Add this ref
+                    className="lg:hidden absolute top-[10.5vh] left-0 w-full bg-black z-20"
+                >
                     <ul className="flex flex-col items-center p-4 space-y-2">
                         <li>
                             <Button
@@ -122,7 +146,7 @@ const Navbar = () => {
                                 <Link
                                     to={`/watch-party`}
                                     className="block py-2"
-                                    onClick={() => setMenuOpen(false)}
+                                    onClick={() => setMenuOpen(false)} // Add this line
                                 >
                                     Join Watch Party
                                 </Link>
@@ -137,18 +161,19 @@ const Navbar = () => {
                                 <Link
                                     to={`/contact`}
                                     className="block py-2"
-                                    onClick={() => setMenuOpen(false)}
+                                    onClick={() => setMenuOpen(false)} // Add this line
                                 >
                                     Contact
                                 </Link>
                             </Button>
                         </li>
+                        {/* Category Menu */}
                         <li>
                             <NavigationMenu>
                                 <NavigationMenuItem className="relative">
                                     <Button
                                         variant="ghost"
-                                        className={`${buttonTextFormat} text-white`} // Apply buttonTextFormat here
+                                        className={`${buttonTextFormat} text-white`}
                                         asChild
                                     >
                                         <NavigationMenuTrigger className="relative z-10">Category</NavigationMenuTrigger>
@@ -159,12 +184,13 @@ const Navbar = () => {
                                                 <li key={category.title}>
                                                     <Button
                                                         variant="ghost"
-                                                        className={`${buttonTextFormat} text-white`} // Apply buttonTextFormat here as well
+                                                        className={`${buttonTextFormat} text-white`}
                                                         asChild
                                                     >
                                                         <Link
                                                             to={category.href}
                                                             className="text-white hover:underline block py-2 px-4"
+                                                            onClick={() => setMenuOpen(false)} // Add this line
                                                         >
                                                             <div>
                                                                 <h3 className="font-bold">{category.title}</h3>
