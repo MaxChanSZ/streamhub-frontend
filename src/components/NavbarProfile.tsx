@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import { Link } from "react-router-dom";
 import profileIcon from "/profileicon.svg";
 import profileIconBg from "/profileiconbg.svg";
@@ -46,7 +46,7 @@ const NavbarProfile = () => {
     }, []);
 
     return (
-        <div className="relative flex items-center pl-8 pr-14">
+        <div className="relative flex items-center pl-6 pr-6">
             <div
                 ref={iconRef}
                 style={{ width: '50px', height: '50px' }}
