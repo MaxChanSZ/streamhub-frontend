@@ -1,7 +1,6 @@
 import { Button } from "@/components/shadcn/ui/button.tsx";
 import logo from "/streamhub-logo.svg";
 import React, { useState } from "react";
-import { useAppContext } from "@/contexts/AppContext";
 import LoginPage from "./LoginPage";
 import RegisterPage from "./RegisterPage";
 import WatchPartyPage from "./WatchPartyPage";
