@@ -46,7 +46,7 @@ const NavbarProfile = () => {
     }, []);
 
     return (
-        <div className="relative flex items-center pl-6 pr-6">
+        <div className="relative flex items-center pl-2 pr-2 sm:pl-6 sm:pr-6">
             <div
                 ref={iconRef}
                 style={{ width: '50px', height: '50px' }}
