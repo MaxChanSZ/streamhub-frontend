@@ -49,23 +49,21 @@ const NavbarProfile = () => {
         <div className="relative flex items-center pl-2 pr-2 sm:pl-6 sm:pr-6">
             <div
                 ref={iconRef}
-                style={{ width: '50px', height: '50px' }}
+                className="relative cursor-pointer w-[50px] h-[50px] lg:w-[60px] lg:h-[60px] 2xl:w-[65px] 2xl:h-[65px] 3xl:w-[70px] 3xl:h-[70px] 4xl:w-[75px] 4xl:h-[75px] 5xl:w-[80px] 5xl:h-[80px]"
                 onClick={toggleProfileMenu}
-                className="relative cursor-pointer"
             >
                 <img
                     src={profileIcon}
                     alt="Profile Icon"
-                    style={{ width: '50px', height: '50px' }}
-                    className="absolute top-0 left-0"
+                    className="absolute top-0 left-0 w-[50px] h-[50px] lg:w-[60px] lg:h-[60px] 2xl:w-[65px] 2xl:h-[65px] 3xl:w-[70px] 3xl:h-[70px] 4xl:w-[75px] 4xl:h-[75px] 5xl:w-[80px] 5xl:h-[80px]"
                 />
                 <img
                     src={profileIconBg}
                     alt="Profile Icon Background"
-                    style={{ width: '50px', height: '50px' }}
-                    className="absolute top-0 left-0"
+                    className="absolute top-0 left-0 w-[50px] h-[50px] lg:w-[60px] lg:h-[60px] 2xl:w-[65px] 2xl:h-[65px] 3xl:w-[70px] 3xl:h-[70px] 4xl:w-[75px] 4xl:h-[75px] 5xl:w-[80px] 5xl:h-[80px]"
                 />
             </div>
+
 
             {isMenuOpen && (
                 <div
@@ -82,7 +80,8 @@ const NavbarProfile = () => {
                     <Button variant="ghost" asChild className="w-full text-left px-4 py-2 text-white">
                         <Link to={`/contact`} onClick={() => setIsProfileMenuOpen(false)}>TestButton</Link>
                     </Button>
-                    <Button variant="destructive" onClick={handleLogout} className="w-full text-left px-4 py-2 text-white">
+                    <Button variant="destructive" onClick={handleLogout}
+                            className="w-full text-left px-4 py-2 text-white">
                         Logout
                     </Button>
                 </div>
