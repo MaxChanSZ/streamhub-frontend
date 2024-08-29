@@ -8,7 +8,11 @@
     "build": "tsc -b && vite build",
     "lint": "eslint . --ext ts,tsx --report-unused-disable-directives --max-warnings 0",
     "test": "vitest",
-    "preview": "vite preview"
+    "preview": "vite preview",
+    "start:zookeeper": "C:Users/timot/Desktop/Code/Projects/StreamHub/kafka_2.13-3.8.0/bin/zookeeper-server-start.sh C:Users/timot/Desktop/Code/Projects/StreamHub/kafka_2.13-3.8.0/kafka_2.13-3.8.0/config/zookeeper.properties",
+    "postinstall": "npm run dev",
+    "start:kafka": "./start.sh",
+    "start:app": "npm run start:kafka"
   },
   "dependencies": {
     "@radix-ui/react-dialog": "^1.1.1",
