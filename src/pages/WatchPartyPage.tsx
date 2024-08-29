@@ -1,9 +1,11 @@
 import LiveChat from "@/components/LiveChat";
+import { useState } from "react";
 
 const WatchPartyPage = () => {
+  const [roomID, setRoomID] = useState("");
   return (
     <div className="flex">
-      <LiveChat />
+      <LiveChat roomID={roomID} setRoomID={setRoomID} />
     </div>
   );
 };
