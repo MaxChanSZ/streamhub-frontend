@@ -8,8 +8,8 @@ import { Button } from "@/components/shadcn/ui/button.tsx";
 
 const NavbarProfile = () => {
     const [isMenuOpen, setIsProfileMenuOpen] = useState(false);
-    const menuRef = useRef<HTMLDivElement>(null);
-    const iconRef = useRef<HTMLDivElement>(null);
+    const menuRef = useRef<HTMLDivElement>(null as unknown as HTMLDivElement);
+    const iconRef = useRef<HTMLDivElement>(null as unknown as HTMLDivElement);
     const { setIsLoggedIn, user, setUser } = useAppContext();
 
     const handleLogout = () => {

@@ -15,7 +15,8 @@ import NavbarProfile from "@/components/NavbarProfile.tsx";
 
 const Navbar = () => {
     const [menuOpen, setMenuOpen] = useState(false);
-    const mobileMenuRef = useRef<HTMLDivElement>(null);
+    const mobileMenuRef = useRef<HTMLDivElement>(null as unknown as HTMLDivElement);
+    const menuButtonRef = useRef<HTMLButtonElement>(null as unknown as HTMLButtonElement);
 
     const buttonTextFormat =
         "text-xl xl:text-xl 2xl:text-2xl 3xl:text-3xl 4xl:text-4xl 5xl:text-5xl " + // Text size
@@ -30,9 +31,8 @@ const Navbar = () => {
 
     const handleClickOutside = (event: MouseEvent) => {
         if (
-            mobileMenuRef.current &&
-            !mobileMenuRef.current.contains(event.target as Node) &&
-            menuOpen // Close only if menu is open and click is outside
+            mobileMenuRef.current && !mobileMenuRef.current.contains(event.target as Node) &&
+            menuButtonRef.current && !menuButtonRef.current.contains(event.target as Node)
         ) {
             setMenuOpen(false);
         }
@@ -122,6 +122,7 @@ const Navbar = () => {
             {/* Mobile Menu Button */}
             <div className="lg:hidden flex-grow">
                 <Button
+                    ref={menuButtonRef}
                     variant="ghost"
                     className={`${buttonTextFormat} text-white justify-start`}
                     onClick={toggleMenu}
@@ -133,7 +134,7 @@ const Navbar = () => {
             {/* Mobile Menu Dropdown */}
             {menuOpen && (
                 <div
-                    ref={mobileMenuRef} // Add this ref
+                    ref={mobileMenuRef}
                     className="lg:hidden absolute top-[10.5vh] left-0 w-full bg-black z-20"
                 >
                     <ul className="flex flex-col items-center p-4 space-y-2">
