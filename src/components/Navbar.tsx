@@ -9,7 +9,6 @@ import { Button } from "@/components/shadcn/ui/button.tsx";
 import { Input } from "@/components/shadcn/ui/input.tsx";
 import { Link } from "react-router-dom";
 import {useEffect, useRef, useState} from "react";
-import { Menu, X } from "lucide-react"; // Icons for menu and close
 import logo from "/streamhub-logo.svg";
 import NavbarProfile from "@/components/NavbarProfile.tsx";
 
