@@ -24,15 +24,26 @@ const Navbar = () => {
   return (
     // The navbar component is a container for the navigation menu and user information.
       <div
-          className="h-[10.5vh] lg:h-[11.5vh] xl:h-[12.5vh] 2xl:h-[13.5vh] 3xl:h-[14.5vh] 4xl:h-[16.5vh] 5xl:h-[18vh] bg-black flex items-center px-4 mt-3 pb-4">
+          className="h-[10.5vh] sm:h-[10.5vh] md:h-[11vh] lg:h-[11vh] xl:h-[11vh] 2xl:h-[11vh] 3xl:h-[12vh] 4xl:h-[12vh] 5xl:h-[12vh] bg-black flex items-center px-4 mt-3 pb-4">
           {/* Logo */}
           <div
-              className="flex-shrink-0 ml-14 mr-8 lg:ml-16 lg:mr-12 xl:ml-20 xl:mr-16 2xl:ml-24 2xl:mr-20 3xl:ml-28 3xl:mr-24 4xl:ml-32 4xl:mr-28 5xl:ml-36 5xl:mr-32">
+              className="
+                flex-shrink-0
+                ml-8 mr-4       /* Base */
+                sm:ml-8 sm:mr-4 /* ≥ 640px */
+                md:ml-10 md:mr-6 /* ≥ 768px */
+                lg:ml-14 lg:mr-10 /* ≥ 1024px */
+                xl:ml-16 xl:mr-12 /* ≥ 1280px */
+                2xl:ml-18 2xl:mr-14 /* ≥ 1536px */
+                3xl:ml-20 3xl:mr-16 /* ≥ 1600px */
+                4xl:ml-22 4xl:mr-18 /* ≥ 1920px */
+                5xl:ml-24 5xl:mr-20 /* ≥ 2560px">
+
               <Link to={`/`}>
                   <img
                       src={logo}
                       alt="StreamHub Logo"
-                      className="w-[10rem] lg:w-[14rem] xl:w-[18rem] 2xl:w-[22rem] 3xl:w-[18rem] 4xl:w-[20rem] 5xl:w-[24rem]
+                      className="w-[8rem] sm:w-[10rem] md:w-[12rem] lg:w-[14rem] xl:w-[16rem] 2xl:w-[18rem] 3xl:w-[20rem] 4xl:w-[22rem]
                        h-auto object-contain" // Responsive width and auto height with proper scaling
                   />
               </Link>
@@ -47,7 +58,7 @@ const Navbar = () => {
                       {/* Watch Party */}
                       <NavigationMenuItem className="relative">
                           <Button variant="ghost" className={buttonTextFormat} asChild>
-                              <Link to={`/watch-party`}>Join a Watch Party</Link>
+                              <Link to={`/watch-party`}>Join Watch Party</Link>
                           </Button>
                       </NavigationMenuItem>
 
