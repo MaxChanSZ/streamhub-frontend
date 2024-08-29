@@ -223,8 +223,8 @@ const Navbar = () => {
             xl:w-[14rem] xl:h-[3.5rem]
             2xl:w-[18rem] 2xl:h-[4rem]
             3xl:w-[20rem] 3xl:h-[4.5rem]
-            4xl:w-[22rem] 4xl:h-[5rem]
-            5xl:w-[24rem] 5xl:h-[5rem]
+            4xl:w-[22rem] 4xl:h-[4.5rem]
+            5xl:w-[24rem] 5xl:h-[4.5rem]
             text-base
             sm:text-xl
             md:text-xl
@@ -232,8 +232,8 @@ const Navbar = () => {
             xl:text-2xl
             2xl:text-3xl
             3xl:text-4xl
-            4xl:text-5xl
-            5xl:text-5xl
+            4xl:text-4xl
+            5xl:text-4xl
         "
                 />
                 <NavbarProfile />
