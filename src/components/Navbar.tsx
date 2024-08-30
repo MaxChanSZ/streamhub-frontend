@@ -216,24 +216,24 @@ const Navbar = () => {
                     placeholder="Search"
                     className="
             bg-black text-white placeholder-white
-            w-[8rem] h-[2.5rem]
-            sm:w-[10rem] sm:h-[3rem]
-            md:w-[10rem] md:h-[3rem]
-            lg:w-[10rem] lg:h-[3rem]
-            xl:w-[14rem] xl:h-[3.5rem]
-            2xl:w-[18rem] 2xl:h-[4rem]
-            3xl:w-[20rem] 3xl:h-[4.5rem]
-            4xl:w-[22rem] 4xl:h-[4.5rem]
-            5xl:w-[24rem] 5xl:h-[4.5rem]
+            w-[8rem] h-[2rem]
+            sm:w-[10rem] sm:h-[2.5rem]
+            md:w-[10rem] md:h-[2.5rem]
+            lg:w-[10rem] lg:h-[2.5rem]
+            xl:w-[14rem] xl:h-[2.5rem]
+            2xl:w-[16rem] 2xl:h-[2.5rem]
+            3xl:w-[18rem] 3xl:h-[2.5rem]
+            4xl:w-[20rem] 4xl:h-[3rem]
+            5xl:w-[20rem] 5xl:h-[3rem]
             text-base
             sm:text-xl
             md:text-xl
             lg:text-xl
             xl:text-2xl
-            2xl:text-3xl
-            3xl:text-4xl
-            4xl:text-4xl
-            5xl:text-4xl
+            2xl:text-2xl
+            3xl:text-2xl
+            4xl:text-3xl
+            5xl:text-3xl
         "
                 />
                 <NavbarProfile />
@@ -252,3 +252,4 @@ const categories: { title: string; href: string }[] = [
     { title: "Category 5", href: "/category5" },
     { title: "Category 6", href: "/category6" },
 ];
+
