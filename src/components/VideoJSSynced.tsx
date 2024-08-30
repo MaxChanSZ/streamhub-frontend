@@ -40,7 +40,7 @@ const VideoJS: React.FC<IVideoPlayerProps> = ({ options }) => {
   const playerRef = React.useRef<any>();
   let player: any;
   let isReceived: boolean = false;
-  const { user } = useAppContext();
+  const sender = Date.now().toString();
 
   // this stomp client will later be accessed by the 
   //const [stompClient, setStompClient] = useState<CompatClient | null>(null);
@@ -74,10 +74,9 @@ const VideoJS: React.FC<IVideoPlayerProps> = ({ options }) => {
           // simply change the value of isReceived back to false
           // else, this is a locally performed action, and needs to be broadcast to the websocket
           if ( isReceived ) {
-            console.log("This was a received play command. Now setting isReceived to false");
+            console.log("This was a received play command. Will not broadcast");
             isReceived = false;
           } else {
-            console.log("Player is played at " + player.currentTime());
             const videoTime = player.currentTime();
             const actionTime = Date.now();
             const action : VideoSyncAction = {
@@ -85,7 +84,7 @@ const VideoJS: React.FC<IVideoPlayerProps> = ({ options }) => {
               actionTime: actionTime,
               videoTime: videoTime,
               sessionId: sessionId,
-              sender: user?.username || "anon"
+              sender: sender
             };
             sendVideoActionMessage(action);
           }
@@ -96,10 +95,9 @@ const VideoJS: React.FC<IVideoPlayerProps> = ({ options }) => {
           // simply change the value of isReceived back to false
           // else, this is a locally performed action, and needs to be broadcast to the websocket
           if ( isReceived ) {
-            console.log("This was a received pause command. Now setting isReceived to false");
+            console.log("This was a received pause command. Will not broadcast");
             isReceived = false;
           } else {
-              console.log("Player is paused at " + player.currentTime());
               const videoTime = player.currentTime();
               const actionTime = Date.now();
               const action : VideoSyncAction = {
@@ -107,7 +105,7 @@ const VideoJS: React.FC<IVideoPlayerProps> = ({ options }) => {
                 actionTime: actionTime,
                 videoTime: videoTime,
                 sessionId: sessionId,
-                sender: user?.username || "anon"
+                sender: sender
               };
             sendVideoActionMessage(action);
           }
@@ -142,8 +140,8 @@ const VideoJS: React.FC<IVideoPlayerProps> = ({ options }) => {
         console.log("Received a message");
 
         // if this message was actually sent by the current user, we do not need to perform any sync actions
-        if (receivedAction.sender === user?.username) {
-          console.log("No action needed as this is the sender")
+        if ( receivedAction.sender === sender ) {
+          console.log("No need to act as this was my own action");
         } else if ( receivedAction.actionType === "Play" ) {
           // Start playing the local player from the correct time
           isReceived = true;
@@ -177,20 +175,19 @@ const VideoJS: React.FC<IVideoPlayerProps> = ({ options }) => {
   }
 
   const playVideoFromAction = (actionTime : number, videoTime : number) => {
+    console.log("Playing video from sync message");
     const currentTime = Date.now();
     // the delay between when the host performed the action, and when the client receives the action
     // convert milliseconds to seconds
     const timeDeltaToHostAction = ( currentTime - actionTime ) / 1000;
-
-    console.log("Time delta is: " + timeDeltaToHostAction);
     // move player to match host
     const syncedVideoTime = videoTime + timeDeltaToHostAction;
-    console.log("synced time is: " +  syncedVideoTime);
     player.currentTime(syncedVideoTime);
     player.play();
   }
 
   const pauseVideoFromAction = (actionTime : number, videoTime : number) => {
+    console.log("Pausing video from sync message");
     player.pause();
     player.currentTime(videoTime + ((Date.now() - actionTime) / 1000));
   }
