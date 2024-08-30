@@ -90,13 +90,6 @@ const Navbar = () => {
                             </Button>
                         </NavigationMenuItem>
 
-                        {/* Rest of Buttons */}
-                        <NavigationMenuItem>
-                            <Button variant="ghost" className={buttonTextFormat} asChild>
-                                <Link to={`/contact`}>Contact</Link>
-                            </Button>
-                        </NavigationMenuItem>
-
                       {/* Category */}
                       <NavigationMenuItem className="relative">
                           <Button variant="ghost" className={buttonTextFormat} asChild>
@@ -121,6 +114,12 @@ const Navbar = () => {
                               </ul>
                           </NavigationMenuContent>
                       </NavigationMenuItem>
+                        {/* Rest of Buttons */}
+                        <NavigationMenuItem>
+                            <Button variant="ghost" className={buttonTextFormat} asChild>
+                                <Link to={`/contact`}>Contact</Link>
+                            </Button>
+                        </NavigationMenuItem>
                     </NavigationMenuList>
               </NavigationMenu>
           </div>
@@ -144,6 +143,8 @@ const Navbar = () => {
                     className="lg:hidden absolute top-[10.5vh] left-0 w-full bg-black z-20"
                 >
                     <ul className="flex flex-col items-center p-4 space-y-2">
+
+                        {/* Mobile Category Menu */}
                         <li>
                             <Button
                                 variant="ghost"
@@ -159,22 +160,7 @@ const Navbar = () => {
                                 </Link>
                             </Button>
                         </li>
-                        <li>
-                            <Button
-                                variant="ghost"
-                                className={`${buttonTextFormat} text-white`}
-                                asChild
-                            >
-                                <Link
-                                    to={`/contact`}
-                                    className="block py-2"
-                                    onClick={() => setMenuOpen(false)} // Add this line
-                                >
-                                    Contact
-                                </Link>
-                            </Button>
-                        </li>
-                        {/* Mobile Category Menu */}
+
                         <li>
                             <NavigationMenu>
                                 <NavigationMenuItem className="relative">
@@ -183,7 +169,9 @@ const Navbar = () => {
                                         className={`${buttonTextFormat} text-white`}
                                         asChild
                                     >
-                                        <NavigationMenuTrigger className="relative z-10">Category</NavigationMenuTrigger>
+
+                                        <NavigationMenuTrigger
+                                            className="relative z-10">Category</NavigationMenuTrigger>
                                     </Button>
                                     <NavigationMenuContent className="bg-black w-fit">
                                         <ul className="flex flex-col items-center w-full gap-2 p-2">
@@ -207,6 +195,21 @@ const Navbar = () => {
                                         </ul>
                                     </NavigationMenuContent>
                                 </NavigationMenuItem>
+
+                                <Button
+                                    variant="ghost"
+                                    className={`${buttonTextFormat} text-white`}
+                                    asChild
+                                >
+                                    <Link
+                                        to={`/contact`}
+                                        className="block py-2"
+                                        onClick={() => setMenuOpen(false)} // Add this line
+                                    >
+                                        Contact
+                                    </Link>
+                                </Button>
+
                             </NavigationMenu>
                         </li>
                     </ul>
