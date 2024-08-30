@@ -1,5 +1,18 @@
 import { Button } from "@/components/shadcn/ui/button";
+import {
+  AlertDialog,
+  AlertDialogTrigger,
+  AlertDialogContent,
+  AlertDialogHeader,
+  AlertDialogTitle,
+  AlertDialogDescription,
+  AlertDialogFooter,
+  AlertDialogCancel,
+  AlertDialogAction,
+} from "@/components/shadcn/ui/alert-dialog";
+import { Input } from "@/components/shadcn/ui/input";
 import { useAppContext } from "@/contexts/AppContext";
+import { useNavigate } from "react-router-dom";
 
 /**
  * WatchPartyPage component is responsible for rendering the page where users can enter the watch party code.
@@ -9,6 +22,7 @@ import { useAppContext } from "@/contexts/AppContext";
  */
 const JoinWatchPartyPage = () => {
   var { isLoggedIn } = useAppContext();
+  // const navigate = useNavigate();
 
   if (isLoggedIn) {
     return (
@@ -37,12 +51,32 @@ const JoinWatchPartyPage = () => {
             ></input>
           </label>
           {/* Submit button for the form */}
-          <Button
-            variant="secondary"
-            className="text-base mx-2 px-4 py-1 self-center font-alatsi"
-          >
-            Submit
-          </Button>
+
+          <AlertDialog>
+            <AlertDialogTrigger asChild>
+              <Button
+                variant="secondary"
+                className="text-base mx-2 px-4 py-1 self-center font-alatsi"
+              >
+                Submit
+              </Button>
+            </AlertDialogTrigger>
+            <AlertDialogContent className="sm:max-w-[400px]">
+              <AlertDialogHeader>
+                <AlertDialogTitle>Enter your display name</AlertDialogTitle>
+                <AlertDialogDescription>
+                  Please enter a name in the input field below.
+                </AlertDialogDescription>
+              </AlertDialogHeader>
+              <div className="space-y-4 py-4">
+                <Input autoFocus placeholder="Enter a value" />
+              </div>
+              <AlertDialogFooter>
+                <AlertDialogCancel>Cancel</AlertDialogCancel>
+                <AlertDialogAction>Submit</AlertDialogAction>
+              </AlertDialogFooter>
+            </AlertDialogContent>
+          </AlertDialog>
         </form>
       </div>
     );

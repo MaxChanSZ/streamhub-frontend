@@ -11,7 +11,6 @@ import LogoutButton from "./LogoutButton";
 import * as apiClient from "@/utils/api-client";
 import ChatInput from "./ChatInput";
 import { LoadingSpinner } from "./LoadingSpinner";
-// import { LoadingSpinner } from "./LoadingSpinner"; // Uncomment if needed
 
 export interface Message {
   messageID: number;
@@ -20,10 +19,15 @@ export interface Message {
   timeStamp: Date;
 }
 
-const LiveChat = () => {
+interface LiveChatProps {
+  roomID: string;
+  setRoomID: (roomID: string) => void;
+}
+
+const LiveChat: React.FC<LiveChatProps> = ({ roomID, setRoomID }) => {
   const [messages, setMessages] = useState<Message[]>([]); // messages state
   const [messageToSend, setMessageToSend] = useState<string>("");
-  const [roomID, setRoomID] = useState<string>("");
+  // const [roomID, setRoomID] = useState<string>("");
   const [isLoading, setIsLoading] = useState<boolean>(false); // To handle loading state
   const TRANSITION_DURATION_MS = 500; // fixed transition period in milliseconds
   const { user } = useAppContext();
