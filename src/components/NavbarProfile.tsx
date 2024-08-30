@@ -69,21 +69,38 @@ const NavbarProfile = () => {
                 <div
                     ref={menuRef}
                     className="absolute mt-2 w-48 bg-black text-white shadow-lg rounded-md z-50"
-                    style={{ top: '100%', right: 0, transform: 'translateX(0%)', backgroundColor: 'rgb(2, 8, 23)' }}
+                    style={{top: '100%', right: 0, transform: 'translateX(0%)', backgroundColor: 'rgb(2, 8, 23)'}}
                 >
-                    <p className="text-white font-alatsi font-semibold text-lg px-4 py-2 border-b border-gray-600">
-                        Hello {user?.username}
+                    <p className="text-white font-alatsi px-4 py-2 border-b border-gray-600 text-2xl">
+                        Hello <span className="font-bold">{user?.username}</span>
                     </p>
-                    <Button variant="ghost" asChild className="w-full text-left px-4 py-2 text-white">
-                        <Link to={`/update-profile`} onClick={() => setIsProfileMenuOpen(false)}>Update Profile</Link>
-                    </Button>
-                    <Button variant="ghost" asChild className="w-full text-left px-4 py-2 text-white">
-                        <Link to={`/contact`} onClick={() => setIsProfileMenuOpen(false)}>TestButton</Link>
-                    </Button>
-                    <Button variant="destructive" onClick={handleLogout}
-                            className="w-full text-left px-4 py-2 text-white">
-                        Logout
-                    </Button>
+                    <div className="flex flex-col space-y-2">
+                        <Button
+                            variant="ghost"
+                            asChild
+                            className="w-full text-left text-2xl text-white"
+                        >
+                            <Link to={`/update-profile`} onClick={() => setIsProfileMenuOpen(false)}>
+                                Update Profile
+                            </Link>
+                        </Button>
+                        <Button
+                            variant="ghost"
+                            asChild
+                            className="w-full text-left text-2xl text-white"
+                        >
+                            <Link to={`/contact`} onClick={() => setIsProfileMenuOpen(false)}>
+                                TestButton
+                            </Link>
+                        </Button>
+                        <Button
+                            variant="destructive"
+                            onClick={handleLogout}
+                            className="w-full text-left text-2xl text-white"
+                        >
+                            Logout
+                        </Button>
+                    </div>
                 </div>
             )}
         </div>

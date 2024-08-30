@@ -82,13 +82,13 @@ const NewestSeriesCarousel = () => {
                     </CarouselItem>
                 ))}
             </CarouselContent>
-            {/* Render these components on screens smaller than 768px */}
+            {/* Render these components on screens smaller than 768px. CarouselPrevious2/Next2 do single scroll*/}
             <div className="block md:hidden">
                 <CarouselPrevious2 className="absolute left-4 z-20 flex h-10 w-10" />
                 <CarouselNext2 className="absolute right-4 z-20 flex h-10 w-10" />
             </div>
 
-            {/* Render these components on screens 768px and larger */}
+            {/* Render these components on screens 768px and larger. CarouselPrevious3/Next3 do 3 scrolls */}
             <div className="hidden md:block">
                 <CarouselPrevious3 className="absolute left-4 z-20 flex h-10 w-10" />
                 <CarouselNext3 className="absolute right-4 z-20 flex h-10 w-10" />

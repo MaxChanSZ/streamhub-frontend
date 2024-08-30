@@ -18,9 +18,9 @@ const Navbar = () => {
     const menuButtonRef = useRef<HTMLButtonElement>(null as unknown as HTMLButtonElement);
 
     const buttonTextFormat =
-        "text-xl xl:text-xl 2xl:text-2xl 3xl:text-3xl 4xl:text-4xl 5xl:text-5xl " + // Text size
+        "text-xl xl:text-xl 2xl:text-2xl 3xl:text-3xl 4xl:text-4xl 5xl:text-4xl " + // Text size
         "mx-2 sm:mx-3 md:mx-4 " + // Margin X
-        "px-0.5 py-6 sm:px-4 sm:py-6 md:px-6 md:py-6 lg:px-1 lg:py-6 xl:px-4 xl:py-7 2xl:px-6 2xl:py-7 3xl:px-8 3xl:py-8 4xl:px-10 4xl:py-8 5xl:px-12 5xl:py-8 " + // Padding
+        "px-0.5 py-6 sm:px-4 sm:py-6 md:px-6 md:py-6 lg:px-1 lg:py-6 xl:px-4 xl:py-7 2xl:px-6 2xl:py-7 3xl:px-8 3xl:py-8 4xl:px-10 4xl:py-8 5xl:px-10 5xl:py-8 " + // Padding
         "bg-black text-white " + // Background and text color
         "hover:bg-white hover:text-black transition-colors" // Hover and transition effects
 
