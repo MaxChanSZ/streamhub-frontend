@@ -1,4 +1,5 @@
 import VideoJS from "@/components/VideoJS";
+import VideoJSSynced from "@/components/VideoJSSynced";
 
 interface WatchPageProps {
   videoSource: string;
@@ -23,7 +24,7 @@ const WatchPage = ( {videoSource} : WatchPageProps ) => {
   return (
     <>
       <h3>Watch Video</h3>
-    <VideoJS options={videoJsOptions} />
+    <VideoJSSynced options={videoJsOptions} />
     </>
   );
 };
