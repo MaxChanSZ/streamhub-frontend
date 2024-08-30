@@ -24,6 +24,13 @@ const Navbar = () => {
         "bg-black text-white " + // Background and text color
         "hover:bg-white hover:text-black transition-colors" // Hover and transition effects
 
+    const categoryButtonFormat =
+        "text-xl xl:text-xl 2xl:text-2xl 3xl:text-3xl 4xl:text-4xl 5xl:text-4xl " + // Text size
+        "mx-1" + // Margin X
+        "px-5 py-5 lg:px-5 lg:py-5 xl:px-5 xl:py-5 2xl:px-7 2xl:py-5 3xl:px-8 3xl:py-6 4xl:px-9 4xl:py-6 5xl:px-10 5xl:py-8 " + // Padding
+        "bg-black text-white " + // Background and text color
+        "hover:bg-white hover:text-black transition-colors" // Hover and transition effects
+
     const toggleMenu = () => {
         setMenuOpen(prevState => !prevState);
     };
@@ -95,14 +102,14 @@ const Navbar = () => {
                           <Button variant="ghost" className={buttonTextFormat} asChild>
                               <NavigationMenuTrigger className="relative z-10">Category</NavigationMenuTrigger>
                           </Button>
-                          <NavigationMenuContent className="bg-black">
-                              <ul className="grid w-full gap-2 p-2">
+                          <NavigationMenuContent className="bg-black w-fit">
+                              <ul className="flex flex-col items-center w-full p-2 space-y-2">
                                   {categories.map((category) => (
-                                      <li key={category.title}>
-                                          <Button variant="ghost" className={buttonTextFormat} asChild>
+                                      <li key={category.title} className="w-full">
+                                          <Button variant="ghost" className={categoryButtonFormat} asChild>
                                               <Link
                                                   to={category.href}
-                                                  className="text-white hover:underline block py-2 px-4"
+                                                  className="text-white hover:underline block w-full py-2 px-4 text-center"
                                               >
                                                   <div>
                                                       <h3 className="font-bold">{category.title}</h3>
@@ -114,7 +121,7 @@ const Navbar = () => {
                               </ul>
                           </NavigationMenuContent>
                       </NavigationMenuItem>
-                  </NavigationMenuList>
+                    </NavigationMenuList>
               </NavigationMenu>
           </div>
 
@@ -167,7 +174,7 @@ const Navbar = () => {
                                 </Link>
                             </Button>
                         </li>
-                        {/* Category Menu */}
+                        {/* Mobile Category Menu */}
                         <li>
                             <NavigationMenu>
                                 <NavigationMenuItem className="relative">
@@ -178,23 +185,21 @@ const Navbar = () => {
                                     >
                                         <NavigationMenuTrigger className="relative z-10">Category</NavigationMenuTrigger>
                                     </Button>
-                                    <NavigationMenuContent className="bg-black">
-                                        <ul className="grid w-full gap-2 p-2">
+                                    <NavigationMenuContent className="bg-black w-fit">
+                                        <ul className="flex flex-col items-center w-full gap-2 p-2">
                                             {categories.map((category) => (
-                                                <li key={category.title}>
+                                                <li key={category.title} className="w-full">
                                                     <Button
                                                         variant="ghost"
-                                                        className={`${buttonTextFormat} text-white`}
+                                                        className={`${categoryButtonFormat} text-white`}
                                                         asChild
                                                     >
                                                         <Link
                                                             to={category.href}
-                                                            className="text-white hover:underline block py-2 px-4"
+                                                            className="text-white hover:underline block w-full py-2 px-4 text-center"
                                                             onClick={() => setMenuOpen(false)} // Add this line
                                                         >
-                                                            <div>
-                                                                <h3 className="font-bold">{category.title}</h3>
-                                                            </div>
+                                                            <h3 className="font-bold">{category.title}</h3>
                                                         </Link>
                                                     </Button>
                                                 </li>
