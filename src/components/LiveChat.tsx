@@ -146,7 +146,7 @@ const LiveChat: React.FC<LiveChatProps> = ({ roomID, setRoomID }) => {
 
       <>
         {/* roomID input for development only */}
-        <form
+        {/* <form
           className="flex text-center justify-center items-center"
           onSubmit={(event) => {
             event.preventDefault();
@@ -164,7 +164,7 @@ const LiveChat: React.FC<LiveChatProps> = ({ roomID, setRoomID }) => {
           <Button type="submit" variant="secondary">
             Enter
           </Button>
-        </form>
+        </form> */}
         <div
           className={`${isLoading ? "opacity-50" : "opacity-100"} transition-opacity duration-${TRANSITION_DURATION_MS}`}
         >

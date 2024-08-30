@@ -12,6 +12,8 @@ import { useAppContext } from "@/contexts/AppContext";
 
 interface IVideoPlayerProps {
   options: videojs.PlayerOptions;
+  roomID: string;
+  setRoomID: (roomID: string) => void;
 }
 
 const initialOptions: any = {
@@ -35,7 +37,7 @@ export interface VideoSyncAction {
   sender: string;
 }
 
-const VideoJS: React.FC<IVideoPlayerProps> = ({ options }) => {
+const VideoJSSynced: React.FC<IVideoPlayerProps> = ({ options, roomID, setRoomID }) => {
   const videoNode = React.useRef<HTMLVideoElement>(null);
   const playerRef = React.useRef<any>();
   let player: any;
@@ -44,7 +46,7 @@ const VideoJS: React.FC<IVideoPlayerProps> = ({ options }) => {
 
   // this stomp client will later be accessed by the 
   //const [stompClient, setStompClient] = useState<CompatClient | null>(null);
-  const sessionId = "1234";
+  const sessionId = roomID;
   let stompClient : null | CompatClient = null;
 
   const playVideo = () => {
@@ -55,9 +57,11 @@ const VideoJS: React.FC<IVideoPlayerProps> = ({ options }) => {
     }
   };
 
-
+  
   React.useEffect(() => {
+    
     if (!playerRef.current) {
+      console.log(`RoomID is ${roomID}`);
       player = playerRef.current = videojs(videoNode.current ? videoNode.current : "", {
         ...initialOptions,
         ...options
@@ -67,7 +71,7 @@ const VideoJS: React.FC<IVideoPlayerProps> = ({ options }) => {
         //console.log(player.current.qualityLevels());
         playerRef.current = this;
         player = this;
-        player.autoplay(true);
+        //player.autoplay(true);
       
         player.on('play', () => {
           // if this action was one that was received from the websocket, we do not need to broadcast it
@@ -121,9 +125,11 @@ const VideoJS: React.FC<IVideoPlayerProps> = ({ options }) => {
       if (player) {
         console.log("Disposing player");
         player.dispose();
+        playerRef.current = null;
+        //videoNode.current = null;
       }
     };
-  }, [options]);
+  }, [options, roomID]);
 
   // Create a web socket connection with the server for video player synchronization
   React.useEffect(() => {
@@ -134,7 +140,7 @@ const VideoJS: React.FC<IVideoPlayerProps> = ({ options }) => {
 
     client.connect({}, () => {
       // subscribe to room id 1234 for now. will need to modify this based on watchparty session eventually
-      const topic = "/topic/video/1234"
+      const topic = `/topic/video/${roomID}`;
       client.subscribe(topic, (videoSyncAction) => {
         const receivedAction : VideoSyncAction = JSON.parse(videoSyncAction.body);
         console.log("Received a message");
@@ -151,7 +157,6 @@ const VideoJS: React.FC<IVideoPlayerProps> = ({ options }) => {
           isReceived = true;
           pauseVideoFromAction(receivedAction.actionTime, receivedAction.videoTime);
         }
-        
       });
       
       // set the stompClient variable of the component to the client we have just created
@@ -164,7 +169,7 @@ const VideoJS: React.FC<IVideoPlayerProps> = ({ options }) => {
     return () => {
       client.disconnect();
     }
-  }, []);
+  }, [roomID]);
 
   // function to send message to server when user plays, pauses, or forwards the video
   const sendVideoActionMessage = (action: VideoSyncAction) => {
@@ -195,11 +200,10 @@ const VideoJS: React.FC<IVideoPlayerProps> = ({ options }) => {
 
 
   return (
-    <div>
+    <div style={{width: '80%'}}>
         <video ref={videoNode} className="video-js vjs-big-play-centered" />
-        <button onClick={playVideo}>Play</button>
     </div>
   );
 };
 
-export default VideoJS;
+export default VideoJSSynced;

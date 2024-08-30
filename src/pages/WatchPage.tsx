@@ -24,7 +24,7 @@ const WatchPage = ( {videoSource} : WatchPageProps ) => {
   return (
     <>
       <h3>Watch Video</h3>
-    <VideoJSSynced options={videoJsOptions} />
+    <VideoJS options={videoJsOptions} />
     </>
   );
 };
