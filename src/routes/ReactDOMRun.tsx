@@ -7,6 +7,7 @@ import HomePage from "@/pages/HomePage.tsx";
 import SeriesPage from "@/pages/SeriesPage.tsx";
 import WatchPage from "@/pages/WatchPage.tsx";
 import WatchPartyPage from "@/pages/WatchPartyPage.tsx";
+import CreateWatchPartyPage from "@/pages/CreateWatchPartyPage.tsx";
 import UpdateProfilePage from "@/pages/UpdateProfilePage.tsx";
 
 import RegisterPage from "@/pages/RegisterPage";
@@ -42,6 +43,10 @@ const router = createBrowserRouter([
       {
         path: "watch-party/:sessionId",
         element: <WatchPartyPage />,
+      },
+      {
+        path: "create-watch-party",
+        element: <CreateWatchPartyPage />,
       },
       {
         path: "update-profile",
