@@ -2,7 +2,7 @@ import LiveChat from "@/components/LiveChat";
 import VideoJSSynced from "@/components/VideoJSSynced";
 import { useState } from "react";
 import { Button } from "@/components/shadcn/ui/button";
-import { useParams } from 'react-router';
+import { useParams } from "react-router";
 
 const WatchPartyPage = () => {
   const params = useParams();
@@ -16,9 +16,9 @@ const WatchPartyPage = () => {
       {
         // replace src with videoSource once that functionality has been created
         src: "http://localhost:8080/encoded/steamboatwillie_001/master.m3u8",
-        type: "application/x-mpegURL"
-      }
-    ]
+        type: "application/x-mpegURL",
+      },
+    ],
   };
 
   const [roomID, setRoomID] = useState(sessionId);
@@ -31,7 +31,7 @@ const WatchPartyPage = () => {
   };
 
   return (
-    <div className="flex">
+    <div className="grid grid-cols-4 gap-2">
       {/* roomID input for development only */}
       {/* <form
           className="flex text-center justify-center items-center"
@@ -52,7 +52,15 @@ const WatchPartyPage = () => {
             Enter
           </Button>
       </form> */}
-      <VideoJSSynced options={videoJsOptions} roomID={roomID} setRoomID={setRoomID} />
+
+      <div className="col-span-3">
+        <VideoJSSynced
+          options={videoJsOptions}
+          roomID={roomID}
+          setRoomID={setRoomID}
+        />
+      </div>
+
       <LiveChat roomID={roomID} setRoomID={setRoomID} />
     </div>
   );

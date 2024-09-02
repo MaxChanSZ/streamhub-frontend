@@ -16,7 +16,7 @@ const ChatHistory: React.FC<ChatHistoryProps> = ({ chatMessages }) => {
   }, [chatMessages.length]);
 
   return (
-    <ScrollArea className="px-2 my-4 h-48">
+    <ScrollArea className="px-2 my-4 h-1/3">
       {/* <div className="flex flex-col items-start px-2 my-4 mt-4"> */}
       {chatMessages.map((msg: Message, index) => (
         <p

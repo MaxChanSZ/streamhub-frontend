@@ -122,9 +122,9 @@ const LiveChat: React.FC<LiveChatProps> = ({ roomID, setRoomID }) => {
   };
 
   return (
-    <div className="justify-center flex flex-col text-white text-center bg-[#161616] px-6">
+    <div className="flex flex-col text-white bg-[#161616] px-6 h-1/2">
       {/* Component title and icons */}
-      <div className="flex flex-row items-center relative py-6 border-b-2 border-[#A8A8A8]">
+      <div className="flex flex-row relative py-6 border-b-2 border-[#A8A8A8]">
         <h2 className="text-lg font-semibold font-alatsi">Live Chat</h2>
         <div className="place-content-end flex flex-row gap-2 absolute right-0">
           <button className="my-2">
@@ -178,7 +178,7 @@ const LiveChat: React.FC<LiveChatProps> = ({ roomID, setRoomID }) => {
       </>
 
       {/* For debugging and dev, remove when done */}
-      <div className="flex flex-row items-center justify-center py-4">
+      {/* <div className="flex flex-row items-center justify-center py-4">
         <Button onClick={clearMessages} variant="destructive" className="mx-4">
           Clear Messages
         </Button>
@@ -186,7 +186,7 @@ const LiveChat: React.FC<LiveChatProps> = ({ roomID, setRoomID }) => {
           Room ID: {roomID === "" ? "None" : roomID}
         </h2>
         <LogoutButton />
-      </div>
+      </div> */}
     </div>
   );
 };
