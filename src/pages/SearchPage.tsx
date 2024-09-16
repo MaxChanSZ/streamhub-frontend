@@ -10,7 +10,7 @@ type SearchResult = {
   seriesTitle: string;
   description: string;
   cast: string;
-  rating: string;
+  rating: number;
   thumbnailURL: string;
   releaseDate: [number];
 };
