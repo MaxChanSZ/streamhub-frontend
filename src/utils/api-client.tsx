@@ -8,7 +8,7 @@ import { useAppContext } from "../contexts/AppContext";
 
 export const register = async (formData: RegisterFormData) => {
   const response = await axios
-    .post("http://localhost:8080/account/registration/submit", formData, {
+    .post("http://localhost:8080/account/api/registration/submit", formData, {
       headers: {
         "Content-Type": "application/json",
       },
@@ -41,7 +41,7 @@ export const register = async (formData: RegisterFormData) => {
 export const login = async (formData: LoginFormData): Promise<User> => {
   const response = await axios
     .post(
-      "http://localhost:8080/account/login/submit",
+      "http://localhost:8080/account/api/login/submit",
       {
         username: formData.username,
         password: formData.password,
