@@ -3,6 +3,7 @@ import { useAppContext } from "@/contexts/AppContext";
 import { useState } from "react";
 import * as apiClient from "@/utils/api-client";
 import { toast } from "@/components/shadcn/ui/use-toast";
+import { useNavigate } from "react-router-dom";
 export type WatchPartyFormData = {
   partyName: string;
   accountID: number | undefined;
@@ -16,6 +17,7 @@ export type WatchPartyFormData = {
  */
 const CreateWatchPartyPage = () => {
   var { user } = useAppContext();
+  const navigate = useNavigate();
 
   const [partyName, setPartyName] = useState<string>('');
   const onFormSubmit = async (e : React.FormEvent<HTMLFormElement>) => {
@@ -35,7 +37,8 @@ const CreateWatchPartyPage = () => {
     try {
       const response = await apiClient.createWatchParty(formData);
       console.log('Watch party created successfully');
-      window.location.pathname = `/watch-party/${response.code}`;
+      navigate(`/watch-party/${response.code}`);
+      // window.location.pathname = `/watch-party/${response.code}`;
     } catch (error) {
       console.error('Failed to create watch party:', error);
     }
