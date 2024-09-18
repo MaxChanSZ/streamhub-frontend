@@ -9,14 +9,14 @@ interface ChatHistoryProps {
 const ChatHistory: React.FC<ChatHistoryProps> = ({ chatMessages }) => {
   const msgRef = useRef(null);
 
-  useEffect(() => {
-    if (chatMessages.length > 0) {
-      msgRef.current.scrollIntoView({ behavior: "smooth" }); //Use scrollIntoView to automatically scroll to my ref
-    }
-  }, [chatMessages.length]);
+  // useEffect(() => {
+  //   if (chatMessages.length > 0) {
+  //     msgRef.current.scrollIntoView({ behavior: "smooth" }); //Use scrollIntoView to automatically scroll to my ref
+  //   }
+  // }, [chatMessages.length]);
 
   return (
-    <ScrollArea className="px-2 my-4 h-1/3">
+    <ScrollArea className="px-2 my-4">
       {/* <div className="flex flex-col items-start px-2 my-4 mt-4"> */}
       {chatMessages.map((msg: Message, index) => (
         <p
