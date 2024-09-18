@@ -11,13 +11,13 @@ const HomePage = () => {
 
   return (
     <div className="text-white justify-center items-center">
-      <Button
+      {/* <Button
         variant="destructive"
         onClick={goToTestPage}
         className="flex-none"
       >
         Go to test page
-      </Button>
+      </Button> */}
       <CarouselPage />
     </div>
   );
