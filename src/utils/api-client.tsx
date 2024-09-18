@@ -173,7 +173,12 @@ export const getChatMessagesByRoomID = async (roomID: string) => {
         // Something happened in setting up the request that triggered an Error
       }
     });
-  return data;
+  if (data === null || data === undefined) {
+    console.log("data is null or undefined");
+    return [];
+  } else {
+    return data;
+  }
 };
 
 export const fetchNewestSeries = async () => {
