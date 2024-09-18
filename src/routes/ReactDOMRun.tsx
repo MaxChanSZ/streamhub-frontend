@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React from "react";
 import { createBrowserRouter, RouterProvider } from "react-router-dom";
 import Root from "@/utils/root";
 import CarouselPage from "@/pages/CarouselPage.tsx";
@@ -7,10 +7,12 @@ import HomePage from "@/pages/HomePage.tsx";
 import SeriesPage from "@/pages/SeriesPage.tsx";
 import WatchPage from "@/pages/WatchPage.tsx";
 import WatchPartyPage from "@/pages/WatchPartyPage.tsx";
+import CreateWatchPartyPage from "@/pages/CreateWatchPartyPage.tsx";
 import UpdateProfilePage from "@/pages/UpdateProfilePage.tsx";
 
 import RegisterPage from "@/pages/RegisterPage";
 import ContactPage from "@/pages/ContactPage.tsx";
+import TestPage from "@/pages/TestPage";
 
 interface ReactDOMRunProps {}
 
@@ -44,6 +46,10 @@ const router = createBrowserRouter([
         element: <WatchPartyPage />,
       },
       {
+        path: "create-watch-party",
+        element: <CreateWatchPartyPage />,
+      },
+      {
         path: "update-profile",
         element: <UpdateProfilePage />,
       },
@@ -61,6 +67,7 @@ const router = createBrowserRouter([
       },
     ],
   },
+  { path: "test", element: <TestPage /> },
 ]);
 
 export default ReactDOMRun;
