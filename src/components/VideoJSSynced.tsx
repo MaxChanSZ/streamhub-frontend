@@ -5,10 +5,8 @@ import "videojs-http-source-selector";
 
 // Styles
 import "video.js/dist/video-js.css";
-import { useState } from "react";
 import SockJS from "sockjs-client";
 import { CompatClient, Stomp } from "@stomp/stompjs";
-import { useAppContext } from "@/contexts/AppContext";
 
 interface IVideoPlayerProps {
   options: videojs.PlayerOptions;
