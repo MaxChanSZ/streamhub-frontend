@@ -67,7 +67,6 @@ const router = createBrowserRouter([
       },
     ],
   },
-  { path: "test", element: <TestPage /> },
 ]);
 
 export default ReactDOMRun;
