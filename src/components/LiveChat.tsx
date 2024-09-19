@@ -8,6 +8,7 @@ import watchParty from "/watch-party.svg";
 import * as apiClient from "@/utils/api-client";
 import ChatInput from "./ChatInput";
 import { LoadingSpinner } from "./LoadingSpinner";
+import ChatHistory from "./ChatHistory";
 
 export interface Message {
   messageID: number;
@@ -79,12 +80,12 @@ const LiveChat: React.FC<LiveChatProps> = ({ roomID, setRoomID }) => {
     fetchMessagesAndSubscribe();
   }, [roomID]); // re-subscribe when roomID changes
 
-  const changeRoomID = (newRoomID: string) => {
-    if (newRoomID !== roomID) {
-      setMessages([]); // Clear previous messages
-      setRoomID(newRoomID);
-    }
-  };
+  // const changeRoomID = (newRoomID: string) => {
+  //   if (newRoomID !== roomID) {
+  //     setMessages([]); // Clear previous messages
+  //     setRoomID(newRoomID);
+  //   }
+  // };
 
   const sendMessage = () => {
     if (messageToSend.trim() !== "") {
