@@ -4,6 +4,8 @@ import {
     Carousel,
     CarouselContent,
     CarouselItem,
+    CarouselNext2,
+    CarouselPrevious2,
     CarouselNext3,
     CarouselPrevious3
 } from '@/components/shadcn/ui/carousel.tsx';
@@ -57,14 +59,16 @@ const NewestSeriesCarousel = () => {
                     >
                         <div className="relative w-full">
                             <Card className="rounded-lg overflow-hidden border-none">
-                                <CardContent className="relative flex aspect-video items-center justify-center p-0 rounded-lg overflow-hidden">
+                                <CardContent
+                                    className="relative flex aspect-video items-center justify-center p-0 rounded-lg overflow-hidden">
                                     <img
                                         src={item.thumbnailURL}
                                         alt={item.seriesTitle}
                                         className="max-h-35 w-full object-cover rounded-lg cursor-pointer"
-                                        style={{ objectFit: 'cover', transform: 'scale(1.05)' }}
+                                        style={{objectFit: 'cover', transform: 'scale(1.05)'}}
                                     />
-                                    <div className="absolute inset-0 flex items-end justify-start text-white bg-black bg-opacity-50 opacity-0 hover:opacity-100 transition-opacity duration-300 p-0">
+                                    <div
+                                        className="absolute inset-0 flex items-end justify-start text-white bg-black bg-opacity-50 opacity-0 hover:opacity-100 transition-opacity duration-300 p-0">
                                         <div className="p-4">
                                             <h3 className="text-2xl font-bold">
                                                 {item.seriesTitle}
@@ -78,8 +82,17 @@ const NewestSeriesCarousel = () => {
                     </CarouselItem>
                 ))}
             </CarouselContent>
-            <CarouselPrevious3 className="absolute left-4 z-20 flex h-10 w-10" />
-            <CarouselNext3 className="absolute right-4 z-20 flex h-10 w-10" />
+            {/* Render these components on screens smaller than 768px. CarouselPrevious2/Next2 do single scroll*/}
+            <div className="block md:hidden">
+                <CarouselPrevious2 className="absolute left-4 z-20 flex h-10 w-10" />
+                <CarouselNext2 className="absolute right-4 z-20 flex h-10 w-10" />
+            </div>
+
+            {/* Render these components on screens 768px and larger. CarouselPrevious3/Next3 do 3 scrolls */}
+            <div className="hidden md:block">
+                <CarouselPrevious3 className="absolute left-4 z-20 flex h-10 w-10" />
+                <CarouselNext3 className="absolute right-4 z-20 flex h-10 w-10" />
+            </div>
         </Carousel>
     );
 };

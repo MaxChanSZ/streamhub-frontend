@@ -181,6 +181,19 @@ export const getChatMessagesByRoomID = async (roomID: string) => {
   }
 };
 
+export const searchSeries = async (title: string) => {
+  const url =
+    title == null
+      ? "http://localhost:8080/api/series"
+      : `http://localhost:8080/api/series?title=${title}`;
+  return await axios.get(url, {
+    headers: {
+      "Content-Type": "application/json",
+    },
+    withCredentials: true,
+  });
+};
+
 export const fetchNewestSeries = async () => {
   try {
     const response = await fetch("http://localhost:8080/api/series/newest");
