@@ -194,6 +194,6 @@ const categories: { title: string; href: string }[] = [
 ];
 
 const watchpartydetails: { title: string; href: string }[] = [
-  { title: "Create a Watch Party", href: "/watch-party" },
+  { title: "Create a Watch Party", href: "/create-watch-party" },
   { title: "Join Watch Party", href: "/join-watch-party" },
 ];
