@@ -104,8 +104,35 @@ const Navbar = () => {
             {/* Watch Party */}
             <NavigationMenuItem>
               <Button variant="ghost" className={buttonTextFormat} asChild>
-                <Link to={`/join-watch-party`}>Join Watch Party</Link>
+                <NavigationMenuTrigger className="relative z-10">
+                  Watch Party
+                </NavigationMenuTrigger>
               </Button>
+              {/* <Button variant="ghost" className={buttonTextFormat} asChild>
+                <Link to={`/join-watch-party`}>Join Watch Party</Link>
+              </Button> */}
+              <NavigationMenuContent className="bg-black w-fit">
+                <ul className="flex flex-col items-center w-full p-2 space-y-2">
+                  {watchPartyActions.map((category) => (
+                    <li key={category.title} className="w-full">
+                      <Button
+                        variant="ghost"
+                        className={categoryButtonFormat}
+                        asChild
+                      >
+                        <Link
+                          to={category.href}
+                          className="text-white hover:underline block w-full py-2 px-4 text-center"
+                        >
+                          <div>
+                            <h3 className="font-bold">{category.title}</h3>
+                          </div>
+                        </Link>
+                      </Button>
+                    </li>
+                  ))}
+                </ul>
+              </NavigationMenuContent>
             </NavigationMenuItem>
 
             {/* Category */}
@@ -285,4 +312,9 @@ const categories: { title: string; href: string }[] = [
   { title: "Category 4", href: "/category4" },
   { title: "Category 5", href: "/category5" },
   { title: "Category 6", href: "/category6" },
+];
+
+const watchPartyActions: { title: string; href: string }[] = [
+  { title: "Create a Watch Party", href: "/create-watch-party" },
+  { title: "Join Watch Party", href: "/join-watch-party" },
 ];
