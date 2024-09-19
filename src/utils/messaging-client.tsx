@@ -8,6 +8,11 @@ export interface MessagingClientOptions {
   onMessageReceived: (message: Message) => void; // Callback for when a new message is received
 }
 
+export type Emoji = {
+  TYPE: string;
+  SESSION_ID: string;
+  SENDER: string;
+};
 
 let client: any = null;
 
@@ -67,3 +72,9 @@ export const sendMessageToChat = async (message) => {
   });
 };
 
+export const sendEmoji = async (reaction: Emoji) => {
+  const client = Stomp.over(() => new SockJS("http://localhost:8080/emoji"));
+  client.connect({}, () => {
+    client.send("/app/emoji", {}, JSON.stringify(reaction));
+  });
+};
