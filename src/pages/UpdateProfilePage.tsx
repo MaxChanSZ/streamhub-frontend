@@ -1,10 +1,11 @@
-import { useForm } from "react-hook-form";
+import { set, useForm } from "react-hook-form";
 import { Button } from "@/components/shadcn/ui/button";
-import { useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { useMutation } from "react-query";
 import { toast } from "@/components/shadcn/ui/use-toast";
 import * as apiClient from "@/utils/api-client";
 import { useAppContext } from "@/contexts/AppContext";
+import DeleteAccountButton from "@/components/DeleteAccountButton";
 
 export type UpdateFormData = {
   username: string;
@@ -69,15 +70,6 @@ const UpdateProfilePage = () => {
   const onFormSubmit = handleSubmit((data) => {
     mutation.mutate(data);
   });
-  const deleteButtonPress = () => {
-    const { setIsLoggedIn, user } = useAppContext();
-    if (user !== null) {
-      apiClient.deleteUser(user?.id);
-      setIsLoggedIn(false);
-      setUser(null);
-      navigate("/");
-    }
-  };
 
   return (
     // Form for updating user profile
@@ -180,7 +172,8 @@ const UpdateProfilePage = () => {
         </div>
       </form>
       <div className="text-center">
-        <Button variant="destructive">Delete Account</Button>
+        {/* <Button variant="destructive">Delete Account</Button> */}
+        <DeleteAccountButton />
       </div>
     </>
   );
