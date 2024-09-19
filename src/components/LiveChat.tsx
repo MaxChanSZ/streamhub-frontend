@@ -122,7 +122,7 @@ const LiveChat: React.FC<LiveChatProps> = ({ roomID, setRoomID }) => {
             setMessageToSend={setMessageToSend}
             sendMessage={sendMessage}
           />
-          <EmojiReaction />
+          <EmojiReaction roomID={roomID} />
         </div>
       </>
     </div>
