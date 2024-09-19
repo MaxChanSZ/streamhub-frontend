@@ -1,5 +1,6 @@
 import { LoginFormData } from "../pages/LoginPage";
 import { RegisterFormData } from "../pages/RegisterPage";
+import { WatchPartyFormData } from "@/pages/WatchPartyPage";
 import axios from "axios";
 import { User } from "@/utils/types";
 import { UpdateFormData } from "../pages/UpdateProfilePage";
@@ -124,12 +125,7 @@ export const update = async (formData: UpdateFormData) => {
 
 export const deleteUser = async (id: number) => {
   const response = await axios
-    .delete(`http://localhost:8080/account/api/delete/${id}`, {
-      headers: {
-        "Content-Type": "application/json",
-        "Access-Control-Allow-Origin": "*",
-      },
-    })
+    .delete(`http://localhost:8080/account/api/delete/${id}`)
     .then((response) => {
       console.log(response.data);
     })
@@ -154,6 +150,37 @@ export const deleteUser = async (id: number) => {
     });
 };
 
+export const getChatMessagesByRoomID = async (roomID: string) => {
+  const data = await axios
+    .get(`http://localhost:8080/api/messages/${roomID}`)
+    .then((response) => {
+      console.log(response.data);
+      return response.data;
+    })
+    .catch((error) => {
+      if (error.response) {
+        // The request was made and the server responded with a status code
+        // that falls out of the range of 2xx
+        console.log(error.response.data);
+        console.log(error.response.status);
+        console.log(error.response.headers);
+      } else if (error.request) {
+        // The request was made but no response was received
+        // `error.request` is an instance of XMLHttpRequest in the browser and an instance of
+        // http.ClientRequest in node.js
+        console.log(error.request);
+      } else {
+        // Something happened in setting up the request that triggered an Error
+      }
+    });
+  if (data === null || data === undefined) {
+    console.log("data is null or undefined");
+    return [];
+  } else {
+    return data;
+  }
+};
+
 export const searchSeries = async (title: string) => {
   const url =
     title == null
@@ -169,30 +196,69 @@ export const searchSeries = async (title: string) => {
 
 export const fetchNewestSeries = async () => {
   try {
-    const response = await fetch('http://localhost:8080/api/series/newest');
+    const response = await fetch("http://localhost:8080/api/series/newest");
     if (!response.ok) {
-      throw new Error('Failed to fetch newest series');
+      throw new Error("Failed to fetch newest series");
     }
     const data = await response.json();
     return data;
   } catch (error) {
-    console.error('Error fetching series:', error);
+    console.error("Error fetching series:", error);
     throw error;
   }
 };
 
 export const fetchTopRatedSeries = async () => {
   try {
-    const response = await fetch('http://localhost:8080/api/series/top-rated');
+    const response = await fetch("http://localhost:8080/api/series/top-rated");
     if (!response.ok) {
-      throw new Error('Failed to fetch top-rated series');
+      throw new Error("Failed to fetch top-rated series");
     }
     const data = await response.json();
     const shuffledSeries = data.sort(() => 0.5 - Math.random());
     return shuffledSeries.slice(0, 5);
   } catch (error) {
-    console.error('Error fetching series:', error);
+    console.error("Error fetching series:", error);
     throw error;
   }
 };
 
+export const createWatchParty = async (
+  formData: WatchPartyFormData
+): Promise<any> => {
+  try {
+    const response = await axios.post(
+      "http://localhost:8080/api/watch-party/create",
+      formData,
+      {
+        headers: {
+          "Content-Type": "application/json",
+        },
+        withCredentials: true,
+      }
+    );
+    return response.data;
+  } catch (error) {
+    if (axios.isAxiosError(error)) {
+      if (error.response) {
+        // The request was made and the server responded with a status code that falls out of the range of 2xx
+        console.log(error.response.data);
+        console.log(error.response.status);
+        console.log(error.response.headers);
+      } else if (error.request) {
+        // The request was made but no response was received
+        console.log(error.request);
+      } else {
+        // Something happened in setting up the request that triggered an Error
+        console.log("Error", error.message);
+      }
+      console.log(error.config);
+    } else {
+      // Handle non-Axios errors here
+      console.log("Unexpected error", error);
+    }
+    throw new Error(
+      error instanceof Error ? error.message : "An unknown error occurred"
+    );
+  }
+};

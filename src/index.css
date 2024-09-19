@@ -3,21 +3,22 @@
 @tailwind components;
 @tailwind utilities;
 
+/* hide scrollbar for IE, Edge, Firefox */
 html,
 body,
 #root {
   height: 100%;
   margin: 0;
   background-color: black;
-  /* hide scrollbar for IE, Edge, Firefox */
+
   -ms-overflow-style: none;
   scrollbar-width: none;
 }
 
-/* hide scrollbar for Safari, Opera, Chrome */
-body::-webkit-scrollbar {
+/*  hide scrollbar for Safari, Opera, Chrome */
+/* body::-webkit-scrollbar {
   display: none;
-}
+}  */
 
 @layer base {
   input[type="number"]::-webkit-inner-spin-button,

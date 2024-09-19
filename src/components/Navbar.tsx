@@ -277,4 +277,3 @@ const categories: { title: string; href: string }[] = [
     { title: "Category 5", href: "/category5" },
     { title: "Category 6", href: "/category6" },
 ];
-

@@ -5,7 +5,7 @@ import profileIconBg from "/profileiconbg.svg";
 import { useAppContext } from "@/contexts/AppContext";
 import { toast } from "./shadcn/ui/use-toast";
 import { Button } from "@/components/shadcn/ui/button.tsx";
-
+import LogoutButton from "./LogoutButton";
 const NavbarProfile = () => {
     const [isMenuOpen, setIsProfileMenuOpen] = useState(false);
     const menuRef = useRef<HTMLDivElement>(null as unknown as HTMLDivElement);
@@ -93,13 +93,7 @@ const NavbarProfile = () => {
                                 TestButton
                             </Link>
                         </Button>
-                        <Button
-                            variant="destructive"
-                            onClick={handleLogout}
-                            className="w-full text-left text-2xl text-white"
-                        >
-                            Logout
-                        </Button>
+                        <LogoutButton/>
                     </div>
                 </div>
             )}
