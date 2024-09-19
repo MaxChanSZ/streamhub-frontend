@@ -34,7 +34,7 @@ const LiveChat: React.FC<LiveChatProps> = ({ roomID, setRoomID }) => {
     const fetchMessagesAndSubscribe = async () => {
       if (roomID === "") return; // Prevent fetching if no room is selected
 
-      setIsLoading(false); // TODO: Change back to true once May is done with her shit
+      setIsLoading(true); // TODO: Change back to true once May is done with her shit
 
       // Fetch past messages
       try {
