@@ -98,7 +98,7 @@ const Navbar = () => {
                         {/* Watch Party */}
                         <NavigationMenuItem>
                             <Button variant="ghost" className={buttonTextFormat} asChild>
-                                <Link to={`/watch-party`}>Join Watch Party</Link>
+                                <Link to={`/join-watch-party`}>Join Watch Party</Link>
                             </Button>
                         </NavigationMenuItem>
 
