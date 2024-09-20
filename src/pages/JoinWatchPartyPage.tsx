@@ -12,7 +12,6 @@ import {
 } from "@/components/shadcn/ui/alert-dialog";
 import { Input } from "@/components/shadcn/ui/input";
 import { useAppContext } from "@/contexts/AppContext";
-import { useNavigate } from "react-router-dom";
 
 /**
  * WatchPartyPage component is responsible for rendering the page where users can enter the watch party code.

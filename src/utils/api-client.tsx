@@ -237,28 +237,22 @@ export const createWatchParty = async (
         withCredentials: true,
       }
     );
-    return response.data;
+    return response.data; 
   } catch (error) {
     if (axios.isAxiosError(error)) {
       if (error.response) {
-        // The request was made and the server responded with a status code that falls out of the range of 2xx
         console.log(error.response.data);
         console.log(error.response.status);
         console.log(error.response.headers);
       } else if (error.request) {
-        // The request was made but no response was received
         console.log(error.request);
       } else {
-        // Something happened in setting up the request that triggered an Error
         console.log("Error", error.message);
       }
       console.log(error.config);
     } else {
-      // Handle non-Axios errors here
-      console.log("Unexpected error", error);
+      console.log("Unexpected error:", error);
     }
-    throw new Error(
-      error instanceof Error ? error.message : "An unknown error occurred"
-    );
+    throw error;
   }
 };
