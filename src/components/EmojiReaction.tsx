@@ -26,21 +26,21 @@ const EmojiReaction = ({ roomID }: { roomID: string }) => {
   };
 
   return (
-    <>
+    <div className="text-2xl">
       {/* https://unicode.org/emoji/charts/full-emoji-list.html */}
       <button onClick={() => sendEmojiReaction("HEART", roomID)}>
         {/* sends a heart icon */}
-        {String.fromCodePoint(0x2764)}
+        🩷
       </button>
       <button onClick={() => sendEmojiReaction("SMILEY_FACE", roomID)}>
         {/* sends a smiley face icon */}
-        {String.fromCodePoint(0x1f642)}
+        🙂
       </button>
       <button onClick={() => sendEmojiReaction("SAD_FACE", roomID)}>
-        {/* sends a heart icon */}
+        {/* sends a sad face icon */}
         {String.fromCodePoint(0x1f641)}
       </button>
-    </>
+    </div>
   );
 };
 

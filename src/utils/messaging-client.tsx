@@ -9,6 +9,11 @@ export interface MessagingClientOptions {
   onMessageReceived: (message: Message) => void; // Callback for when a new message is received
 }
 
+export interface EmojiClientOptions {
+  roomID: string;
+  onReceived: (emoji: Emoji) => void;
+}
+
 let client: any = null;
 
 /**
@@ -73,4 +78,42 @@ export const sendEmoji = async (reaction: Emoji) => {
   client.connect({}, () => {
     client.send("/app/emoji", {}, JSON.stringify(reaction));
   });
+};
+
+export const EmojiConnection = (options: EmojiClientOptions) => {
+  const { roomID, onReceived } = options;
+
+  // Set up WebSocket connection
+  const brokerURL = "http://localhost:8080/emoji";
+  client = Stomp.over(() => new SockJS(brokerURL));
+  client.reconnectDelay = 5000; // Try to reconnect every 5 seconds
+
+  client.connect({}, () => {
+    const topic = `/topic/emoji/${roomID}`;
+    console.log(`Listening to: ${topic}`);
+
+    client.subscribe(topic, (message: any) => {
+      const newEmoji = JSON.parse(message.body);
+      console.log(
+        `New Emoji: ${newEmoji.type} | ID: ${newEmoji.session_ID} | Sender: ${newEmoji.sender}`
+      );
+
+      const constructedEmoji: Emoji = {
+        TYPE: newEmoji.type,
+        SESSION_ID: newEmoji.session_ID,
+        SENDER: newEmoji.sender,
+      };
+
+      // Call the callback with the new message
+      onReceived(constructedEmoji);
+    });
+  });
+
+  return () => {
+    if (client && client.connected) {
+      client.disconnect(() => {
+        console.log("Disconnected from WebSocket");
+      });
+    }
+  };
 };

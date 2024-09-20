@@ -12,6 +12,7 @@ import {
   sendMessageToChat,
 } from "@/utils/messaging-client";
 import EmojiReaction from "./EmojiReaction";
+import EmojiOverlay from "./EmojiOverlay";
 
 export interface Message {
   messageID: number;
@@ -90,7 +91,7 @@ const LiveChat: React.FC<LiveChatProps> = ({ roomID, setRoomID }) => {
   };
 
   return (
-    <div className="flex flex-col text-white bg-[#161616] px-6 h-1/2">
+    <div className="flex flex-col text-white bg-[#161616] px-6 relative">
       {/* Component title and icons */}
       <div className="flex flex-row relative py-6 border-b-2 border-[#A8A8A8]">
         <h2 className="text-lg font-semibold font-alatsi">Live Chat</h2>
@@ -112,19 +113,20 @@ const LiveChat: React.FC<LiveChatProps> = ({ roomID, setRoomID }) => {
         </div>
       )}
 
-      <>
-        <div
-          className={`${isLoading ? "opacity-50" : "opacity-100"} transition-opacity duration-${TRANSITION_DURATION_MS}`}
-        >
+      <div
+        className={`${isLoading ? "opacity-50" : "opacity-100"} transition-opacity duration-${TRANSITION_DURATION_MS}`}
+      >
+        <div className="relative">
           <ChatHistory chatMessages={messages} />
-          <ChatInput
-            messageToSend={messageToSend}
-            setMessageToSend={setMessageToSend}
-            sendMessage={sendMessage}
-          />
-          <EmojiReaction roomID={roomID} />
+          <EmojiOverlay roomID={roomID} />
         </div>
-      </>
+        <ChatInput
+          messageToSend={messageToSend}
+          setMessageToSend={setMessageToSend}
+          sendMessage={sendMessage}
+        />
+        <EmojiReaction roomID={roomID} />
+      </div>
     </div>
   );
 };
