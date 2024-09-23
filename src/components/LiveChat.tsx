@@ -39,7 +39,7 @@ const LiveChat: React.FC<LiveChatProps> = ({ roomID, setRoomID }) => {
     if (roomID === "") return; // Prevent fetching if no room is selected
 
     const fetchMessagesAndSubscribe = async () => {
-      setIsLoading(true); // Start loading
+      setIsLoading(false); // Start loading //TODO change back to true when done
 
       // Fetch past messages
       try {
@@ -118,7 +118,7 @@ const LiveChat: React.FC<LiveChatProps> = ({ roomID, setRoomID }) => {
       >
         <div className="relative">
           <ChatHistory chatMessages={messages} />
-          <EmojiOverlay roomID={roomID} />
+          
         </div>
         <ChatInput
           messageToSend={messageToSend}
@@ -127,6 +127,8 @@ const LiveChat: React.FC<LiveChatProps> = ({ roomID, setRoomID }) => {
         />
         <EmojiReaction roomID={roomID} />
       </div>
+
+      <EmojiOverlay roomID={roomID} />
     </div>
   );
 };

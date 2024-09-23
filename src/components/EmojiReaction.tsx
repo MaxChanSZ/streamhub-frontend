@@ -4,14 +4,14 @@ import { sendEmoji } from "@/utils/messaging-client";
 export interface EmojiReaction {}
 
 export type Emoji = {
-  TYPE: EmoteType;
+  TYPE: string;
   SESSION_ID: string;
   SENDER: string | undefined;
-  ID: number;
+  ID: string;
 };
 
 // export type EmoteType = "😂" | "😘" | "😭" | "😡" | "🥶";
-export type EmoteType = "HEART" | "SMILEY_FACE" | "SAD_FACE";
+export type EmoteType = "🩷" | "🙂" | "😢";
 
 const EmojiReaction = ({ roomID }: { roomID: string }) => {
   const { user } = useAppContext();
@@ -22,7 +22,7 @@ const EmojiReaction = ({ roomID }: { roomID: string }) => {
       TYPE: emojiType,
       SESSION_ID: roomID,
       SENDER: user?.username,
-      ID: 0,
+      ID: (((1+Math.random())*0x10000)|0).toString(16).substring(1),
     };
     sendEmoji(emoji);
   };
@@ -30,15 +30,15 @@ const EmojiReaction = ({ roomID }: { roomID: string }) => {
   return (
     <div className="text-4xl">
       {/* https://unicode.org/emoji/charts/full-emoji-list.html */}
-      <button onClick={() => sendEmojiReaction("HEART", roomID)}>
+      <button onClick={() => sendEmojiReaction("🩷", roomID)}>
         {/* sends a heart icon */}
         🩷
       </button>
-      <button onClick={() => sendEmojiReaction("SMILEY_FACE", roomID)}>
+      <button onClick={() => sendEmojiReaction("🙂", roomID)}>
         {/* sends a smiley face icon */}
         🙂
       </button>
-      <button onClick={() => sendEmojiReaction("SAD_FACE", roomID)}>
+      <button onClick={() => sendEmojiReaction("😢", roomID)}>
         {/* sends a sad face icon */}
         😢
       </button>
