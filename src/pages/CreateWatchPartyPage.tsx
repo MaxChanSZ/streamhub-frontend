@@ -2,6 +2,14 @@ import React, { useState } from "react";
 import { Button } from "@/components/shadcn/ui/button";
 import { Input } from "@/components/shadcn/ui/input";
 import { createWatchParty } from "@/utils/api-client";
+import { useAppContext } from "@/contexts/AppContext";
+
+export type WatchPartyFormData = {
+  partyName: string;
+  accountID: number | undefined;
+  scheduledDate: string;
+  scheduledTime: string;
+};
 
 const Label: React.FC<React.LabelHTMLAttributes<HTMLLabelElement>> = ({ children, className, ...props }) => (
   <label className={`block text-sm font-medium text-stone-50 mb-1 ${className}`} {...props}>
@@ -22,15 +30,31 @@ const CreateWatchPartyPage = () => {
   const [partyCode, setPartyCode] = useState<string>('');
   const [isLoading, setIsLoading] = useState<boolean>(false);
   const [error, setError] = useState<string | null>(null);
+  const { user } = useAppContext();
 
   const onFormSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     setIsLoading(true);
     setError(null);
-
+  
+    const accountID = user?.id;
+  
+    if (!accountID) {
+      setError('User not logged in. Please log in to create a watch party.');
+      setIsLoading(false);
+      return;
+    }
+  
+    const formData: WatchPartyFormData = {
+      partyName,
+      accountID,
+      scheduledDate,
+      scheduledTime,
+    };
+  
     try {
-      const response = await createWatchParty({ partyName, scheduledDate, scheduledTime });
-      setPartyCode(response.partyCode);
+      const response = await createWatchParty(formData);
+      setPartyCode(response.code);
       console.log('Watch Party created:', response);
     } catch (error) {
       console.error('Error creating watch party:', error);

@@ -68,9 +68,3 @@ const WatchPartyPage = () => {
 export default WatchPartyPage;
 
 
-export interface WatchPartyFormData {
-  partyName: string;
-  scheduledDate: string;
-  scheduledTime: string;
-}
-
