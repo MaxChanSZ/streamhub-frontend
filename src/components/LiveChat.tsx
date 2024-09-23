@@ -85,10 +85,10 @@ const LiveChat: React.FC<LiveChatProps> = ({ roomID, setRoomID }) => {
     }
   };
 
-  const clearMessages = async () => {
-    setMessages([]);
-    await axios.get("http://localhost:8080/api/clearMessages");
-  };
+  // const clearMessages = async () => {
+  //   setMessages([]);
+  //   await axios.get("http://localhost:8080/api/clearMessages");
+  // };
 
   return (
     <div className="flex flex-col text-white bg-[#161616] px-6 relative">
