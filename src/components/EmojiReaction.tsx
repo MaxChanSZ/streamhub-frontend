@@ -7,6 +7,7 @@ export type Emoji = {
   TYPE: EmoteType;
   SESSION_ID: string;
   SENDER: string | undefined;
+  ID: number;
 };
 
 // export type EmoteType = "😂" | "😘" | "😭" | "😡" | "🥶";
@@ -21,12 +22,13 @@ const EmojiReaction = ({ roomID }: { roomID: string }) => {
       TYPE: emojiType,
       SESSION_ID: roomID,
       SENDER: user?.username,
+      ID: 0,
     };
     sendEmoji(emoji);
   };
 
   return (
-    <div className="text-2xl">
+    <div className="text-4xl">
       {/* https://unicode.org/emoji/charts/full-emoji-list.html */}
       <button onClick={() => sendEmojiReaction("HEART", roomID)}>
         {/* sends a heart icon */}
@@ -38,7 +40,7 @@ const EmojiReaction = ({ roomID }: { roomID: string }) => {
       </button>
       <button onClick={() => sendEmojiReaction("SAD_FACE", roomID)}>
         {/* sends a sad face icon */}
-        {String.fromCodePoint(0x1f641)}
+        😢
       </button>
     </div>
   );

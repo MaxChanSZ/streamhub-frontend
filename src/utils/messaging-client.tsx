@@ -94,14 +94,16 @@ export const EmojiConnection = (options: EmojiClientOptions) => {
 
     client.subscribe(topic, (message: any) => {
       const newEmoji = JSON.parse(message.body);
+      console.log(newEmoji);
       console.log(
-        `New Emoji: ${newEmoji.type} | ID: ${newEmoji.session_ID} | Sender: ${newEmoji.sender}`
+        `New Emoji: ${newEmoji.type} | sessionID: ${newEmoji.session_ID} | Sender: ${newEmoji.sender} | ID: ${newEmoji.emojiID}`
       );
 
       const constructedEmoji: Emoji = {
         TYPE: newEmoji.type,
         SESSION_ID: newEmoji.session_ID,
         SENDER: newEmoji.sender,
+        ID: newEmoji.emojiID,
       };
 
       // Call the callback with the new message
