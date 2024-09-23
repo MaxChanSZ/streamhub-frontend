@@ -1,24 +1,20 @@
+import SockJS from "sockjs-client";
+import { Stomp } from "@stomp/stompjs";
 import { useEffect, useState } from "react";
 import { useAppContext } from "@/contexts/AppContext";
 import axios from "axios";
 import plus from "/plus-icon.svg";
 import watchParty from "/watch-party.svg";
+import * as apiClient from "@/utils/api-client";
 import ChatInput from "./ChatInput";
 import { LoadingSpinner } from "./LoadingSpinner";
 import ChatHistory from "./ChatHistory";
-import {
-  initWebSocketConnection,
-  getPastMessages,
-  sendMessageToChat,
-} from "@/utils/messaging-client";
-import EmojiReaction from "./EmojiReaction";
 import EmojiOverlay from "./EmojiOverlay";
 
 export interface Message {
   messageID: number;
   content: string;
   sender: string;
-  sessionID: string;
   timeStamp: Date;
   type: string;
 }
@@ -36,34 +32,49 @@ const LiveChat: React.FC<LiveChatProps> = ({ roomID, setRoomID }) => {
   const { user } = useAppContext();
 
   useEffect(() => {
-    if (roomID === "") return; // Prevent fetching if no room is selected
-
     const fetchMessagesAndSubscribe = async () => {
-      setIsLoading(true); // Start loading
+      if (roomID === "") return; // Prevent fetching if no room is selected
+
+      setIsLoading(true); // TODO: Change back to true once May is done with her shit
 
       // Fetch past messages
       try {
         const pastMessages = await getPastMessages(roomID);
-        setMessages(pastMessages); // Set past messages in state
+        setMessages(pastMessages);
       } catch (error) {
         console.error("Error fetching past messages:", error);
       } finally {
         setTimeout(() => {
-          setIsLoading(false); // End loading after transition
+          setIsLoading(false); // End loading
         }, TRANSITION_DURATION_MS);
       }
 
-      // Initialize WebSocket connection
-      const disconnectWebSocket = initWebSocketConnection({
-        roomID,
-        onMessageReceived: (newMessage) => {
+      // Set up WebSocket connection
+      const brokerURL = "http://localhost:8080/chat";
+      const client = Stomp.over(() => new SockJS(brokerURL));
+      client.reconnectDelay = 5000; // Try to reconnect every 5 seconds
+
+      client.connect({}, () => {
+        const topic = `/topic/chat/${roomID}`;
+        console.log(`Listening to: ${topic}`);
+
+        client.subscribe(topic, (message) => {
+          const newMessage = JSON.parse(message.body);
+          console.log(
+            `NewMessage: ${newMessage.content} | ID: ${newMessage.messageID} | Timestamp: ${newMessage.timeStamp}`
+          );
+
+          // Use functional update to prevent race condition
           setMessages((prevMessages) => [...prevMessages, newMessage]);
-        },
+        });
       });
 
-      // Cleanup function to disconnect WebSocket
       return () => {
-        disconnectWebSocket();
+        if (client.connected) {
+          client.disconnect(() => {
+            console.log("Disconnected");
+          });
+        }
       };
     };
 
@@ -72,16 +83,28 @@ const LiveChat: React.FC<LiveChatProps> = ({ roomID, setRoomID }) => {
 
   const sendMessage = () => {
     if (messageToSend.trim() !== "") {
-      const messagePayload = {
-        type: "CHAT",
-        content: messageToSend,
-        sender: user?.username || "anon",
-        sessionId: roomID,
-      };
-      sendMessageToChat(messagePayload).then(() => {
-        console.log(`Message sent: ${messageToSend} | Room: ${roomID}`);
+      const client = Stomp.over(() => new SockJS("http://localhost:8080/chat"));
+      client.connect({}, () => {
+        const messagePayload = {
+          type: "CHAT",
+          content: messageToSend,
+          sender: user?.username || "anon",
+          sessionId: roomID,
+        };
+        client.send("/app/chat", {}, JSON.stringify(messagePayload));
+        setMessageToSend(""); // Clear input after sending
       });
-      setMessageToSend(""); // Clear input after sending
+    }
+  };
+
+  const getPastMessages = async (roomID: string): Promise<Message[]> => {
+    try {
+      const pastMessages: Message[] =
+        await apiClient.getChatMessagesByRoomID(roomID);
+      return pastMessages;
+    } catch (error) {
+      console.error("Failed to fetch past messages:", error);
+      return []; // Return an empty array on failure
     }
   };
 
@@ -125,7 +148,7 @@ const LiveChat: React.FC<LiveChatProps> = ({ roomID, setRoomID }) => {
           setMessageToSend={setMessageToSend}
           sendMessage={sendMessage}
         />
-        <EmojiReaction roomID={roomID} />
+        {/* <EmojiReaction roomID={roomID} /> */}
       </div>
     </div>
   );
