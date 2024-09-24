@@ -23,17 +23,25 @@ const WatchPartyPage = () => {
 
   const [roomID, setRoomID] = useState(sessionId);
 
+  const changeRoomID = (newRoomID: string) => {
+    if (newRoomID !== roomID) {
+      // Clear previous messages
+      setRoomID(newRoomID);
+    }
+  };
+
   return (
-    <div className="grid grid-cols-4 gap-2">
-      <div className="col-span-3">
+    <div className="grid grid-cols-1 gap-y-2 md:grid-cols-4 md:gap-x-4 ">
+      <div className="col-span-3 min-h-80">
         <VideoJSSynced
           options={videoJsOptions}
           roomID={roomID}
           setRoomID={setRoomID}
         />
       </div>
-
-      <LiveChat roomID={roomID} />
+      <div className="col-span-1">
+        <LiveChat roomID={roomID} />
+      </div>
     </div>
   );
 };

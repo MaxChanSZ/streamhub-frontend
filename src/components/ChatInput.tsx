@@ -30,22 +30,26 @@ const ChatInput = ({
 
   return (
     <form
-      className="my-4 flex flex-row items-center"
+      className="px-1 my-4 flex flex-row gap-x-3 justify-between order-last"
       onSubmit={(event) => {
         event.preventDefault();
         sendMessage(messageToSend);
       }}
     >
-      <Input
-        type="text"
-        value={messageToSend}
-        onChange={(event) => setMessageToSend(event.target.value)}
-        className="bg-black font-sans font-medium border-none"
-        placeholder="Type your message here"
-      ></Input>
-      <Button className="mx-5 bg-[#11061F] hover:bg-[#A8A8A8]" type="submit">
-        Send
-      </Button>
+      <div className="w-full">
+        <Input
+          type="text"
+          value={messageToSend}
+          onChange={(event) => setMessageToSend(event.target.value)}
+          className="bg-black font-sans font-medium text-[#A8A8A8] border-none"
+          placeholder="Type something ..."
+        ></Input>
+      </div>
+      <div className="order-last">
+        <Button className="bg-[#11061F] hover:bg-[#A8A8A8] " type="submit">
+          Send
+        </Button>
+      </div>
     </form>
   );
 };
