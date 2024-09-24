@@ -1,4 +1,4 @@
-import { useRef } from "react";
+import { useEffect, useRef } from "react";
 import { Message } from "./LiveChat";
 import { ScrollArea } from "./shadcn/ui/scroll-area";
 
@@ -7,19 +7,31 @@ interface ChatHistoryProps {
 }
 
 const ChatHistory: React.FC<ChatHistoryProps> = ({ chatMessages }) => {
-  const msgRef = useRef(null);
+  const messagesEndRef = useRef<HTMLDivElement>(null);
+
+  const scrollToBottom = () => {
+    setTimeout(() => {
+      messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
+    }, 0);
+  };
+
+  useEffect(() => {
+    scrollToBottom();
+  }, [chatMessages]);
 
   return (
-    <ScrollArea className="px-2 my-4">
-      {chatMessages.map((msg: Message, index) => (
-        <p
-          key={msg.messageID}
-          className="my-2 text-[#A8A8A8] text-wrap text-start"
-          // ref={index + 1 === chatMessages.length ? msgRef : null} //Verify if the card is the last one.
-        >
-          <strong>{msg.sender}:</strong> {msg.content}
-        </p>
-      ))}
+    <ScrollArea className="h-96">
+      <div className="px-2 my-4">
+        {chatMessages.map((msg: Message) => (
+          <p
+            key={msg.messageID}
+            className="my-2 text-[#A8A8A8] text-wrap text-start"
+          >
+            <strong>{msg.sender}:</strong> {msg.content}
+          </p>
+        ))}
+      </div>
+      <div ref={messagesEndRef} />
     </ScrollArea>
   );
 };
