@@ -31,7 +31,7 @@ const WatchPartyPage = () => {
   };
 
   return (
-    <div className="grid grid-cols-4 gap-2">
+    <div className="grid grid-cols-1 gap-y-2 md:grid-cols-4 md:gap-x-4 ">
       {/* roomID input for development only */}
       {/* <form
           className="flex text-center justify-center items-center"
@@ -53,15 +53,16 @@ const WatchPartyPage = () => {
           </Button>
       </form> */}
 
-      <div className="col-span-3">
+      <div className="col-span-3 min-h-80">
         <VideoJSSynced
           options={videoJsOptions}
           roomID={roomID}
           setRoomID={setRoomID}
         />
       </div>
-
-      <LiveChat roomID={roomID} setRoomID={setRoomID} />
+      <div className="col-span-1">
+        <LiveChat roomID={roomID} setRoomID={setRoomID} />
+      </div>
     </div>
   );
 };

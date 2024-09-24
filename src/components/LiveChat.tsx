@@ -113,16 +113,18 @@ const LiveChat: React.FC<LiveChatProps> = ({ roomID, setRoomID }) => {
   };
 
   return (
-    <div className="flex flex-col text-white bg-[#161616] px-6 h-1/2">
+    <div className="px-2 flex flex-col min-h-96 min-w-60 bg-[#161616]">
       {/* Component title and icons */}
-      <div className="flex flex-row relative py-6 border-b-2 border-[#A8A8A8]">
-        <h2 className="text-lg font-semibold font-alatsi">Live Chat</h2>
-        <div className="place-content-end flex flex-row gap-2 absolute right-0">
-          <button className="my-2">
-            <img src={plus} className="min-h-8"></img>
+      <div className="flex flex-row flex-wrap justify-between p-2 pt-4 border border-0 border-b-2">
+        <div className="flex items-center">
+          <h2 className="font-alatsi text-stone-50 text-lg ">Live Chat</h2>
+        </div>
+        <div className="flex order-last space-x-3 items-center">
+          <button className="size-auto">
+            <img src={plus} className="size-8"></img>
           </button>
-          <button className="my-2">
-            <img src={watchParty} className="min-h-8"></img>
+          <button className="size-auto">
+            <img src={watchParty} className="size-8"></img>
           </button>
         </div>
       </div>
@@ -135,18 +137,20 @@ const LiveChat: React.FC<LiveChatProps> = ({ roomID, setRoomID }) => {
         </div>
       )}
 
-      <>
-        <div
-          className={`${isLoading ? "opacity-50" : "opacity-100"} transition-opacity duration-${TRANSITION_DURATION_MS}`}
-        >
-          <ChatHistory chatMessages={messages} />
-          <ChatInput
-            messageToSend={messageToSend}
-            setMessageToSend={setMessageToSend}
-            sendMessage={sendMessage}
-          />
-        </div>
-      </>
+      
+      <div
+        className={`${isLoading ? "opacity-50" : "opacity-100"} transition-opacity duration-${TRANSITION_DURATION_MS}`}
+      >
+        
+        <ChatHistory chatMessages={messages} />
+        <ChatInput
+          messageToSend={messageToSend}
+          setMessageToSend={setMessageToSend}
+          sendMessage={sendMessage}
+        />
+        
+      </div>
+      
     </div>
   );
 };
