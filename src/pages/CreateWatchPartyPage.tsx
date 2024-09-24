@@ -26,7 +26,6 @@ export const Label: React.FC<React.LabelHTMLAttributes<HTMLLabelElement>> = ({ c
  * @return {JSX.Element} The rendered CreateWatchPartyPage component.
  */
 const CreateWatchPartyPage = () => {
-
   const [partyName, setPartyName] = useState<string>('');
   const [scheduledDate, setScheduledDate] = useState<string>('');
   const [scheduledTime, setScheduledTime] = useState<string>('');
@@ -35,8 +34,6 @@ const CreateWatchPartyPage = () => {
   const [poll, setPoll] = useState<null|Poll>(null);
   const [error, setError] = useState<string | null>(null);
   const { user } = useAppContext();
-
-  console.log(poll);
 
   const onFormSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
