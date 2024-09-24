@@ -1,6 +1,6 @@
 import { LoginFormData } from "../pages/LoginPage";
 import { RegisterFormData } from "../pages/RegisterPage";
-import { WatchPartyFormData } from "@/pages/WatchPartyPage";
+import { WatchPartyFormData } from "@/pages/CreateWatchPartyPage";
 import axios from "axios";
 import { User } from "@/utils/types";
 import { UpdateFormData } from "../pages/UpdateProfilePage";

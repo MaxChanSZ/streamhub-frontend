@@ -1,19 +1,23 @@
-import SockJS from "sockjs-client";
-import { Stomp } from "@stomp/stompjs";
 import { useEffect, useState } from "react";
 import { useAppContext } from "@/contexts/AppContext";
 import axios from "axios";
 import plus from "/plus-icon.svg";
 import watchParty from "/watch-party.svg";
-import * as apiClient from "@/utils/api-client";
 import ChatInput from "./ChatInput";
 import { LoadingSpinner } from "./LoadingSpinner";
 import ChatHistory from "./ChatHistory";
+import {
+  initWebSocketConnection,
+  getPastMessages,
+  sendMessageToChat,
+} from "@/utils/messaging-client";
+import EmojiReaction from "./EmojiReaction";
 
 export interface Message {
   messageID: number;
   content: string;
   sender: string;
+  sessionID: string;
   timeStamp: Date;
   type: string;
 }
@@ -31,49 +35,34 @@ const LiveChat: React.FC<LiveChatProps> = ({ roomID, setRoomID }) => {
   const { user } = useAppContext();
 
   useEffect(() => {
-    const fetchMessagesAndSubscribe = async () => {
-      if (roomID === "") return; // Prevent fetching if no room is selected
+    if (roomID === "") return; // Prevent fetching if no room is selected
 
-      setIsLoading(false); // TODO: Change back to true once May is done with her shit
+    const fetchMessagesAndSubscribe = async () => {
+      setIsLoading(true); // Start loading
 
       // Fetch past messages
       try {
         const pastMessages = await getPastMessages(roomID);
-        setMessages(pastMessages);
+        setMessages(pastMessages); // Set past messages in state
       } catch (error) {
         console.error("Error fetching past messages:", error);
       } finally {
         setTimeout(() => {
-          setIsLoading(false); // End loading
+          setIsLoading(false); // End loading after transition
         }, TRANSITION_DURATION_MS);
       }
 
-      // Set up WebSocket connection
-      const brokerURL = "http://localhost:8080/chat";
-      const client = Stomp.over(() => new SockJS(brokerURL));
-      client.reconnectDelay = 5000; // Try to reconnect every 5 seconds
-
-      client.connect({}, () => {
-        const topic = `/topic/chat/${roomID}`;
-        console.log(`Listening to: ${topic}`);
-
-        client.subscribe(topic, (message) => {
-          const newMessage = JSON.parse(message.body);
-          console.log(
-            `NewMessage: ${newMessage.content} | ID: ${newMessage.messageID} | Timestamp: ${newMessage.timeStamp}`
-          );
-
-          // Use functional update to prevent race condition
+      // Initialize WebSocket connection
+      const disconnectWebSocket = initWebSocketConnection({
+        roomID,
+        onMessageReceived: (newMessage) => {
           setMessages((prevMessages) => [...prevMessages, newMessage]);
-        });
+        },
       });
 
+      // Cleanup function to disconnect WebSocket
       return () => {
-        if (client.connected) {
-          client.disconnect(() => {
-            console.log("Disconnected");
-          });
-        }
+        disconnectWebSocket();
       };
     };
 
@@ -82,28 +71,16 @@ const LiveChat: React.FC<LiveChatProps> = ({ roomID, setRoomID }) => {
 
   const sendMessage = () => {
     if (messageToSend.trim() !== "") {
-      const client = Stomp.over(() => new SockJS("http://localhost:8080/chat"));
-      client.connect({}, () => {
-        const messagePayload = {
-          type: "CHAT",
-          content: messageToSend,
-          sender: user?.username || "anon",
-          sessionId: roomID,
-        };
-        client.send("/app/chat", {}, JSON.stringify(messagePayload));
-        setMessageToSend(""); // Clear input after sending
+      const messagePayload = {
+        type: "CHAT",
+        content: messageToSend,
+        sender: user?.username || "anon",
+        sessionId: roomID,
+      };
+      sendMessageToChat(messagePayload).then(() => {
+        console.log(`Message sent: ${messageToSend} | Room: ${roomID}`);
       });
-    }
-  };
-
-  const getPastMessages = async (roomID: string): Promise<Message[]> => {
-    try {
-      const pastMessages: Message[] =
-        await apiClient.getChatMessagesByRoomID(roomID);
-      return pastMessages;
-    } catch (error) {
-      console.error("Failed to fetch past messages:", error);
-      return []; // Return an empty array on failure
+      setMessageToSend(""); // Clear input after sending
     }
   };
 
@@ -137,20 +114,19 @@ const LiveChat: React.FC<LiveChatProps> = ({ roomID, setRoomID }) => {
         </div>
       )}
 
-      
-      <div
-        className={`${isLoading ? "opacity-50" : "opacity-100"} transition-opacity duration-${TRANSITION_DURATION_MS}`}
-      >
-        
-        <ChatHistory chatMessages={messages} />
-        <ChatInput
-          messageToSend={messageToSend}
-          setMessageToSend={setMessageToSend}
-          sendMessage={sendMessage}
-        />
-        
-      </div>
-      
+      <>
+        <div
+          className={`${isLoading ? "opacity-50" : "opacity-100"} transition-opacity duration-${TRANSITION_DURATION_MS}`}
+        >
+          <ChatHistory chatMessages={messages} />
+          <ChatInput
+            messageToSend={messageToSend}
+            setMessageToSend={setMessageToSend}
+            sendMessage={sendMessage}
+          />
+          <EmojiReaction />
+        </div>
+      </>
     </div>
   );
 };
