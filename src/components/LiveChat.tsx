@@ -10,6 +10,7 @@ import { LoadingSpinner } from "./LoadingSpinner";
 import ChatHistory from "./ChatHistory";
 import EmojiOverlay from "./EmojiOverlay";
 import EmojiReaction from "./EmojiReaction";
+import { initWebSocketConnection } from "@/utils/messaging-client";
 
 export interface Message {
   messageID: number;
@@ -46,32 +47,15 @@ const LiveChat: React.FC<LiveChatProps> = ({ roomID, setRoomID }) => {
         }, TRANSITION_DURATION_MS);
       }
 
-      // Set up WebSocket connection
-      const brokerURL = "http://localhost:8080/chat";
-      const client = Stomp.over(() => new SockJS(brokerURL));
-      client.reconnectDelay = 5000; // Try to reconnect every 5 seconds
-
-      client.connect({}, () => {
-        const topic = `/topic/chat/${roomID}`;
-        console.log(`Listening to: ${topic}`);
-
-        client.subscribe(topic, (message) => {
-          const newMessage = JSON.parse(message.body);
-          console.log(
-            `NewMessage: ${newMessage.content} | ID: ${newMessage.messageID} | Timestamp: ${newMessage.timeStamp}`
-          );
-
-          // Use functional update to prevent race condition
+      const disconnectConnection = initWebSocketConnection({
+        roomID: roomID,
+        onMessageReceived: (newMessage) => {
           setMessages((prevMessages) => [...prevMessages, newMessage]);
-        });
+        },
       });
 
       return () => {
-        if (client.connected) {
-          client.disconnect(() => {
-            console.log("Disconnected");
-          });
-        }
+        disconnectConnection();
       };
     };
 
