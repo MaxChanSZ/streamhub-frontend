@@ -6,14 +6,20 @@ const EmojiOverlay = ({ roomID }: { roomID: string }) => {
   const [emojiQueue, setEmojiQueue] = useState<Emoji[]>([]);
   const DELAY = 500; // delay for timeout
 
-  const disconnect = EmojiConnection({
-    roomID,
-    onReceived: (newEmoji) => {
-      console.log(`${newEmoji.TYPE} received`);
-      setEmojiQueue((queue) => [...queue, newEmoji]);
-      // TODO: add emoji streams
-    },
-  });
+  useEffect(() => {
+    const disconnect = EmojiConnection({
+      roomID,
+      onReceived: (newEmoji) => {
+        console.log(`${newEmoji.TYPE} received`);
+        setEmojiQueue((queue) => [...queue, newEmoji]);
+      },
+    });
+
+    // Cleanup the WebSocket connection when the component unmounts or roomID changes
+    return () => {
+      disconnect(); // Properly disconnect the WebSocket
+    };
+  }, [roomID]);
 
   useEffect(() => {
     const timer = setTimeout(() => {
@@ -22,8 +28,10 @@ const EmojiOverlay = ({ roomID }: { roomID: string }) => {
         setEmojiQueue(rest);
       }
     }, DELAY);
-    disconnect();
-    return () => clearTimeout(timer);
+
+    return () => {
+      clearTimeout(timer);
+    };
   }, [emojiQueue]);
 
   return (

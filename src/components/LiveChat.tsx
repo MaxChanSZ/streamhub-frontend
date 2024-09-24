@@ -2,7 +2,6 @@ import SockJS from "sockjs-client";
 import { Stomp } from "@stomp/stompjs";
 import { useEffect, useState } from "react";
 import { useAppContext } from "@/contexts/AppContext";
-import axios from "axios";
 import plus from "/plus-icon.svg";
 import watchParty from "/watch-party.svg";
 import * as apiClient from "@/utils/api-client";
@@ -34,7 +33,7 @@ const LiveChat: React.FC<LiveChatProps> = ({ roomID, setRoomID }) => {
 
   useEffect(() => {
     const fetchMessagesAndSubscribe = async () => {
-      setIsLoading(false); // Start loading //TODO change back to true when done
+      setIsLoading(false); // Start loading // TODO: change to true only outside of FDM
 
       // Fetch past messages
       try {
@@ -106,11 +105,6 @@ const LiveChat: React.FC<LiveChatProps> = ({ roomID, setRoomID }) => {
       return []; // Return an empty array on failure
     }
   };
-
-  // const clearMessages = async () => {
-  //   setMessages([]);
-  //   await axios.get("http://localhost:8080/api/clearMessages");
-  // };
 
   return (
     <div className="flex flex-col text-white bg-[#161616] px-6 relative">

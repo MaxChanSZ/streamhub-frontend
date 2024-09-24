@@ -74,55 +74,47 @@ export const sendMessageToChat = async (message: any) => {
 };
 
 export const sendEmoji = async (reaction: Emoji) => {
-  emojiClient = Stomp.over(() => new SockJS("http://localhost:8080/emoji"));
-
-  // const client = Stomp.over(() => new SockJS("http://localhost:8080/emoji"));
-  console.log(reaction);
-  emojiClient.connect({}, () => {
+  if (emojiClient && emojiClient.connected) {
     emojiClient.send("/app/emoji", {}, JSON.stringify(reaction));
-  });
+  }
 };
 
 export const EmojiConnection = (options: EmojiClientOptions) => {
   const { roomID, onReceived } = options;
 
   // Set up WebSocket connection
+  // Avoid re-initializing the WebSocket connection if already connected
   if (!emojiClient || !emojiClient.connected) {
     emojiClient = Stomp.over(() => new SockJS("http://localhost:8080/emoji"));
-    emojiClient.reconnectDelay = 5000; // Try to reconnect every 5 seconds
-  }
+    emojiClient.reconnectDelay = 5000; // Reconnect every 5 seconds if disconnected
 
-  // const brokerURL = "http://localhost:8080/emoji";
-  // client = Stomp.over(() => new SockJS(brokerURL));
-  // client.reconnectDelay = 5000; // Try to reconnect every 5 seconds
+    emojiClient.connect({}, () => {
+      const topic = `/topic/emoji/${roomID}`;
+      console.log(`Subscribed to: ${topic}`);
 
-  emojiClient.connect({}, () => {
-    const topic = `/topic/emoji/${roomID}`;
-    console.log(`Listening to: ${topic}`);
+      // Subscribe to the emoji topic
+      emojiClient.subscribe(topic, (message: any) => {
+        const newEmoji = JSON.parse(message.body);
+        console.log(`New Emoji received: ${newEmoji.type}`);
 
-    emojiClient.subscribe(topic, (message: any) => {
-      const newEmoji = JSON.parse(message.body);
-      console.log(newEmoji);
-      console.log(
-        `New Emoji: ${newEmoji.type} | sessionID: ${newEmoji.session_ID} | Sender: ${newEmoji.sender} | ID: ${newEmoji.id}`
-      );
+        // Construct the emoji object
+        const constructedEmoji: Emoji = {
+          TYPE: newEmoji.type,
+          SESSION_ID: newEmoji.session_ID,
+          SENDER: newEmoji.sender,
+          ID: newEmoji.id,
+        };
 
-      const constructedEmoji: Emoji = {
-        TYPE: newEmoji.type,
-        SESSION_ID: newEmoji.session_ID,
-        SENDER: newEmoji.sender,
-        ID: newEmoji.id,
-      };
-
-      // Call the callback with the new message
-      onReceived(constructedEmoji);
+        // Trigger the callback with the new emoji
+        onReceived(constructedEmoji);
+      });
     });
-  });
+  }
 
   return () => {
     if (emojiClient && emojiClient.connected) {
       emojiClient.disconnect(() => {
-        console.log("Disconnected from WebSocket");
+        console.log("Disconnected from WebSocket - emojiClient");
       });
       emojiClient = null;
     }
