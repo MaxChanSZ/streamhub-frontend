@@ -50,6 +50,7 @@ export const initWebSocketConnection = (options: MessagingClientOptions) => {
       client.disconnect(() => {
         console.log("Disconnected from WebSocket");
       });
+      client = null;
     }
   };
 };
@@ -69,11 +70,10 @@ export const getPastMessages = async (roomID: string): Promise<Message[]> => {
 };
 
 export const sendMessageToChat = async (message: any) => {
-  console.log(message);
-  const client = Stomp.over(() => new SockJS("http://localhost:8080/chat"));
-  client.connect({}, () => {
+  if (client && client.connected) {
     client.send("/app/chat", {}, JSON.stringify(message));
-  });
+  }
+  console.log(message);
 };
 
 export const sendEmoji = async (reaction: Emoji) => {

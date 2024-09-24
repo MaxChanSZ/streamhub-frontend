@@ -22,7 +22,7 @@ const EmojiReaction = ({ roomID }: { roomID: string }) => {
 
   const emojiCoolDown = () => {
     setWaiting(true);
-    const timer = setTimeout(() => {
+    setTimeout(() => {
       setWaiting(false);
     }, EMOJI_COOLDOWN_TIME);
   };
@@ -33,12 +33,12 @@ const EmojiReaction = ({ roomID }: { roomID: string }) => {
       toast({
         title: "Please wait",
         description: "You can only send one emoji every second",
-        duration: 2000,
+        duration: 1000,
       });
       return;
     }
 
-    emojiCoolDown();
+    emojiCoolDown(); // start timeout for next emoji
 
     console.log("sending " + emojiType);
     const emoji = {

@@ -10,7 +10,10 @@ import { LoadingSpinner } from "./LoadingSpinner";
 import ChatHistory from "./ChatHistory";
 import EmojiOverlay from "./EmojiOverlay";
 import EmojiReaction from "./EmojiReaction";
-import { initWebSocketConnection } from "@/utils/messaging-client";
+import {
+  initWebSocketConnection,
+  getPastMessages,
+} from "@/utils/messaging-client";
 
 export interface Message {
   messageID: number;
@@ -34,7 +37,6 @@ const LiveChat: React.FC<LiveChatProps> = ({ roomID, setRoomID }) => {
   useEffect(() => {
     const fetchMessagesAndSubscribe = async () => {
       setIsLoading(false); // Start loading // TODO: change to true only outside of FDM
-
       // Fetch past messages
       try {
         const pastMessages = await getPastMessages(roomID);
@@ -53,25 +55,12 @@ const LiveChat: React.FC<LiveChatProps> = ({ roomID, setRoomID }) => {
           setMessages((prevMessages) => [...prevMessages, newMessage]);
         },
       });
-
       return () => {
         disconnectConnection();
       };
     };
-
     fetchMessagesAndSubscribe();
   }, [roomID]); // re-subscribe when roomID changes
-
-  const getPastMessages = async (roomID: string): Promise<Message[]> => {
-    try {
-      const pastMessages: Message[] =
-        await apiClient.getChatMessagesByRoomID(roomID);
-      return pastMessages;
-    } catch (error) {
-      console.error("Failed to fetch past messages:", error);
-      return []; // Return an empty array on failure
-    }
-  };
 
   return (
     <div className="flex flex-col text-white bg-[#161616] px-6 relative">
