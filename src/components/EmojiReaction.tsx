@@ -22,7 +22,7 @@ const EmojiReaction = ({ roomID }: { roomID: string }) => {
       TYPE: emojiType,
       SESSION_ID: roomID,
       SENDER: user?.username,
-      ID: (((1+Math.random())*0x10000)|0).toString(16).substring(1),
+      ID: (((1 + Math.random()) * 0x10000) | 0).toString(16).substring(1),
     };
     sendEmoji(emoji);
   };

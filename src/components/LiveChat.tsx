@@ -29,7 +29,6 @@ const LiveChat: React.FC<LiveChatProps> = ({ roomID, setRoomID }) => {
   const [messageToSend, setMessageToSend] = useState<string>("");
   const [isLoading, setIsLoading] = useState<boolean>(false); // To handle loading state
   const TRANSITION_DURATION_MS = 500; // fixed transition period in milliseconds
-  const { user } = useAppContext();
 
   useEffect(() => {
     const fetchMessagesAndSubscribe = async () => {
@@ -79,22 +78,6 @@ const LiveChat: React.FC<LiveChatProps> = ({ roomID, setRoomID }) => {
     fetchMessagesAndSubscribe();
   }, [roomID]); // re-subscribe when roomID changes
 
-  const sendMessage = () => {
-    if (messageToSend.trim() !== "") {
-      const client = Stomp.over(() => new SockJS("http://localhost:8080/chat"));
-      client.connect({}, () => {
-        const messagePayload = {
-          type: "CHAT",
-          content: messageToSend,
-          sender: user?.username || "anon",
-          sessionId: roomID,
-        };
-        client.send("/app/chat", {}, JSON.stringify(messagePayload));
-        setMessageToSend(""); // Clear input after sending
-      });
-    }
-  };
-
   const getPastMessages = async (roomID: string): Promise<Message[]> => {
     try {
       const pastMessages: Message[] =
@@ -138,7 +121,7 @@ const LiveChat: React.FC<LiveChatProps> = ({ roomID, setRoomID }) => {
         <ChatInput
           messageToSend={messageToSend}
           setMessageToSend={setMessageToSend}
-          sendMessage={sendMessage}
+          roomID={roomID}
         />
         <EmojiReaction roomID={roomID} />
       </div>

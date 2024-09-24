@@ -25,23 +25,25 @@ export const initWebSocketConnection = (options: MessagingClientOptions) => {
 
   // Set up WebSocket connection
   const brokerURL = "http://localhost:8080/chat";
-  client = Stomp.over(() => new SockJS(brokerURL));
-  client.reconnectDelay = 5000; // Try to reconnect every 5 seconds
+  if (!client || !client.connected) {
+    client = Stomp.over(() => new SockJS(brokerURL));
+    client.reconnectDelay = 5000; // Try to reconnect every 5 seconds
 
-  client.connect({}, () => {
-    const topic = `/topic/chat/${roomID}`;
-    console.log(`Listening to: ${topic}`);
+    client.connect({}, () => {
+      const topic = `/topic/chat/${roomID}`;
+      console.log(`Listening to: ${topic}`);
 
-    client.subscribe(topic, (message: any) => {
-      const newMessage = JSON.parse(message.body);
-      console.log(
-        `NewMessage: ${newMessage.content} | ID: ${newMessage.messageID} | Timestamp: ${newMessage.timeStamp}`
-      );
+      client.subscribe(topic, (message: any) => {
+        const newMessage = JSON.parse(message.body);
+        console.log(
+          `NewMessage: ${newMessage.content} | ID: ${newMessage.messageID} | Timestamp: ${newMessage.timeStamp}`
+        );
 
-      // Call the callback with the new message
-      onMessageReceived(newMessage);
+        // Call the callback with the new message
+        onMessageReceived(newMessage);
+      });
     });
-  });
+  }
 
   return () => {
     if (client && client.connected) {
@@ -67,6 +69,7 @@ export const getPastMessages = async (roomID: string): Promise<Message[]> => {
 };
 
 export const sendMessageToChat = async (message: any) => {
+  console.log(message);
   const client = Stomp.over(() => new SockJS("http://localhost:8080/chat"));
   client.connect({}, () => {
     client.send("/app/chat", {}, JSON.stringify(message));

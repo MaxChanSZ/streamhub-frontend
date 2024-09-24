@@ -1,23 +1,39 @@
+import { sendMessageToChat } from "@/utils/messaging-client";
 import { Button } from "./shadcn/ui/button";
 import { Input } from "./shadcn/ui/input";
+import { useAppContext } from "@/contexts/AppContext";
 
 interface ChatInputProps {
   messageToSend: string;
   setMessageToSend: (message: string) => void;
-  sendMessage: () => void;
+  roomID: string;
 }
 
 const ChatInput = ({
   messageToSend,
   setMessageToSend,
-  sendMessage,
+  roomID,
 }: ChatInputProps) => {
+  const { user } = useAppContext();
+  const sendMessage = (message: string) => {
+    if (message.trim() !== "") {
+      const messagePayload = {
+        type: "CHAT",
+        content: message,
+        sender: user?.username || "anon",
+        sessionId: roomID,
+      };
+      sendMessageToChat(messagePayload);
+      setMessageToSend(""); // Clear input after sending
+    }
+  };
+
   return (
     <form
       className="my-4 flex flex-row items-center"
       onSubmit={(event) => {
         event.preventDefault();
-        sendMessage();
+        sendMessage(messageToSend);
       }}
     >
       <Input
