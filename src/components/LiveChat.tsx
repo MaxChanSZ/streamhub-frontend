@@ -10,6 +10,7 @@ import ChatInput from "./ChatInput";
 import { LoadingSpinner } from "./LoadingSpinner";
 import ChatHistory from "./ChatHistory";
 import EmojiOverlay from "./EmojiOverlay";
+import EmojiReaction from "./EmojiReaction";
 
 export interface Message {
   messageID: number;
@@ -145,7 +146,7 @@ const LiveChat: React.FC<LiveChatProps> = ({ roomID, setRoomID }) => {
           setMessageToSend={setMessageToSend}
           sendMessage={sendMessage}
         />
-        {/* <EmojiReaction roomID={roomID} /> */}
+        <EmojiReaction roomID={roomID} />
       </div>
 
       <EmojiOverlay roomID={roomID} />

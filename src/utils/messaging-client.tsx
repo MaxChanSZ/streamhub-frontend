@@ -15,6 +15,7 @@ export interface EmojiClientOptions {
 }
 
 let client: any = null;
+let emojiClient: any = null;
 
 /**
  * Initializes WebSocket connection and subscribes to the chat topic
@@ -73,10 +74,12 @@ export const sendMessageToChat = async (message: any) => {
 };
 
 export const sendEmoji = async (reaction: Emoji) => {
-  const client = Stomp.over(() => new SockJS("http://localhost:8080/emoji"));
+  emojiClient = Stomp.over(() => new SockJS("http://localhost:8080/emoji"));
+
+  // const client = Stomp.over(() => new SockJS("http://localhost:8080/emoji"));
   console.log(reaction);
-  client.connect({}, () => {
-    client.send("/app/emoji", {}, JSON.stringify(reaction));
+  emojiClient.connect({}, () => {
+    emojiClient.send("/app/emoji", {}, JSON.stringify(reaction));
   });
 };
 
@@ -84,15 +87,20 @@ export const EmojiConnection = (options: EmojiClientOptions) => {
   const { roomID, onReceived } = options;
 
   // Set up WebSocket connection
-  const brokerURL = "http://localhost:8080/emoji";
-  client = Stomp.over(() => new SockJS(brokerURL));
-  client.reconnectDelay = 5000; // Try to reconnect every 5 seconds
+  if (!emojiClient || !emojiClient.connected) {
+    emojiClient = Stomp.over(() => new SockJS("http://localhost:8080/emoji"));
+    emojiClient.reconnectDelay = 5000; // Try to reconnect every 5 seconds
+  }
 
-  client.connect({}, () => {
+  // const brokerURL = "http://localhost:8080/emoji";
+  // client = Stomp.over(() => new SockJS(brokerURL));
+  // client.reconnectDelay = 5000; // Try to reconnect every 5 seconds
+
+  emojiClient.connect({}, () => {
     const topic = `/topic/emoji/${roomID}`;
     console.log(`Listening to: ${topic}`);
 
-    client.subscribe(topic, (message: any) => {
+    emojiClient.subscribe(topic, (message: any) => {
       const newEmoji = JSON.parse(message.body);
       console.log(newEmoji);
       console.log(
@@ -112,10 +120,11 @@ export const EmojiConnection = (options: EmojiClientOptions) => {
   });
 
   return () => {
-    if (client && client.connected) {
-      client.disconnect(() => {
+    if (emojiClient && emojiClient.connected) {
+      emojiClient.disconnect(() => {
         console.log("Disconnected from WebSocket");
       });
+      emojiClient = null;
     }
   };
 };
