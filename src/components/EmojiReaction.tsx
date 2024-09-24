@@ -1,6 +1,7 @@
 import { useAppContext } from "@/contexts/AppContext";
 import { sendEmoji } from "@/utils/messaging-client";
 import { useState } from "react";
+import { toast } from "./shadcn/ui/use-toast";
 
 export interface EmojiReaction {}
 
@@ -16,9 +17,29 @@ export type EmoteType = "🩷" | "🙂" | "😢";
 
 const EmojiReaction = ({ roomID }: { roomID: string }) => {
   const { user } = useAppContext();
-  const { waiting, setWaiting } = useState(false);
+  const [waiting, setWaiting] = useState<boolean>(false);
+  const EMOJI_COOLDOWN_TIME = 1000;
+
+  const emojiCoolDown = () => {
+    setWaiting(true);
+    const timer = setTimeout(() => {
+      setWaiting(false);
+    }, EMOJI_COOLDOWN_TIME);
+  };
 
   const sendEmojiReaction = (emojiType: EmoteType, roomID: string) => {
+    if (waiting) {
+      console.log("waiting");
+      toast({
+        title: "Please wait",
+        description: "You can only send one emoji every second",
+        duration: 2000,
+      });
+      return;
+    }
+
+    emojiCoolDown();
+
     console.log("sending " + emojiType);
     const emoji = {
       TYPE: emojiType,
