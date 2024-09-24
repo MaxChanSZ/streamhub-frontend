@@ -1,5 +1,6 @@
 import { useAppContext } from "@/contexts/AppContext";
 import { sendEmoji } from "@/utils/messaging-client";
+import { useState } from "react";
 
 export interface EmojiReaction {}
 
@@ -15,6 +16,7 @@ export type EmoteType = "🩷" | "🙂" | "😢";
 
 const EmojiReaction = ({ roomID }: { roomID: string }) => {
   const { user } = useAppContext();
+  const { waiting, setWaiting } = useState(false);
 
   const sendEmojiReaction = (emojiType: EmoteType, roomID: string) => {
     console.log("sending " + emojiType);

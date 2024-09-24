@@ -37,9 +37,8 @@ const EmojiOverlay = ({ roomID }: { roomID: string }) => {
   return (
     <div className="">
       {emojiQueue.map((emoji) => {
-        return <div key={emoji.ID}>{emoji.TYPE + "" + emoji.ID}</div>;
+        return <div key={emoji.ID}>{emoji.TYPE}</div>;
       })}
-      <p>{emojiQueue.length}</p>
     </div>
   );
 };
