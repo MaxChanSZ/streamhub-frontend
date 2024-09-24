@@ -3,15 +3,17 @@ import { Button } from "@/components/shadcn/ui/button";
 import { Input } from "@/components/shadcn/ui/input";
 import { createWatchParty } from "@/utils/api-client";
 import { useAppContext } from "@/contexts/AppContext";
+import Poll from "@/components/Poll";
 
 export type WatchPartyFormData = {
   partyName: string;
   accountID: number | undefined;
   scheduledDate: string;
   scheduledTime: string;
+  poll: null | Poll;
 };
 
-const Label: React.FC<React.LabelHTMLAttributes<HTMLLabelElement>> = ({ children, className, ...props }) => (
+export const Label: React.FC<React.LabelHTMLAttributes<HTMLLabelElement>> = ({ children, className, ...props }) => (
   <label className={`block text-sm font-medium text-stone-50 mb-1 ${className}`} {...props}>
     {children}
   </label>
@@ -24,13 +26,17 @@ const Label: React.FC<React.LabelHTMLAttributes<HTMLLabelElement>> = ({ children
  * @return {JSX.Element} The rendered CreateWatchPartyPage component.
  */
 const CreateWatchPartyPage = () => {
+
   const [partyName, setPartyName] = useState<string>('');
   const [scheduledDate, setScheduledDate] = useState<string>('');
   const [scheduledTime, setScheduledTime] = useState<string>('');
   const [partyCode, setPartyCode] = useState<string>('');
   const [isLoading, setIsLoading] = useState<boolean>(false);
+  const [poll, setPoll] = useState<null|Poll>(null);
   const [error, setError] = useState<string | null>(null);
   const { user } = useAppContext();
+
+  console.log(poll);
 
   const onFormSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
@@ -50,6 +56,7 @@ const CreateWatchPartyPage = () => {
       accountID,
       scheduledDate,
       scheduledTime,
+      poll
     };
   
     try {
@@ -104,6 +111,39 @@ const CreateWatchPartyPage = () => {
             required
           />
         </div>
+        
+        {/* POLL FOR WATCH PARTY */}
+        {poll ? (
+          <div>
+            <Poll 
+              poll={poll}
+              setPoll={setPoll}
+            />
+            <Button
+              type="button"
+              variant="default"
+              className="w-full text-base py-2 font-alatsi"
+              onClick={() => setPoll(null)}
+            >
+            Cancel Poll
+          </Button>
+          </div>
+        ) : (
+          <Button
+          type="button"
+          variant="default"
+          className="w-full text-base py-2 font-alatsi"
+          onClick={() => setPoll({
+            question: "",
+            options: ["", ""],
+            optionSize: 2
+          })}
+        >
+          Create Poll
+        </Button>
+        )}
+        
+        {/* SUBMIT FORM BUTTON */}
         <Button
           type="submit"
           variant="secondary"
