@@ -1,10 +1,6 @@
-import SockJS from "sockjs-client";
-import { Stomp } from "@stomp/stompjs";
 import { useEffect, useState } from "react";
-import { useAppContext } from "@/contexts/AppContext";
 import plus from "/plus-icon.svg";
 import watchParty from "/watch-party.svg";
-import * as apiClient from "@/utils/api-client";
 import ChatInput from "./ChatInput";
 import { LoadingSpinner } from "./LoadingSpinner";
 import ChatHistory from "./ChatHistory";
@@ -25,10 +21,9 @@ export interface Message {
 
 interface LiveChatProps {
   roomID: string;
-  setRoomID: (roomID: string) => void;
 }
 
-const LiveChat: React.FC<LiveChatProps> = ({ roomID, setRoomID }) => {
+const LiveChat: React.FC<LiveChatProps> = ({ roomID }) => {
   const [messages, setMessages] = useState<Message[]>([]); // messages state
   const [messageToSend, setMessageToSend] = useState<string>("");
   const [isLoading, setIsLoading] = useState<boolean>(false); // To handle loading state
