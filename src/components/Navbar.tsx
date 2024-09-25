@@ -95,10 +95,17 @@ const Navbar = () => {
             <div className="hidden lg:flex flex-grow justify-start">
                 <NavigationMenu className="font-alatsi text-white">
                     <NavigationMenuList className="py-4 flex items-center space-x-0">
-                        {/* Watch Party */}
+                        {/* Join Watch Party */}
                         <NavigationMenuItem>
                             <Button variant="ghost" className={buttonTextFormat} asChild>
                                 <Link to={`/join-watch-party`}>Join Watch Party</Link>
+                            </Button>
+                        </NavigationMenuItem>
+
+                        {/* Create Watch Party */}
+                        <NavigationMenuItem>
+                            <Button variant="ghost" className={buttonTextFormat} asChild>
+                                <Link to={`/create-watch-party`}>Create Watch Party</Link>
                             </Button>
                         </NavigationMenuItem>
 
@@ -214,13 +221,27 @@ const Navbar = () => {
                                     asChild
                                 >
                                     <Link
+                                        to={`/create-watch-party`}
+                                        className="block py-2"
+                                        onClick={() => setMenuOpen(false)}
+                                    >
+                                        Create Watch Party
+                                    </Link>
+                                </Button>
+                                <Button
+                                    variant="ghost"
+                                    className={`${buttonTextFormat} text-white`}
+                                    asChild
+                                >
+                                    <Link
                                         to={`/contact`}
                                         className="block py-2"
-                                        onClick={() => setMenuOpen(false)} // Add this line
+                                        onClick={() => setMenuOpen(false)}
                                     >
                                         Contact
                                     </Link>
                                 </Button>
+
 
                             </NavigationMenu>
                         </li>
