@@ -98,18 +98,19 @@ export const EmojiConnection = (options: EmojiClientOptions) => {
       // Subscribe to the emoji topic
       emojiClient.subscribe(topic, (message: any) => {
         const newEmoji = JSON.parse(message.body);
-        console.log(`New Emoji received: ${newEmoji.type}`);
+        console.log(message.body);
+        console.log(`New Emoji received: ${newEmoji.TYPE}`);
 
         // Construct the emoji object
-        const constructedEmoji: Emoji = {
-          TYPE: newEmoji.type,
-          SESSION_ID: newEmoji.session_ID,
-          SENDER: newEmoji.sender,
-          ID: newEmoji.id,
-        };
+        // const constructedEmoji: Emoji = {
+        //   TYPE: newEmoji.type,
+        //   SESSION_ID: newEmoji.session_ID,
+        //   SENDER: newEmoji.sender,
+        //   ID: newEmoji.id,
+        // };
 
         // Trigger the callback with the new emoji
-        onReceived(constructedEmoji);
+        onReceived(newEmoji);
       });
     });
   }
