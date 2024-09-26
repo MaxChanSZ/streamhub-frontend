@@ -97,43 +97,23 @@ const Navbar = () => {
         </Link>
       </div>
 
-      {/* Centered Navigation Menu */}
-      <div className="hidden lg:flex flex-grow justify-start">
-        <NavigationMenu className="font-alatsi text-white">
-          <NavigationMenuList className="py-4 flex items-center space-x-0">
-            {/* Watch Party */}
-            <NavigationMenuItem>
-              <Button variant="ghost" className={buttonTextFormat} asChild>
-                <NavigationMenuTrigger className="relative z-10">
-                  Watch Party
-                </NavigationMenuTrigger>
-              </Button>
-              {/* <Button variant="ghost" className={buttonTextFormat} asChild>
-                <Link to={`/join-watch-party`}>Join Watch Party</Link>
-              </Button> */}
-              <NavigationMenuContent className="bg-black w-fit">
-                <ul className="flex flex-col items-center w-full p-2 space-y-2">
-                  {watchPartyActions.map((category) => (
-                    <li key={category.title} className="w-full">
-                      <Button
-                        variant="ghost"
-                        className={categoryButtonFormat}
-                        asChild
-                      >
-                        <Link
-                          to={category.href}
-                          className="text-white hover:underline block w-full py-2 px-4 text-center"
-                        >
-                          <div>
-                            <h3 className="font-bold">{category.title}</h3>
-                          </div>
-                        </Link>
-                      </Button>
-                    </li>
-                  ))}
-                </ul>
-              </NavigationMenuContent>
-            </NavigationMenuItem>
+            {/* Centered Navigation Menu */}
+            <div className="hidden lg:flex flex-grow justify-start">
+                <NavigationMenu className="font-alatsi text-white">
+                    <NavigationMenuList className="py-4 flex items-center space-x-0">
+                        {/* Join Watch Party */}
+                        <NavigationMenuItem>
+                            <Button variant="ghost" className={buttonTextFormat} asChild>
+                                <Link to={`/join-watch-party`}>Join Watch Party</Link>
+                            </Button>
+                        </NavigationMenuItem>
+
+                        {/* Create Watch Party */}
+                        <NavigationMenuItem>
+                            <Button variant="ghost" className={buttonTextFormat} asChild>
+                                <Link to={`/create-watch-party`}>Create Watch Party</Link>
+                            </Button>
+                        </NavigationMenuItem>
 
             {/* Category */}
             <NavigationMenuItem className="relative">
@@ -246,24 +226,40 @@ const Navbar = () => {
                   </NavigationMenuContent>
                 </NavigationMenuItem>
 
-                <Button
-                  variant="ghost"
-                  className={`${buttonTextFormat} text-white`}
-                  asChild
-                >
-                  <Link
-                    to={`/contact`}
-                    className="block py-2"
-                    onClick={() => setMenuOpen(false)} // Add this line
-                  >
-                    Contact
-                  </Link>
-                </Button>
-              </NavigationMenu>
-            </li>
-          </ul>
-        </div>
-      )}
+                                <Button
+                                    variant="ghost"
+                                    className={`${buttonTextFormat} text-white`}
+                                    asChild
+                                >
+                                    <Link
+                                        to={`/create-watch-party`}
+                                        className="block py-2"
+                                        onClick={() => setMenuOpen(false)}
+                                    >
+                                        Create Watch Party
+                                    </Link>
+                                </Button>
+                                <Button
+                                    variant="ghost"
+                                    className={`${buttonTextFormat} text-white`}
+                                    asChild
+                                >
+                                    <Link
+                                        to={`/contact`}
+                                        className="block py-2"
+                                        onClick={() => setMenuOpen(false)}
+                                    >
+                                        Contact
+                                    </Link>
+                                </Button>
+
+
+                            </NavigationMenu>
+                        </li>
+                    </ul>
+                </div>
+            )}
+
 
       {/* Search Bar */}
       <div className="flex items-center space-x-1 pl-1 ml-auto lg:ml-0">

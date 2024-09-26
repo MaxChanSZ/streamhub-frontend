@@ -1,7 +1,6 @@
 import React from "react";
 import { createBrowserRouter, RouterProvider } from "react-router-dom";
 import Root from "@/utils/root";
-import CarouselPage from "@/pages/CarouselPage.tsx";
 import ErrorPage from "@/pages/ErrorPage.tsx";
 import HomePage from "@/pages/HomePage.tsx";
 import SeriesPage from "@/pages/SeriesPage.tsx";
