@@ -1,16 +1,21 @@
 import React, { useState } from "react";
 import { Button } from "@/components/shadcn/ui/button";
 import { Input } from "@/components/shadcn/ui/input";
-import { createWatchParty } from "@/utils/api-client";
+import { createPoll, createWatchParty } from "@/utils/api-client";
 import { useAppContext } from "@/contexts/AppContext";
-import Poll from "@/components/Poll";
+import Poll, { PollOptionRequestData, PollRequestData } from "@/components/Poll";
 
 export type WatchPartyFormData = {
   partyName: string;
   accountID: number | undefined;
   scheduledDate: string;
   scheduledTime: string;
-  poll: null | Poll;
+};
+
+export type WatchPartyResponseData = {
+  id: number;
+  code: string;
+  createdDate: number[];
 };
 
 export const Label: React.FC<React.LabelHTMLAttributes<HTMLLabelElement>> = ({ children, className, ...props }) => (
@@ -33,7 +38,34 @@ const CreateWatchPartyPage = () => {
   const [isLoading, setIsLoading] = useState<boolean>(false);
   const [poll, setPoll] = useState<null|Poll>(null);
   const [error, setError] = useState<string | null>(null);
+  const [isPollCreated, setIsPollCreated] = useState<boolean>(false);
   const { user } = useAppContext();
+
+  const onPollCreate = async(poll: Poll, watchPartyId: number) => {
+    let optionRequestsData: PollOptionRequestData[] = [];
+      for (let i=0; i<poll.optionSize; i++) {
+        const request: PollOptionRequestData = {
+          value: poll.options[i]
+        }
+        optionRequestsData.push(request);
+      }
+
+      const pollRequestData: PollRequestData = {
+        watchPartyID: watchPartyId,
+        question: poll.question,
+        pollOptionRequests: optionRequestsData
+      }
+
+      try {
+        const response = await createPoll(pollRequestData);
+        console.log('Poll created:', response);
+      } catch (error) {
+        console.error('Error creating poll:', error);
+        setError('Failed to create poll. Please try again.');
+      } finally {
+        setIsPollCreated(true);
+      }
+  }
 
   const onFormSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
@@ -47,19 +79,23 @@ const CreateWatchPartyPage = () => {
       setIsLoading(false);
       return;
     }
-  
+
     const formData: WatchPartyFormData = {
       partyName,
       accountID,
       scheduledDate,
-      scheduledTime,
-      poll
+      scheduledTime
     };
   
     try {
       const response = await createWatchParty(formData);
       setPartyCode(response.code);
       console.log('Watch Party created:', response);
+      // create a poll if there is one
+      if (poll) {
+        console.log("id",response.id);
+        onPollCreate(poll, response.id);
+      }
     } catch (error) {
       console.error('Error creating watch party:', error);
       setError('Failed to create watch party. Please try again.');
@@ -119,7 +155,7 @@ const CreateWatchPartyPage = () => {
             <Button
               type="button"
               variant="default"
-              className="w-full text-base py-2 font-alatsi"
+              className="w-full text-base py-2 font-alatsi border"
               onClick={() => setPoll(null)}
             >
             Cancel Poll
@@ -129,7 +165,7 @@ const CreateWatchPartyPage = () => {
           <Button
           type="button"
           variant="default"
-          className="w-full text-base py-2 font-alatsi"
+          className="w-full text-white py-2 font-alatsi border"
           onClick={() => setPoll({
             question: "",
             options: ["", ""],
@@ -159,6 +195,11 @@ const CreateWatchPartyPage = () => {
         <div className="mt-4 p-4 bg-green-100 border border-green-400 text-green-700 rounded">
           <p>Your party code is: <strong>{partyCode}</strong></p>
           <p className="mt-2 text-sm">Share this code with your friends to invite them to your watch party!</p>
+        </div>
+      )}
+       {isPollCreated && (
+        <div className="mt-4 p-4 bg-green-100 border border-green-400 text-green-700 rounded">
+          <p className="mt-2 text-sm">Poll successfully created!</p>
         </div>
       )}
     </div>

@@ -1,10 +1,11 @@
 import { LoginFormData } from "../pages/LoginPage";
 import { RegisterFormData } from "../pages/RegisterPage";
-import { WatchPartyFormData } from "@/pages/CreateWatchPartyPage";
+import { WatchPartyFormData, WatchPartyResponseData } from "@/pages/CreateWatchPartyPage";
 import axios from "axios";
 import { User } from "@/utils/types";
 import { UpdateFormData } from "../pages/UpdateProfilePage";
 import { useAppContext } from "../contexts/AppContext";
+import { PollRequestData } from "@/components/Poll";
 
 export const register = async (formData: RegisterFormData) => {
   const response = await axios
@@ -225,11 +226,46 @@ export const fetchTopRatedSeries = async () => {
 
 export const createWatchParty = async (
   formData: WatchPartyFormData
-): Promise<any> => {
+): Promise<WatchPartyResponseData> => {
   try {
     const response = await axios.post(
       "http://localhost:8080/api/watch-party/create",
       formData,
+      {
+        headers: {
+          "Content-Type": "application/json",
+        },
+        withCredentials: true,
+      }
+    );
+    return response.data;
+  } catch (error) {
+    if (axios.isAxiosError(error)) {
+      if (error.response) {
+        console.log(error.response.data);
+        console.log(error.response.status);
+        console.log(error.response.headers);
+      } else if (error.request) {
+        console.log(error.request);
+      } else {
+        console.log("Error", error.message);
+      }
+      console.log(error.config);
+    } else {
+      console.log("Unexpected error:", error);
+    }
+    throw error;
+  }
+};
+
+export const createPoll = async (
+  pollData: PollRequestData
+): Promise<any> => {
+  try {
+    console.log(pollData);
+    const response = await axios.post(
+      "http://localhost:8080/api/watch-party/create-poll",
+      pollData,
       {
         headers: {
           "Content-Type": "application/json",

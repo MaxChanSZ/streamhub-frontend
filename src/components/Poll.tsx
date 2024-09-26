@@ -3,11 +3,21 @@ import { Input } from "./shadcn/ui/input";
 import { RadioGroup, RadioGroupItem } from "./shadcn/ui/radio-group"
 import { useState } from "react";
 
-
 export type Poll = {
     question: string;
     options: string[];
     optionSize: number;
+};
+
+export type PollRequestData = {
+  watchPartyID: number | undefined;
+  question: string;
+  pollOptionRequests: PollOptionRequestData[];
+};
+
+export type PollOptionRequestData = {
+  pollId?: number;
+  value: string;
 };
 
 export type PollOption = {
@@ -77,6 +87,7 @@ export const Poll: React.FC<PollProps> = ({ poll, setPoll }) => {
             <Label htmlFor="poll-watchparty-question">Poll Question</Label>
             <Input
               id="poll-watchparty-question"
+              placeholder="e.g, Which do you prefer?"
               type="text"
               value={question}
               onChange={(e) => handleQuestionChange(e.target.value)}
@@ -147,9 +158,10 @@ export const Poll: React.FC<PollProps> = ({ poll, setPoll }) => {
             value={optionValue}
             type="text"
             className="w-full font-alatsi"
+            placeholder={"Option " + (id+1)}
             onChange={(e) => onChange(e.target.value, id)}
           />
-        </div>
+      </div>
     );
   };
 
