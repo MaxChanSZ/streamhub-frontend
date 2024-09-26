@@ -1,4 +1,5 @@
-import React from 'react';
+import React, { useState } from 'react';
+import { ChevronDown, ChevronUp } from 'lucide-react';
 import inceptionImage from '../images/inception.jpg';
 import matrixImage from '../images/matrix.jpg';
 import interstellarImage from '../images/interstellar.jpg';
@@ -46,34 +47,65 @@ const pollData: Poll = {
       },
     ],
   };
-
-  const MovieCard: React.FC<{ movie: MovieOption; totalVotes: number }> = ({ movie, totalVotes }) => {
+  
+  const MedalIcon: React.FC<{ place: number }> = ({ place }) => {
+    const colors = ['gold', 'silver', '#CD7F32'];
+    return (
+      <svg className="w-8 h-8" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <circle cx="12" cy="12" r="10" fill={colors[place - 1]} />
+        <text x="50%" y="50%" dominantBaseline="central" textAnchor="middle" fill="white" fontSize="14" fontWeight="bold">
+          {place}
+        </text>
+      </svg>
+    );
+  };
+  
+  const MovieCard: React.FC<{ movie: MovieOption; totalVotes: number; place: number }> = ({ movie, totalVotes, place }) => {
+    const [expanded, setExpanded] = useState(false);
     const votePercentage = (movie.votes / totalVotes) * 100;
+    const isTopThree = place <= 3;
   
     return (
-      <div className="bg-white rounded-lg shadow-md overflow-hidden flex flex-col h-full">
-        <div className="relative pt-[150%]"> 
+      <div className={`bg-gray-800 rounded-lg shadow-lg overflow-hidden flex flex-col h-full border border-gray-700 ${isTopThree ? 'transform hover:scale-105 transition-transform duration-300' : ''}`}>
+        <div className="relative pt-[56.25%]"> 
           <img 
             src={movie.image} 
             alt={movie.name} 
-            className="absolute top-0 left-0 w-full h-full object-cover"
+            className="absolute top-0 left-0 w-full h-full object-cover object-top"
           />
+          {isTopThree && (
+            <div className="absolute top-2 left-2">
+              <MedalIcon place={place} />
+            </div>
+          )}
         </div>
         <div className="p-4 flex-grow flex flex-col justify-between">
           <div>
-            <h3 className="text-lg font-semibold mb-2">{movie.name}</h3>
-            <p className="text-sm text-gray-600 mb-4">{movie.description}</p>
+            <h3 className={`font-semibold mb-2 text-white ${isTopThree ? 'text-xl' : 'text-lg'}`}>{movie.name}</h3>
+            <p className={`text-gray-400 mb-2 ${expanded ? '' : 'line-clamp-2'} ${isTopThree ? 'text-base' : 'text-sm'}`}>{movie.description}</p>
+            {movie.description.length > 100 && (
+              <button 
+                onClick={() => setExpanded(!expanded)} 
+                className="text-blue-400 text-sm flex items-center mt-1 hover:text-blue-300"
+              >
+                {expanded ? (
+                  <>
+                    <ChevronUp size={16} className="mr-1" />
+                    Show less
+                  </>
+                ) : (
+                  <>
+                    <ChevronDown size={16} className="mr-1" />
+                    Read more
+                  </>
+                )}
+              </button>
+            )}
           </div>
           <div>
-            <div className="bg-gray-200 h-4 rounded-full overflow-hidden">
-              <div
-                className="bg-blue-500 h-full"
-                style={{ width: `${votePercentage}%` }}
-              ></div>
-            </div>
             <div className="mt-2 flex justify-between items-center">
-              <span className="text-sm font-medium">{movie.votes} votes</span>
-              <span className="text-sm font-medium">{votePercentage.toFixed(1)}%</span>
+              <span className={`font-medium text-gray-300 ${isTopThree ? 'text-base' : 'text-sm'}`}>{movie.votes} votes</span>
+              <span className={`font-medium text-gray-300 ${isTopThree ? 'text-base' : 'text-sm'}`}>{votePercentage.toFixed(1)}%</span>
             </div>
           </div>
         </div>
@@ -83,27 +115,37 @@ const pollData: Poll = {
   
   const PollResult: React.FC<{ poll: Poll }> = ({ poll }) => {
     const totalVotes = poll.options.reduce((sum, option) => sum + option.votes, 0);
+    const sortedOptions = [...poll.options].sort((a, b) => b.votes - a.votes);
     
     return (
-      <div className="mb-8">
-        <h2 className="text-2xl font-bold mb-4">{poll.question}</h2>
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
-          {poll.options.map((movie, index) => (
-            <MovieCard key={index} movie={movie} totalVotes={totalVotes} />
+      <div>
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mb-8">
+          {sortedOptions.slice(0, 3).map((movie, index) => (
+            <MovieCard key={index} movie={movie} totalVotes={totalVotes} place={index + 1} />
           ))}
         </div>
+        {sortedOptions.length > 3 && (
+          <div>
+            <h3 className="text-2xl font-semibold mb-4 text-white">Honorable Mentions</h3>
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
+              {sortedOptions.slice(3).map((movie, index) => (
+                <MovieCard key={index + 3} movie={movie} totalVotes={totalVotes} place={index + 4} />
+              ))}
+            </div>
+          </div>
+        )}
       </div>
     );
   };
   
   const PollResultPage: React.FC = () => {
     return (
-      <div className="container mx-auto px-4">
-        <h1 className="text-3xl font-bold mb-8">Movie Poll Results</h1>
+      <div className="container mx-auto px-4 py-8 bg-gray-900 text-white min-h-screen">
+        <h1 className="text-3xl md:text-4xl font-bold mb-2">Movie Poll Results</h1>
+        <h2 className="text-xl md:text-2xl font-semibold mb-6">{pollData.question}</h2>
         <PollResult poll={pollData} />
       </div>
     );
   };
   
   export default PollResultPage;
-  
