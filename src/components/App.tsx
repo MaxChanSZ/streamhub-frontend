@@ -7,11 +7,11 @@ const App = () => {
   if (login) {
     return (
       <div>
-        <ReactDOMRun />
+        <ReactDOMRun login={login} setLogin={setLogin} />
       </div>
     );
   } else {
-    return <LandingPage login={login} setLogin={setLogin} />;
+    return <LandingPage login={} setLogin={setLogin} />;
   }
 };
 

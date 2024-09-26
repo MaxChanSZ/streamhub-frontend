@@ -12,61 +12,81 @@ import SearchPage from "@/pages/SearchPage";
 import RegisterPage from "@/pages/RegisterPage";
 import ContactPage from "@/pages/ContactPage.tsx";
 import TestPage from "@/pages/TestPage";
+import JoinWatchPartyPage from "@/pages/JoinWatchPartyPage";
+import { useAppContext } from "@/contexts/AppContext";
+import LandingPage from "@/pages/LandingPage";
+import { login } from "@/utils/api-client";
 
-interface ReactDOMRunProps {}
+interface ReactDOMRunProps {
+  login: boolean;
+  setLogin: React.Dispatch<React.SetStateAction<boolean>>;
+}
 
 const ReactDOMRun: React.FC<ReactDOMRunProps> = () => {
+  const router = createBrowserRouter([
+    {
+      path: "/",
+      element: <Root />,
+      errorElement: <ErrorPage />,
+      children: [
+        {
+          index: true,
+          element: <HomePage />,
+        },
+        {
+          path: "landing",
+          element: <LandingPage login={login} setLogin={setLogin} />,
+        },
+        {
+          path: "watch/:seriesId",
+          element: <SeriesPage />,
+        },
+        {
+          path: "watch/:seriesId/:episodeId",
+          element: <WatchPage videoSource="" />,
+        },
+        {
+          path: "watch-party/:sessionId",
+          element: <WatchPartyPage />,
+        },
+        {
+          path: "create-watch-party",
+          element: <CreateWatchPartyPage />,
+        },
+        {
+          path: "join-watch-party",
+          element: <JoinWatchPartyPage />,
+        },
+        {
+          path: "update-profile",
+          element: <UpdateProfilePage />,
+        },
+        {
+          path: "register",
+          element: <RegisterPage />,
+        },
+        {
+          path: "contact",
+          element: <ContactPage />,
+        },
+        {
+          path: "search",
+          element: <SearchPage />,
+        },
+      ],
+    },
+    { path: "test", element: <TestPage /> },
+  ]);
+
   return (
     <>
       <RouterProvider router={router} />
     </>
   );
 };
-const router = createBrowserRouter([
-  {
-    path: "/",
-    element: <Root />,
-    errorElement: <ErrorPage />,
-    children: [
-      {
-        index: true,
-        element: <HomePage />,
-      },
-      {
-        path: "watch/:seriesId",
-        element: <SeriesPage />,
-      },
-      {
-        path: "watch/:seriesId/:episodeId",
-        element: <WatchPage videoSource="" />,
-      },
-      {
-        path: "watch-party/:sessionId",
-        element: <WatchPartyPage />,
-      },
-      {
-        path: "create-watch-party",
-        element: <CreateWatchPartyPage />,
-      },
-      {
-        path: "update-profile",
-        element: <UpdateProfilePage />,
-      },
-      {
-        path: "register",
-        element: <RegisterPage />,
-      },
-      {
-        path: "contact",
-        element: <ContactPage />,
-      },
-      {
-        path: "search",
-        element: <SearchPage />,
-      },
-    ],
-  },
-  { path: "test", element: <TestPage /> },
-]);
+
+
+
+
 
 export default ReactDOMRun;
