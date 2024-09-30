@@ -1,6 +1,6 @@
 import { LoginFormData } from "../pages/LoginPage";
 import { RegisterFormData } from "../pages/RegisterPage";
-import { WatchPartyFormData, WatchPartyResponseData } from "@/pages/CreateWatchPartyPage";
+import { PollOptionResponseData, PollResponseData, UpdatePollOptionRequestData, WatchPartyFormData, WatchPartyResponseData } from "@/pages/CreateWatchPartyPage";
 import axios from "axios";
 import { User } from "@/utils/types";
 import { UpdateFormData } from "../pages/UpdateProfilePage";
@@ -260,15 +260,92 @@ export const createWatchParty = async (
 
 export const createPoll = async (
   pollData: PollRequestData
-): Promise<any> => {
+): Promise<PollResponseData> => {
   try {
-    console.log(pollData);
     const response = await axios.post(
-      "http://localhost:8080/api/watch-party/create-poll",
+      "http://localhost:8080/api/poll/create",
       pollData,
       {
         headers: {
           "Content-Type": "application/json",
+        },
+        withCredentials: true,
+      }
+    );
+    return response.data; 
+  } catch (error) {
+    if (axios.isAxiosError(error)) {
+      if (error.response) {
+        console.log(error.response.data);
+        console.log(error.response.status);
+        console.log(error.response.headers);
+      } else if (error.request) {
+        console.log(error.request);
+      } else {
+        console.log("Error", error.message);
+      }
+      console.log(error.config);
+    } else {
+      console.log("Unexpected error:", error);
+    }
+    throw error;
+  }
+};
+
+
+export const getPollOptions = async (
+  pollId: number
+): Promise<PollOptionResponseData[]> => {
+  try {
+    const response = await axios.post(
+      "http://localhost:8080/api/poll/get-poll-options-by-poll",
+      null,
+      {
+        headers: {
+          "Content-Type": "application/json",
+        },
+        withCredentials: true,
+        params: {
+          pollId
+        }
+      }
+    );
+    return response.data; 
+  } catch (error) {
+    if (axios.isAxiosError(error)) {
+      if (error.response) {
+        console.log(error.response.data);
+        console.log(error.response.status);
+        console.log(error.response.headers);
+      } else if (error.request) {
+        console.log(error.request);
+      } else {
+        console.log("Error", error.message);
+      }
+      console.log(error.config);
+    } else {
+      console.log("Unexpected error:", error);
+    }
+    throw error;
+  }
+};
+
+export const uploadImage = async (
+  image: File,
+  fileName: string,
+  directory: string
+): Promise<any> => {
+  try {
+    const formData = new FormData();
+    formData.append("image", image);
+    formData.append("fileName", fileName);
+    formData.append("directory", directory);
+    const response = await axios.post(
+      "http://localhost:8080/api/image/upload",
+      formData,
+      {
+        headers: {
+          "Content-Type": "multipart/form-data",
         },
         withCredentials: true,
       }

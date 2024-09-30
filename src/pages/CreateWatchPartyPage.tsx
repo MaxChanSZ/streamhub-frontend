@@ -1,7 +1,12 @@
 import React, { useState } from "react";
 import { Button } from "@/components/shadcn/ui/button";
 import { Input } from "@/components/shadcn/ui/input";
-import { createPoll, createWatchParty } from "@/utils/api-client";
+import { 
+  createPoll,
+  createWatchParty,
+  getPollOptions,
+  uploadImage
+} from "@/utils/api-client";
 import { useAppContext } from "@/contexts/AppContext";
 import Poll, { PollOptionRequestData, PollRequestData } from "@/components/Poll";
 
@@ -12,11 +17,28 @@ export type WatchPartyFormData = {
   scheduledTime: string;
 };
 
+export type UpdatePollOptionRequestData = {
+  id: number;
+  imageUrl: string;
+};
+
 export type WatchPartyResponseData = {
   id: number;
   code: string;
   createdDate: number[];
 };
+
+export type PollResponseData = {
+  id: number;
+  question: string;
+};
+
+export type PollOptionResponseData = {
+  id: number;
+  value: string;
+  description: string;
+  imageUrl: string;
+}
 
 export const Label: React.FC<React.LabelHTMLAttributes<HTMLLabelElement>> = ({ children, className, ...props }) => (
   <label className={`block text-sm font-medium text-stone-50 mb-1 ${className}`} {...props}>
@@ -44,8 +66,16 @@ const CreateWatchPartyPage = () => {
   const onPollCreate = async(poll: Poll, watchPartyId: number) => {
     let optionRequestsData: PollOptionRequestData[] = [];
       for (let i=0; i<poll.optionSize; i++) {
+        const {
+          value,
+          description,
+          image
+        } = poll.options[i];
         const request: PollOptionRequestData = {
-          value: poll.options[i]
+          value,
+          description,
+          image,
+          fileName: image?.name
         }
         optionRequestsData.push(request);
       }
@@ -59,6 +89,15 @@ const CreateWatchPartyPage = () => {
       try {
         const response = await createPoll(pollRequestData);
         console.log('Poll created:', response);
+        const pollOptionList: PollOptionResponseData[] = await getPollOptions(response?.id);
+        for (var i=0; i<pollOptionList.length; i++) {
+          // upload images and save image url
+          const optionImage: File| null = pollRequestData?.pollOptionRequests[i].image ? pollRequestData?.pollOptionRequests[i].image : null;
+          if (optionImage) {
+            uploadImage(optionImage, pollOptionList[i].imageUrl, "pollOptionImages");
+            console.log("Image uploaded for " + optionImage.name);
+          }
+        }
       } catch (error) {
         console.error('Error creating poll:', error);
         setError('Failed to create poll. Please try again.');
@@ -93,7 +132,6 @@ const CreateWatchPartyPage = () => {
       console.log('Watch Party created:', response);
       // create a poll if there is one
       if (poll) {
-        console.log("id",response.id);
         onPollCreate(poll, response.id);
       }
     } catch (error) {
@@ -168,7 +206,10 @@ const CreateWatchPartyPage = () => {
           className="w-full text-white py-2 font-alatsi border"
           onClick={() => setPoll({
             question: "",
-            options: ["", ""],
+            options: [
+              {value: "", description: "", image: null, imageOptionUrl: ""},
+              {value: "", description: "", image: null, imageOptionUrl: ""}
+            ],
             optionSize: 2
           })}
         >
