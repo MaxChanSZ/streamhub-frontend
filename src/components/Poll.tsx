@@ -17,6 +17,12 @@ export type PollOption = {
   imageOptionUrl: string;
 };
 
+interface PollProps {
+  poll: Poll;
+  setPoll: (poll: Poll) => void;
+  optionSize?: number;
+};
+
 export type PollOptionProps = {
   id: number;
   value: string;
@@ -25,11 +31,6 @@ export type PollOptionProps = {
   onOptionValueChange(option: PollOption, id: number): void;
 };
 
-interface PollProps {
-  poll: Poll;
-  setPoll: (poll: Poll) => void;
-  optionSize?: number;
-}
 
 // for api calls
 // to create poll in backend
@@ -101,7 +102,7 @@ export const Poll: React.FC<PollProps> = ({ poll, setPoll }) => {
       setOptions(options);
       setPoll({
         ...poll,
-        options: options,
+        options,
       })
     }
 
