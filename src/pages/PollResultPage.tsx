@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useRef, useEffect } from 'react';
 import { ChevronDown, ChevronUp } from 'lucide-react';
 import inceptionImage from '../images/inception.jpg';
 import matrixImage from '../images/matrix.jpg';
@@ -23,25 +23,25 @@ const pollData: Poll = {
     options: [
       {
         name: 'Inception',
-        votes: 45,
+        votes: 12,
         description: 'A thief who enters the dreams of others to steal secrets from their subconscious.',
         image: inceptionImage
       },
       {
         name: 'The Matrix',
-        votes: 40,
+        votes: 7,
         description: 'A computer programmer discovers the shocking truth about his simulated reality.',
         image: matrixImage
       },
       {
         name: 'Interstellar',
-        votes: 35,
-        description: 'Explorers travel through a wormhole in space in an attempt to save humanity.',
+        votes: 4,
+        description: 'Explorers travel through a wormhole in space in an attempt to save humanity. From evil and devestation for all eternity',
         image: interstellarImage
       },
       {
         name: 'Blade Runner 2049',
-        votes: 30,
+        votes: 9,
         description: 'A new blade runner unearths a long-buried secret that has the potential to plunge society into chaos.',
         image: bladerunnerImage
       },
@@ -49,9 +49,9 @@ const pollData: Poll = {
   };
   
   const MedalIcon: React.FC<{ place: number }> = ({ place }) => {
-    const colors = ['gold', 'silver', '#CD7F32'];
+    const colors = ['#C9B037', '#B4B4B4', '#AD8A56'];
     return (
-      <svg className="w-8 h-8" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+      <svg className="w-6 h-6 inline-block mr-2" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
         <circle cx="12" cy="12" r="10" fill={colors[place - 1]} />
         <text x="50%" y="50%" dominantBaseline="central" textAnchor="middle" fill="white" fontSize="14" fontWeight="bold">
           {place}
@@ -62,31 +62,52 @@ const pollData: Poll = {
   
   const MovieCard: React.FC<{ movie: MovieOption; totalVotes: number; place: number }> = ({ movie, totalVotes, place }) => {
     const [expanded, setExpanded] = useState(false);
+    const [isOverflowing, setIsOverflowing] = useState(false);
+    const descriptionRef = useRef<HTMLParagraphElement>(null);
     const votePercentage = (movie.votes / totalVotes) * 100;
     const isTopThree = place <= 3;
   
+    useEffect(() => {
+      const checkOverflow = () => {
+        if (descriptionRef.current) {
+          setIsOverflowing(
+            descriptionRef.current.scrollHeight > descriptionRef.current.clientHeight
+          );
+        }
+      };
+  
+      checkOverflow();
+      window.addEventListener('resize', checkOverflow);
+      return () => window.removeEventListener('resize', checkOverflow);
+    }, [movie.description]);
+  
     return (
-      <div className={`bg-gray-800 rounded-lg shadow-lg overflow-hidden flex flex-col h-full border border-gray-700 ${isTopThree ? 'transform hover:scale-105 transition-transform duration-300' : ''}`}>
-        <div className="relative pt-[56.25%]"> 
+      <div className={`bg-gray-800 rounded-lg shadow-lg overflow-hidden flex flex-col h-full border border-gray-700 ${
+        isTopThree ? 'transform hover:scale-105 transition-transform duration-300' : ''
+      }`}>
+        <div className="relative pt-[100%]"> 
           <img 
             src={movie.image} 
             alt={movie.name} 
             className="absolute top-0 left-0 w-full h-full object-cover object-top"
           />
-          {isTopThree && (
-            <div className="absolute top-2 left-2">
-              <MedalIcon place={place} />
-            </div>
-          )}
         </div>
-        <div className="p-4 flex-grow flex flex-col justify-between">
+        <div className="p-4 flex-grow flex flex-col justify-between relative z-10">
           <div>
-            <h3 className={`font-semibold mb-2 text-white ${isTopThree ? 'text-xl' : 'text-lg'}`}>{movie.name}</h3>
-            <p className={`text-gray-400 mb-2 ${expanded ? '' : 'line-clamp-2'} ${isTopThree ? 'text-base' : 'text-sm'}`}>{movie.description}</p>
-            {movie.description.length > 100 && (
+            <h3 className={`font-semibold mb-2 text-white ${isTopThree ? 'text-xl' : 'text-lg'} flex items-center`}>
+              {isTopThree && <MedalIcon place={place} />}
+              <span>{movie.name}</span>
+            </h3>
+            <p 
+              ref={descriptionRef}
+              className={`text-gray-400 mb-2 ${expanded ? '' : 'line-clamp-2'} ${isTopThree ? 'text-base' : 'text-sm'}`}
+            >
+              {movie.description}
+            </p>
+            {isOverflowing && (
               <button 
                 onClick={() => setExpanded(!expanded)} 
-                className="text-blue-400 text-sm flex items-center mt-1 hover:text-blue-300"
+                className="text-blue-400 text-sm flex items-center mt-1 hover:text-blue-300 relative z-20"
               >
                 {expanded ? (
                   <>
@@ -140,7 +161,7 @@ const pollData: Poll = {
   
   const PollResultPage: React.FC = () => {
     return (
-      <div className="container mx-auto px-4 py-8 bg-gray-900 text-white min-h-screen">
+      <div className="container mx-auto px-2 py-4 text-white min-h-screen">
         <h1 className="text-3xl md:text-4xl font-bold mb-2">Movie Poll Results</h1>
         <h2 className="text-xl md:text-2xl font-semibold mb-6">{pollData.question}</h2>
         <PollResult poll={pollData} />
