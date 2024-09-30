@@ -58,7 +58,7 @@ const LiveChat: React.FC<LiveChatProps> = ({ roomID }) => {
   }, [roomID]); // re-subscribe when roomID changes
 
   return (
-    <div className="px-2 flex flex-col min-h-96 min-w-60 bg-[#161616]">
+    <div className="px-2 flex flex-col min-h-96 min-w-80 bg-[#161616]">
       {/* Component title and icons */}
       <div className="flex flex-row flex-wrap justify-between p-2 pt-4 border border-0 border-b-2">
         <div className="flex items-center">
@@ -87,16 +87,18 @@ const LiveChat: React.FC<LiveChatProps> = ({ roomID }) => {
       >
         <div className="relative">
           <ChatHistory chatMessages={messages} />
+          <EmojiOverlay roomID={roomID} />
         </div>
+        <EmojiReaction roomID={roomID} />
         <ChatInput
           messageToSend={messageToSend}
           setMessageToSend={setMessageToSend}
           roomID={roomID}
         />
-        <EmojiReaction roomID={roomID} />
+        
       </div>
 
-      <EmojiOverlay roomID={roomID} />
+      
     </div>
   );
 };

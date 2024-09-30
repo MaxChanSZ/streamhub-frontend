@@ -1,10 +1,11 @@
 import { EmojiConnection } from "@/utils/messaging-client";
 import { Emoji } from "./EmojiReaction";
 import { useEffect, useState } from "react";
+import { EmojiBubble } from "./EmojiBubble";
 
 const EmojiOverlay = ({ roomID }: { roomID: string }) => {
   const [emojiQueue, setEmojiQueue] = useState<Emoji[]>([]);
-  const DELAY = 500; // delay for timeout
+  const DELAY = 4500; // delay for timeout
 
   useEffect(() => {
     const disconnect = EmojiConnection({
@@ -35,9 +36,9 @@ const EmojiOverlay = ({ roomID }: { roomID: string }) => {
   }, [emojiQueue]);
 
   return (
-    <div className="mb-4">
+    <div className="absolute bottom-0 left-0 z-3 h-full w-full">
       {emojiQueue.map((emoji) => {
-        return <div key={emoji.ID}>{emoji.TYPE}</div>;
+        return <EmojiBubble emoji={emoji}/>;
       })}
     </div>
   );
