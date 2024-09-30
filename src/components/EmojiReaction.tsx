@@ -15,7 +15,7 @@ const EmojiReaction = ({ roomID }: { roomID: string }) => {
   const { user } = useAppContext();
   const [waiting, setWaiting] = useState<boolean>(false);
   const [enableCooldown, setEnableCooldown] = useState<boolean>(false);
-  const EMOJI_COOLDOWN_TIME = 4000;
+  const EMOJI_COOLDOWN_TIME = 2000;
 
   const emojiCoolDown = () => {
     setWaiting(true);
@@ -28,7 +28,7 @@ const EmojiReaction = ({ roomID }: { roomID: string }) => {
     if (waiting) {
       toast({
         title: "Please wait",
-        description: "You can only send one emoji every second",
+        description: `You can only send one emoji every ${EMOJI_COOLDOWN_TIME / 1000} seconds`,
         duration: 1000,
       });
       return;
@@ -63,13 +63,11 @@ const EmojiReaction = ({ roomID }: { roomID: string }) => {
   return (
     <>
       <div className="text-4xl md:text-2xl my-4">
-
-        {emojiList.map(({emoji, label}, index) => (
+        {emojiList.map(({ emoji, label }, index) => (
           <button key={index} onClick={() => sendEmojiReaction(emoji, roomID)}>
             {emoji}
           </button>
         ))}
-        
       </div>
       <div className="flex items-center space-x-2 text-[#A8A8A8] font-semibold">
         <Switch
