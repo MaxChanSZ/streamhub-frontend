@@ -1,0 +1,16 @@
+/* EmojiBubble.css */
+@keyframes bubble {
+  from {
+    bottom: 0%;
+  }
+  to {
+    bottom: 90%;
+		opacity: 0;
+  }
+}
+
+.bubble {
+  animation: bubble ease-out;
+  position: absolute;
+  animation-fill-mode: forwards;
+}
