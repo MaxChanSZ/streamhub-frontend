@@ -89,8 +89,8 @@ const NavbarProfile = () => {
                             asChild
                             className="w-full text-left text-2xl text-white"
                         >
-                            <Link to={`/pollResults`} onClick={() => setIsProfileMenuOpen(false)}>
-                                Poll Results
+                            <Link to={`/contact`} onClick={() => setIsProfileMenuOpen(false)}>
+                                Contact
                             </Link>
                         </Button>
                         <LogoutButton/>

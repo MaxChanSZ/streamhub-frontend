@@ -148,7 +148,7 @@ const Navbar = () => {
                         {/* Rest of Buttons */}
                         <NavigationMenuItem>
                             <Button variant="ghost" className={buttonTextFormat} asChild>
-                                <Link to={`/contact`}>Contact</Link>
+                                <Link to={`/pollResults`}>Poll Results</Link>
                             </Button>
                         </NavigationMenuItem>
                     </NavigationMenuList>
@@ -249,11 +249,11 @@ const Navbar = () => {
                                     asChild
                                 >
                                     <Link
-                                        to={`/contact`}
+                                        to={`/pollResults`}
                                         className="block py-2"
                                         onClick={() => setMenuOpen(false)}
                                     >
-                                        Contact
+                                        Poll Results
                                     </Link>
                                 </Button>
 
