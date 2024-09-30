@@ -31,7 +31,6 @@ const EmojiReaction = ({ roomID }: { roomID: string }) => {
 
   const sendEmojiReaction = (emojiType: EmoteType, roomID: string) => {
     if (waiting) {
-      console.log("waiting");
       toast({
         title: "Please wait",
         description: "You can only send one emoji every second",

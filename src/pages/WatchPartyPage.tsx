@@ -23,13 +23,6 @@ const WatchPartyPage = () => {
 
   const [roomID, setRoomID] = useState(sessionId);
 
-  const changeRoomID = (newRoomID: string) => {
-    if (newRoomID !== roomID) {
-      // Clear previous messages
-      setRoomID(newRoomID);
-    }
-  };
-
   return (
     <div className="grid grid-cols-1 gap-y-2 md:grid-cols-4 md:gap-x-4 ">
       <div className="col-span-3 min-h-80">
