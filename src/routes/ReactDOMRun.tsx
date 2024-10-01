@@ -16,6 +16,7 @@ import JoinWatchPartyPage from "@/pages/JoinWatchPartyPage";
 import { useAppContext } from "@/contexts/AppContext";
 import LandingPage from "@/pages/LandingPage";
 import { login } from "@/utils/api-client";
+import PollResultPage from "@/pages/PollResultPage.tsx";
 
 interface ReactDOMRunProps {
 }
@@ -56,6 +57,10 @@ const ReactDOMRun: React.FC<ReactDOMRunProps> = () => {
           element: <UpdateProfilePage />,
         },
         {
+        path: "pollResults",
+        element: <PollResultPage />,
+      },
+      {
           path: "register",
           element: <RegisterPage />,
         },
