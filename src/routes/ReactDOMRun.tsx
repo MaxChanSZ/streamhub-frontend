@@ -13,6 +13,7 @@ import RegisterPage from "@/pages/RegisterPage";
 import ContactPage from "@/pages/ContactPage.tsx";
 import TestPage from "@/pages/TestPage";
 import PollResultPage from "@/pages/PollResultPage.tsx";
+import SendEmailPage from "@/pages/SendEmailPage.tsx";
 
 interface ReactDOMRunProps {}
 
@@ -48,6 +49,10 @@ const router = createBrowserRouter([
       {
         path: "create-watch-party",
         element: <CreateWatchPartyPage />,
+      },
+      {
+        path: "send-email",
+        element: <SendEmailPage />,
       },
       {
         path: "update-profile",
