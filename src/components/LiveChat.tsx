@@ -1,4 +1,3 @@
-import { Button } from "./shadcn/ui/button";
 import SockJS from "sockjs-client";
 import { Stomp } from "@stomp/stompjs";
 import { useEffect, useState } from "react";
@@ -6,17 +5,17 @@ import { useAppContext } from "@/contexts/AppContext";
 import axios from "axios";
 import plus from "/plus-icon.svg";
 import watchParty from "/watch-party.svg";
-import ChatHistory from "./ChatHistory";
-import LogoutButton from "./LogoutButton";
 import * as apiClient from "@/utils/api-client";
 import ChatInput from "./ChatInput";
 import { LoadingSpinner } from "./LoadingSpinner";
+import ChatHistory from "./ChatHistory";
 
 export interface Message {
   messageID: number;
   content: string;
   sender: string;
   timeStamp: Date;
+  type: string;
 }
 
 interface LiveChatProps {
@@ -27,7 +26,6 @@ interface LiveChatProps {
 const LiveChat: React.FC<LiveChatProps> = ({ roomID, setRoomID }) => {
   const [messages, setMessages] = useState<Message[]>([]); // messages state
   const [messageToSend, setMessageToSend] = useState<string>("");
-  // const [roomID, setRoomID] = useState<string>("");
   const [isLoading, setIsLoading] = useState<boolean>(false); // To handle loading state
   const TRANSITION_DURATION_MS = 500; // fixed transition period in milliseconds
   const { user } = useAppContext();
@@ -81,13 +79,6 @@ const LiveChat: React.FC<LiveChatProps> = ({ roomID, setRoomID }) => {
 
     fetchMessagesAndSubscribe();
   }, [roomID]); // re-subscribe when roomID changes
-
-  const changeRoomID = (newRoomID: string) => {
-    if (newRoomID !== roomID) {
-      setMessages([]); // Clear previous messages
-      setRoomID(newRoomID);
-    }
-  };
 
   const sendMessage = () => {
     if (messageToSend.trim() !== "") {
@@ -145,26 +136,6 @@ const LiveChat: React.FC<LiveChatProps> = ({ roomID, setRoomID }) => {
       )}
 
       <>
-        {/* roomID input for development only */}
-        {/* <form
-          className="flex text-center justify-center items-center"
-          onSubmit={(event) => {
-            event.preventDefault();
-            changeRoomID(roomID);
-          }}
-        >
-          <label className="text-xs font-bold">Enter Room ID:</label>
-          <input
-            type="text"
-            value={roomID}
-            onChange={(event) => setRoomID(event.target.value.toString())}
-            className="text-black text-center mx-4 py-2 px-1 font-semibold grow-0 border-none"
-          ></input>
-
-          <Button type="submit" variant="secondary">
-            Enter
-          </Button>
-        </form> */}
         <div
           className={`${isLoading ? "opacity-50" : "opacity-100"} transition-opacity duration-${TRANSITION_DURATION_MS}`}
         >
@@ -176,17 +147,6 @@ const LiveChat: React.FC<LiveChatProps> = ({ roomID, setRoomID }) => {
           />
         </div>
       </>
-
-      {/* For debugging and dev, remove when done */}
-      {/* <div className="flex flex-row items-center justify-center py-4">
-        <Button onClick={clearMessages} variant="destructive" className="mx-4">
-          Clear Messages
-        </Button>
-        <h2 className="mx-4 text-2xl font-bold">
-          Room ID: {roomID === "" ? "None" : roomID}
-        </h2>
-        <LogoutButton />
-      </div> */}
     </div>
   );
 };

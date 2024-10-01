@@ -11,8 +11,10 @@ const App = () => {
       </div>
     );
   } else {
-    return <LandingPage login={login} setLogin={setLogin} />;
+    return <LandingPage login={login} setLogin={setLogin}/>;
   }
 };
 
 export default App;
+
+// login={login} setLogin={setLogin}
