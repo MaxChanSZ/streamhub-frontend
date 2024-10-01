@@ -12,6 +12,7 @@ import SearchPage from "@/pages/SearchPage";
 import RegisterPage from "@/pages/RegisterPage";
 import ContactPage from "@/pages/ContactPage.tsx";
 import TestPage from "@/pages/TestPage";
+import PollResultPage from "@/pages/PollResultPage.tsx";
 
 interface ReactDOMRunProps {}
 
@@ -51,6 +52,10 @@ const router = createBrowserRouter([
       {
         path: "update-profile",
         element: <UpdateProfilePage />,
+      },
+      {
+        path: "pollResults",
+        element: <PollResultPage />,
       },
       {
         path: "register",
