@@ -215,8 +215,8 @@ const VideoJSSynced: React.FC<IVideoPlayerProps> = ({
   };
 
   return (
-    <div className="w-full ">
-      <video ref={videoNode} className="video-js vjs-big-play-centered" />
+    <div className=" w-full ">
+      <video ref={videoNode} className="video-js vjs-big-play-centered min-h-96" />
     </div>
   );
 };

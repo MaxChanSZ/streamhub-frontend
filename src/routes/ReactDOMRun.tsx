@@ -78,9 +78,57 @@ const ReactDOMRun: React.FC<ReactDOMRunProps> = () => {
     </>
   );
 };
+<<<<<<< HEAD
 
 
 
 
+=======
+const router = createBrowserRouter([
+  {
+    path: "/",
+    element: <Root />,
+    errorElement: <ErrorPage />,
+    children: [
+      {
+        index: true,
+        element: <HomePage />,
+      },
+      {
+        path: "watch/:seriesId",
+        element: <SeriesPage />,
+      },
+      {
+        path: "watch/:seriesId/:episodeId",
+        element: <WatchPage videoSource="" />,
+      },
+      {
+        path: "watch-party/:sessionId",
+        element: <WatchPartyPage />,
+      },
+      {
+        path: "create-watch-party",
+        element: <CreateWatchPartyPage />,
+      },
+      {
+        path: "update-profile",
+        element: <UpdateProfilePage />,
+      },
+      {
+        path: "register",
+        element: <RegisterPage />,
+      },
+      {
+        path: "contact",
+        element: <ContactPage />,
+      },
+      {
+        path: "search",
+        element: <SearchPage />,
+      },
+    ],
+  },
+]);
+>>>>>>> origin/SCRUM-173
 
 export default ReactDOMRun;

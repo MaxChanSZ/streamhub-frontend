@@ -15,7 +15,7 @@ const Root = () => {
   return (
     <div className="bg-[#08081d]">
       <Navbar />
-      <div className="min-h-[80vh] mx-20 my-4">
+      <div className="min-h-[80vh] mx-10 my-4">
         <Outlet />
       </div>
       <Footer />
