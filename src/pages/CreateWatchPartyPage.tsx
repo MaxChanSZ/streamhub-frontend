@@ -13,6 +13,7 @@ import Poll, { PollOptionRequestData, PollRequestData } from "@/components/Poll"
 export type WatchPartyFormData = {
   partyName: string;
   accountID: number | undefined;
+  password: string;
   scheduledDate: string;
   scheduledTime: string;
 };
@@ -57,6 +58,7 @@ const CreateWatchPartyPage = () => {
   const [scheduledDate, setScheduledDate] = useState<string>('');
   const [scheduledTime, setScheduledTime] = useState<string>('');
   const [partyCode, setPartyCode] = useState<string>('');
+  const [password, setPassword] = useState<string>('');
   const [isLoading, setIsLoading] = useState<boolean>(false);
   const [poll, setPoll] = useState<null|Poll>(null);
   const [error, setError] = useState<string | null>(null);
@@ -122,6 +124,7 @@ const CreateWatchPartyPage = () => {
     const formData: WatchPartyFormData = {
       partyName,
       accountID,
+      password,
       scheduledDate,
       scheduledTime
     };
@@ -156,6 +159,18 @@ const CreateWatchPartyPage = () => {
             placeholder="e.g., Horror Night"
             value={partyName}
             onChange={(e) => setPartyName(e.target.value)}
+            className="w-full font-alatsi"
+            required
+          />
+        </div>
+        <div>
+          <Label htmlFor="password">Password</Label>
+          <Input
+            id="password"
+            type="password"
+            placeholder="Watchparty Password"
+            value={password}
+            onChange={(e) => setPassword(e.target.value)}
             className="w-full font-alatsi"
             required
           />

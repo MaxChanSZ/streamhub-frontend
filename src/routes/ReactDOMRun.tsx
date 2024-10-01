@@ -19,8 +19,6 @@ import { login } from "@/utils/api-client";
 import PollResultPage from "@/pages/PollResultPage.tsx";
 
 interface ReactDOMRunProps {
-  login: boolean;
-  setLogin: React.Dispatch<React.SetStateAction<boolean>>;
 }
 
 const ReactDOMRun: React.FC<ReactDOMRunProps> = () => {
@@ -33,10 +31,6 @@ const ReactDOMRun: React.FC<ReactDOMRunProps> = () => {
         {
           index: true,
           element: <HomePage />,
-        },
-        {
-          path: "landing",
-          element: <LandingPage login={login} setLogin={setLogin} />,
         },
         {
           path: "watch/:seriesId",

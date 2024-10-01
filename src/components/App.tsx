@@ -7,12 +7,14 @@ const App = () => {
   if (login) {
     return (
       <div>
-        <ReactDOMRun login={login} setLogin={setLogin} />
+        <ReactDOMRun />
       </div>
     );
   } else {
-    return <LandingPage login={} setLogin={setLogin} />;
+    return <LandingPage login={login} setLogin={setLogin}/>;
   }
 };
 
 export default App;
+
+// login={login} setLogin={setLogin}
