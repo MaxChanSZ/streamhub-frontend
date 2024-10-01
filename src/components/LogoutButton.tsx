@@ -24,7 +24,7 @@ const LogoutButton = () => {
   return (
     <Button
       variant="destructive"
-      className="text-base mx-4"
+      className="text-2xl mx-4"
       onClick={handleLogout}
       aria-label="Logout"
     >

@@ -101,59 +101,65 @@ const Navbar = () => {
             <div className="hidden lg:flex flex-grow justify-start">
                 <NavigationMenu className="font-alatsi text-white">
                     <NavigationMenuList className="py-4 flex items-center space-x-0">
-                        {/* Join Watch Party */}
-                        <NavigationMenuItem>
+
+                        {/*Watch Party*/}
+                        <NavigationMenuItem className="relative">
                             <Button variant="ghost" className={buttonTextFormat} asChild>
-                                <Link to={`/join-watch-party`}>Join Watch Party</Link>
+                                <NavigationMenuTrigger className="relative z-10">Watch Party</NavigationMenuTrigger>
                             </Button>
+                            <NavigationMenuContent className="bg-black w-fit">
+                                <ul className="flex flex-col items-center w-full p-2 space-y-2">
+                                    {wpCategories.map((category) => (
+                                        <li key={category.title} className="w-full">
+                                            <Button variant="ghost" className={categoryButtonFormat} asChild>
+                                                <Link
+                                                    to={category.href}
+                                                    className="text-white hover:underline block w-full py-2 px-4 text-center"
+                                                >
+                                                    <div>
+                                                        <h3 className="font-bold">{category.title}</h3>
+                                                    </div>
+                                                </Link>
+                                            </Button>
+                                        </li>
+                                    ))}
+                                </ul>
+                            </NavigationMenuContent>
                         </NavigationMenuItem>
 
-                        {/* Create Watch Party */}
+                        {/* Category */}
+                        <NavigationMenuItem className="relative">
+                            <Button variant="ghost" className={buttonTextFormat} asChild>
+                                <NavigationMenuTrigger className="relative z-10">Category</NavigationMenuTrigger>
+                            </Button>
+                            <NavigationMenuContent className="bg-black w-fit">
+                                <ul className="flex flex-col items-center w-full p-2 space-y-2">
+                                    {categories.map((category) => (
+                                        <li key={category.title} className="w-full">
+                                            <Button variant="ghost" className={categoryButtonFormat} asChild>
+                                                <Link
+                                                    to={category.href}
+                                                    className="text-white hover:underline block w-full py-2 px-4 text-center"
+                                                >
+                                                    <div>
+                                                        <h3 className="font-bold">{category.title}</h3>
+                                                    </div>
+                                                </Link>
+                                            </Button>
+                                        </li>
+                                    ))}
+                                </ul>
+                            </NavigationMenuContent>
+                        </NavigationMenuItem>
+                        {/* Rest of Buttons */}
                         <NavigationMenuItem>
                             <Button variant="ghost" className={buttonTextFormat} asChild>
-                                <Link to={`/create-watch-party`}>Create Watch Party</Link>
+                                <Link to={`/pollResults`}>Poll Results</Link>
                             </Button>
                         </NavigationMenuItem>
-
-            {/* Category */}
-            <NavigationMenuItem className="relative">
-              <Button variant="ghost" className={buttonTextFormat} asChild>
-                <NavigationMenuTrigger className="relative z-10">
-                  Category
-                </NavigationMenuTrigger>
-              </Button>
-              <NavigationMenuContent className="bg-black w-fit">
-                <ul className="flex flex-col items-center w-full p-2 space-y-2">
-                  {categories.map((category) => (
-                    <li key={category.title} className="w-full">
-                      <Button
-                        variant="ghost"
-                        className={categoryButtonFormat}
-                        asChild
-                      >
-                        <Link
-                          to={category.href}
-                          className="text-white hover:underline block w-full py-2 px-4 text-center"
-                        >
-                          <div>
-                            <h3 className="font-bold">{category.title}</h3>
-                          </div>
-                        </Link>
-                      </Button>
-                    </li>
-                  ))}
-                </ul>
-              </NavigationMenuContent>
-            </NavigationMenuItem>
-            {/* Rest of Buttons */}
-            <NavigationMenuItem>
-              <Button variant="ghost" className={buttonTextFormat} asChild>
-                <Link to={`/contact`}>Contact</Link>
-              </Button>
-            </NavigationMenuItem>
-          </NavigationMenuList>
-        </NavigationMenu>
-      </div>
+                    </NavigationMenuList>
+                </NavigationMenu>
+            </div>
 
       {/* Mobile Menu Button */}
       <div className="lg:hidden flex-grow">
@@ -167,64 +173,81 @@ const Navbar = () => {
         </Button>
       </div>
 
-      {/* Mobile Menu Dropdown */}
-      {menuOpen && (
-        <div
-          ref={mobileMenuRef}
-          className="lg:hidden absolute top-[10.5vh] left-0 w-full bg-black z-20"
-        >
-          <ul className="flex flex-col items-center p-4 space-y-2">
-            {/* Mobile Category Menu */}
-            <li>
-              <Button
-                variant="ghost"
-                className={`${buttonTextFormat} text-white`}
-                asChild
-              >
-                <Link
-                  to={`/watch-party`}
-                  className="block py-2"
-                  onClick={() => setMenuOpen(false)} // Add this line
+            {/* Mobile Menu Dropdown */}
+            {menuOpen && (
+                <div
+                    ref={mobileMenuRef}
+                    className="lg:hidden absolute top-[10.5vh] left-0 w-full bg-black z-20"
                 >
-                  Join Watch Party
-                </Link>
-              </Button>
-            </li>
+                    <ul className="flex flex-col items-center p-4 space-y-2">
 
-            <li>
-              <NavigationMenu>
-                <NavigationMenuItem className="relative">
-                  <Button
-                    variant="ghost"
-                    className={`${buttonTextFormat} text-white`}
-                    asChild
-                  >
-                    <NavigationMenuTrigger className="relative z-10">
-                      Category
-                    </NavigationMenuTrigger>
-                  </Button>
-                  <NavigationMenuContent className="bg-black w-fit">
-                    <ul className="flex flex-col items-center w-full gap-2 p-2">
-                      {categories.map((category) => (
-                        <li key={category.title} className="w-full">
-                          <Button
-                            variant="ghost"
-                            className={`${categoryButtonFormat} text-white`}
-                            asChild
-                          >
-                            <Link
-                              to={category.href}
-                              className="text-white hover:underline block w-full py-2 px-4 text-center"
-                              onClick={() => setMenuOpen(false)} // Add this line
-                            >
-                              <h3 className="font-bold">{category.title}</h3>
-                            </Link>
-                          </Button>
-                        </li>
-                      ))}
-                    </ul>
-                  </NavigationMenuContent>
-                </NavigationMenuItem>
+                        {/* Mobile Category Menu */}
+                        <li>
+                            <NavigationMenu>
+                                <NavigationMenuItem className="relative">
+                                    <Button
+                                        variant="ghost"
+                                        className={`${buttonTextFormat} text-white`}
+                                        asChild
+                                    >
+
+                                        <NavigationMenuTrigger
+                                            className="relative z-10">Category</NavigationMenuTrigger>
+                                    </Button>
+                                    <NavigationMenuContent className="bg-black w-fit">
+                                        <ul className="flex flex-col items-center w-full gap-2 p-2">
+                                            {categories.map((category) => (
+                                                <li key={category.title} className="w-full">
+                                                    <Button
+                                                        variant="ghost"
+                                                        className={`${categoryButtonFormat} text-white`}
+                                                        asChild
+                                                    >
+                                                        <Link
+                                                            to={category.href}
+                                                            className="text-white hover:underline block w-full py-2 px-4 text-center"
+                                                            onClick={() => setMenuOpen(false)} // Add this line
+                                                        >
+                                                            <h3 className="font-bold">{category.title}</h3>
+                                                        </Link>
+                                                    </Button>
+                                                </li>
+                                            ))}
+                                        </ul>
+                                    </NavigationMenuContent>
+                                </NavigationMenuItem>
+                                <NavigationMenuItem className="relative">
+                                    <Button
+                                        variant="ghost"
+                                        className={`${buttonTextFormat} text-white`}
+                                        asChild
+                                    >
+
+                                        <NavigationMenuTrigger
+                                            className="relative z-10">Watch Party</NavigationMenuTrigger>
+                                    </Button>
+                                    <NavigationMenuContent className="bg-black w-fit">
+                                        <ul className="flex flex-col items-center w-full gap-2 p-2">
+                                            {wpCategories.map((category) => (
+                                                <li key={category.title} className="w-full">
+                                                    <Button
+                                                        variant="ghost"
+                                                        className={`${categoryButtonFormat} text-white`}
+                                                        asChild
+                                                    >
+                                                        <Link
+                                                            to={category.href}
+                                                            className="text-white hover:underline block w-full py-2 px-4 text-center"
+                                                            onClick={() => setMenuOpen(false)} // Add this line
+                                                        >
+                                                            <h3 className="font-bold">{category.title}</h3>
+                                                        </Link>
+                                                    </Button>
+                                                </li>
+                                            ))}
+                                        </ul>
+                                    </NavigationMenuContent>
+                                </NavigationMenuItem>
 
                                 <Button
                                     variant="ghost"
@@ -232,24 +255,11 @@ const Navbar = () => {
                                     asChild
                                 >
                                     <Link
-                                        to={`/create-watch-party`}
+                                        to={`/pollResults`}
                                         className="block py-2"
                                         onClick={() => setMenuOpen(false)}
                                     >
-                                        Create Watch Party
-                                    </Link>
-                                </Button>
-                                <Button
-                                    variant="ghost"
-                                    className={`${buttonTextFormat} text-white`}
-                                    asChild
-                                >
-                                    <Link
-                                        to={`/contact`}
-                                        className="block py-2"
-                                        onClick={() => setMenuOpen(false)}
-                                    >
-                                        Contact
+                                        Poll Results
                                     </Link>
                                 </Button>
 
@@ -310,7 +320,7 @@ const categories: { title: string; href: string }[] = [
   { title: "Category 6", href: "/category6" },
 ];
 
-const watchPartyActions: { title: string; href: string }[] = [
-  { title: "Create a Watch Party", href: "/create-watch-party" },
-  { title: "Join Watch Party", href: "/join-watch-party" },
+const wpCategories: { title: string; href: string }[] = [
+    { title: "Join Watch Party", href: "/join-watch-party" },
+    { title: "Create Watch Party", href: "/create-watch-party" },
 ];

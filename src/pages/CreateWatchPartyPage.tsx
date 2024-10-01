@@ -1,8 +1,14 @@
 import React, { useState } from "react";
 import { Button } from "@/components/shadcn/ui/button";
 import { Input } from "@/components/shadcn/ui/input";
-import { createWatchParty } from "@/utils/api-client";
+import { 
+  createPoll,
+  createWatchParty,
+  getPollOptions,
+  uploadImage
+} from "@/utils/api-client";
 import { useAppContext } from "@/contexts/AppContext";
+import Poll, { PollOptionRequestData, PollRequestData } from "@/components/Poll";
 
 export type WatchPartyFormData = {
   partyName: string;
@@ -11,7 +17,30 @@ export type WatchPartyFormData = {
   scheduledTime: string;
 };
 
-const Label: React.FC<React.LabelHTMLAttributes<HTMLLabelElement>> = ({ children, className, ...props }) => (
+export type UpdatePollOptionRequestData = {
+  id: number;
+  imageUrl: string;
+};
+
+export type WatchPartyResponseData = {
+  id: number;
+  code: string;
+  createdDate: number[];
+};
+
+export type PollResponseData = {
+  id: number;
+  question: string;
+};
+
+export type PollOptionResponseData = {
+  id: number;
+  value: string;
+  description: string;
+  imageUrl: string;
+}
+
+export const Label: React.FC<React.LabelHTMLAttributes<HTMLLabelElement>> = ({ children, className, ...props }) => (
   <label className={`block text-sm font-medium text-stone-50 mb-1 ${className}`} {...props}>
     {children}
   </label>
@@ -29,8 +58,53 @@ const CreateWatchPartyPage = () => {
   const [scheduledTime, setScheduledTime] = useState<string>('');
   const [partyCode, setPartyCode] = useState<string>('');
   const [isLoading, setIsLoading] = useState<boolean>(false);
+  const [poll, setPoll] = useState<null|Poll>(null);
   const [error, setError] = useState<string | null>(null);
+  const [isPollCreated, setIsPollCreated] = useState<boolean>(false);
   const { user } = useAppContext();
+
+  const onPollCreate = async(poll: Poll, watchPartyId: number) => {
+    let optionRequestsData: PollOptionRequestData[] = [];
+      for (let i=0; i<poll.optionSize; i++) {
+        const {
+          value,
+          description,
+          image
+        } = poll.options[i];
+        const request: PollOptionRequestData = {
+          value,
+          description,
+          image,
+          fileName: image?.name
+        }
+        optionRequestsData.push(request);
+      }
+
+      const pollRequestData: PollRequestData = {
+        watchPartyID: watchPartyId,
+        question: poll.question,
+        pollOptionRequests: optionRequestsData
+      }
+
+      try {
+        const response = await createPoll(pollRequestData);
+        console.log('Poll created:', response);
+        const pollOptionList: PollOptionResponseData[] = await getPollOptions(response?.id);
+        for (var i=0; i<pollOptionList.length; i++) {
+          // upload images and save image url
+          const optionImage: File| null = pollRequestData?.pollOptionRequests[i].image ? pollRequestData?.pollOptionRequests[i].image : null;
+          if (optionImage) {
+            uploadImage(optionImage, pollOptionList[i].imageUrl, "pollOptionImages");
+            console.log("Image uploaded for " + optionImage.name);
+          }
+        }
+      } catch (error) {
+        console.error('Error creating poll:', error);
+        setError('Failed to create poll. Please try again.');
+      } finally {
+        setIsPollCreated(true);
+      }
+  }
 
   const onFormSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
@@ -44,18 +118,22 @@ const CreateWatchPartyPage = () => {
       setIsLoading(false);
       return;
     }
-  
+
     const formData: WatchPartyFormData = {
       partyName,
       accountID,
       scheduledDate,
-      scheduledTime,
+      scheduledTime
     };
   
     try {
       const response = await createWatchParty(formData);
       setPartyCode(response.code);
       console.log('Watch Party created:', response);
+      // create a poll if there is one
+      if (poll) {
+        onPollCreate(poll, response.id);
+      }
     } catch (error) {
       console.error('Error creating watch party:', error);
       setError('Failed to create watch party. Please try again.');
@@ -104,6 +182,42 @@ const CreateWatchPartyPage = () => {
             required
           />
         </div>
+        
+        {/* POLL FOR WATCH PARTY */}
+        {poll ? (
+          <div>
+            <Poll 
+              poll={poll}
+              setPoll={setPoll}
+            />
+            <Button
+              type="button"
+              variant="default"
+              className="w-full text-base py-2 font-alatsi border"
+              onClick={() => setPoll(null)}
+            >
+            Cancel Poll
+          </Button>
+          </div>
+        ) : (
+          <Button
+          type="button"
+          variant="default"
+          className="w-full text-white py-2 font-alatsi border"
+          onClick={() => setPoll({
+            question: "",
+            options: [
+              {value: "", description: "", image: null, imageOptionUrl: ""},
+              {value: "", description: "", image: null, imageOptionUrl: ""}
+            ],
+            optionSize: 2
+          })}
+        >
+          Create Poll
+        </Button>
+        )}
+        
+        {/* SUBMIT FORM BUTTON */}
         <Button
           type="submit"
           variant="secondary"
@@ -122,6 +236,11 @@ const CreateWatchPartyPage = () => {
         <div className="mt-4 p-4 bg-green-100 border border-green-400 text-green-700 rounded">
           <p>Your party code is: <strong>{partyCode}</strong></p>
           <p className="mt-2 text-sm">Share this code with your friends to invite them to your watch party!</p>
+        </div>
+      )}
+       {isPollCreated && (
+        <div className="mt-4 p-4 bg-green-100 border border-green-400 text-green-700 rounded">
+          <p className="mt-2 text-sm">Poll successfully created!</p>
         </div>
       )}
     </div>
