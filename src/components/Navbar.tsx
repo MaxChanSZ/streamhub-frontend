@@ -317,4 +317,5 @@ const categories: { title: string; href: string }[] = [
 const wpCategories: { title: string; href: string }[] = [
     { title: "Join Watch Party", href: "/join-watch-party" },
     { title: "Create Watch Party", href: "/create-watch-party" },
+    { title: "Send Invitation", href: "/send-email" },
 ];
