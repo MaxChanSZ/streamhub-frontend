@@ -49,7 +49,10 @@ const LiveChat: React.FC<LiveChatProps> = ({ roomID, setRoomID }) => {
       }
 
       // Set up WebSocket connection
-      const brokerURL = "http://localhost:8080/chat";
+      const userToken = localStorage.getItem("watchparty-token");
+      console.log(userToken);
+      let token = userToken?.substring(1, userToken.length - 1);
+      const brokerURL = `http://localhost:8080/chat?token=${token}&roomID=${roomID}`;
       const client = Stomp.over(() => new SockJS(brokerURL));
       client.reconnectDelay = 5000; // Try to reconnect every 5 seconds
 
