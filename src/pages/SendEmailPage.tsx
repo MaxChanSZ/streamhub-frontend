@@ -7,8 +7,8 @@ interface WatchParty {
   partyName: string;
   scheduledDate: string;
   scheduledTime: string;
-  code: string; // Changed from partyCode to code
-  createdDate: number[]; // Added this field
+  code: string; 
+  createdDate: number[]; 
 }
 
 const SendEmailPage: React.FC = () => {
@@ -42,7 +42,7 @@ const SendEmailPage: React.FC = () => {
   };
 
   const generateEmailBody = (party: WatchParty, additionalMessage: string) => {
-    const partyLink = `http://localhost:5173/watch-party/${party.code}`; // Use party.code instead of party.partyCode
+    const partyLink = `http://localhost:5173/watch-party/${party.code}`; 
     return `
 You are invited to join our Watch Party!
 
@@ -80,7 +80,7 @@ We hope to see you there!
     console.log("Email body:", emailBody);
 
     try {
-      await axios.post('/api/send-watch-party-email', {
+      await axios.post('http://localhost:8080/api/send-watch-party-email', {
         partyId: selectedParty,
         emailAddresses: emailList,
         subject: emailSubject,
