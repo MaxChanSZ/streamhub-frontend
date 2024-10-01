@@ -1,7 +1,6 @@
 import LiveChat from "@/components/LiveChat";
 import VideoJSSynced from "@/components/VideoJSSynced";
 import { useState } from "react";
-import { Button } from "@/components/shadcn/ui/button";
 import { useParams } from "react-router";
 
 const WatchPartyPage = () => {

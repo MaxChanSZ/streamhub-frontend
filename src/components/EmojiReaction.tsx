@@ -3,12 +3,14 @@ import { sendEmoji } from "@/utils/messaging-client";
 import { useState } from "react";
 import { toast } from "./shadcn/ui/use-toast";
 import { Switch } from "./shadcn/ui/switch";
+import { uuid } from "@/utils/emoji-methods";
 export interface EmojiReaction {}
 
 export type Emoji = {
   TYPE: string;
   SESSION_ID: string;
   SENDER: string | undefined;
+  ID: string;
 };
 
 const EmojiReaction = ({ roomID }: { roomID: string }) => {
@@ -44,6 +46,7 @@ const EmojiReaction = ({ roomID }: { roomID: string }) => {
       TYPE: emojiType,
       SESSION_ID: roomID,
       SENDER: user?.username,
+      ID: uuid(),
     };
     sendEmoji(emoji);
   };
