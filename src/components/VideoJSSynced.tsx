@@ -139,7 +139,7 @@ const VideoJSSynced: React.FC<IVideoPlayerProps> = ({
   // Create a web socket connection with the server for video player synchronization
   React.useEffect(() => {
     const userToken = localStorage.getItem("watchparty-token");
-    console.log(userToken);
+    
     let token = userToken?.substring(1, userToken.length - 1);
     const socket = new SockJS(`http://localhost:8080/video-sync?token=${token}&roomID=${roomID}`);
     const client = Stomp.over(socket);

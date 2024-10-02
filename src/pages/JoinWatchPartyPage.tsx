@@ -49,11 +49,11 @@ const JoinWatchPartyPage = () => {
               localStorage.setItem("watchparty-token", JSON.stringify(response.data.token));
               // once the token has been set, redirect to the watch party page with the token
               // already stored in the local storage
-              navigate(`/watch-party/${code}`)
+              console.log("Video source is: " + response.data.videoSource);
+              navigate(`/watch-party/${code}`);
             }
           }
         } 
-      
       )
       .catch(
         ( error ) =>  {
@@ -62,6 +62,7 @@ const JoinWatchPartyPage = () => {
             description: error.response ? error.response.data : null,
             variant: "destructive",
           });
+          console.log(error);
         }
       )
     }

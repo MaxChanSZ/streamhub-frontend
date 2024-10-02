@@ -24,7 +24,7 @@ export const initWebSocketConnection = (options: MessagingClientOptions) => {
   const { roomID, onMessageReceived } = options;
 
   const userToken = localStorage.getItem("watchparty-token");
-  console.log(userToken);
+  
   let token = userToken?.substring(1, userToken.length - 1);
 
   // Set up WebSocket connection
@@ -90,7 +90,7 @@ export const EmojiConnection = (options: EmojiClientOptions) => {
   const { roomID, onReceived } = options;
 
   const userToken = localStorage.getItem("watchparty-token");
-  console.log(userToken);
+  
   let token = userToken?.substring(1, userToken.length - 1);
 
   // Set up WebSocket connection
