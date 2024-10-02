@@ -1,9 +1,7 @@
 import React, { useState, useRef, useEffect } from 'react';
 import { ChevronDown, ChevronUp } from 'lucide-react';
-import inceptionImage from '../images/inception.jpg';
-import matrixImage from '../images/matrix.jpg';
-import interstellarImage from '../images/interstellar.jpg';
-import bladerunnerImage from '../images/bladeRunner.jpg';
+import { useAppContext } from "@/contexts/AppContext";
+import axios from 'axios';
 
 type MovieOption = {
   name: string;
@@ -17,36 +15,14 @@ type Poll = {
   options: MovieOption[];
 };
 
-// Mock data for movie poll
-const pollData: Poll = {
-    question: "What's your favorite sci-fi movie?",
-    options: [
-      {
-        name: 'Inception',
-        votes: 12,
-        description: 'A thief who enters the dreams of others to steal secrets from their subconscious.',
-        image: inceptionImage
-      },
-      {
-        name: 'The Matrix',
-        votes: 7,
-        description: 'A computer programmer discovers the shocking truth about his simulated reality.',
-        image: matrixImage
-      },
-      {
-        name: 'Interstellar',
-        votes: 4,
-        description: 'Explorers travel through a wormhole in space in an attempt to save humanity. From evil and devestation for all eternity',
-        image: interstellarImage
-      },
-      {
-        name: 'Blade Runner 2049',
-        votes: 9,
-        description: 'A new blade runner unearths a long-buried secret that has the potential to plunge society into chaos.',
-        image: bladerunnerImage
-      },
-    ],
-  };
+interface WatchParty {
+  id: number;
+  partyName: string;
+  scheduledDate: string;
+  scheduledTime: string;
+  code: string;
+  createdDate: number[];
+}
   
   const MedalIcon: React.FC<{ place: number }> = ({ place }) => {
     const colors = ['#C9B037', '#B4B4B4', '#AD8A56'];
@@ -158,15 +134,78 @@ const pollData: Poll = {
       </div>
     );
   };
+
+  const WatchPartyDropdown: React.FC<{ onSelect: (partyId: string) => void }> = ({ onSelect }) => {
+    const [watchParties, setWatchParties] = useState<WatchParty[]>([]);
+    const { user } = useAppContext();
   
-  const PollResultPage: React.FC = () => {
+    useEffect(() => {
+      if (user) {
+        fetchWatchParties();
+      }
+    }, [user]);
+  
+    const fetchWatchParties = async () => {
+      try {
+        if (user && user.id) {
+          const response = await axios.get<WatchParty[]>(`http://localhost:8080/api/watch-party/get/${user.id}`);
+          setWatchParties(response.data);
+        }
+      } catch (error) {
+        console.error('Error fetching watch parties:', error);
+      }
+    };
+  
     return (
-      <div className="container mx-auto px-2 py-4 text-white min-h-screen">
-        <h1 className="text-3xl md:text-4xl font-bold mb-2">Movie Poll Results</h1>
-        <h2 className="text-xl md:text-2xl font-semibold mb-6">{pollData.question}</h2>
-        <PollResult poll={pollData} />
-      </div>
+      <select
+        onChange={(e) => onSelect(e.target.value)}
+        className="w-full p-2 mb-4 bg-gray-700 text-white border border-gray-600 rounded-md"
+      >
+        <option value="">Select a watch party to view Poll Results</option>
+        {watchParties.map((party) => (
+          <option key={party.id} value={party.id.toString()}>
+            {party.partyName} - {party.scheduledDate} {party.scheduledTime}
+          </option>
+        ))}
+      </select>
     );
   };
   
+  const PollResultPage: React.FC = () => {
+    const [selectedParty, setSelectedParty] = useState<string>('');
+    const [pollData, setPollData] = useState<Poll | null>(null);
+  
+    useEffect(() => {
+      if (selectedParty) {
+        fetchPollData(selectedParty);
+      }
+    }, [selectedParty]);
+  
+    const fetchPollData = async (partyId: string) => {
+      try {
+        const response = await axios.get<Poll>(`http://localhost:8080/api/poll/${partyId}`);
+        setPollData(response.data);
+      } catch (error) {
+        console.error('Error fetching poll data:', error);
+      }
+    };
+  
+    const handlePartySelect = (partyId: string) => {
+      setSelectedParty(partyId);
+    };
+  
+    return (
+      <div className="container mx-auto px-2 py-4 text-white min-h-screen">
+        <h1 className="text-3xl md:text-4xl font-bold mb-2">Movie Poll Results</h1>
+        <WatchPartyDropdown onSelect={handlePartySelect} />
+        {pollData && (
+          <>
+            <h2 className="text-xl md:text-2xl font-semibold mb-6">{pollData.question}</h2>
+            <PollResult poll={pollData} />
+          </>
+        )}
+      </div>
+    );
+  };
+
   export default PollResultPage;
