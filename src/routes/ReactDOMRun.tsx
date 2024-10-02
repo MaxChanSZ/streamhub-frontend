@@ -1,5 +1,9 @@
 import React from "react";
-import { createBrowserRouter, RouterProvider } from "react-router-dom";
+import {
+  createBrowserRouter,
+  Navigate,
+  RouterProvider,
+} from "react-router-dom";
 import Root from "@/utils/root";
 import ErrorPage from "@/pages/ErrorPage.tsx";
 import HomePage from "@/pages/HomePage.tsx";
@@ -16,6 +20,7 @@ import SendEmailPage from "@/pages/SendEmailPage.tsx";
 import { ProtectedRoute } from "./ProtectedRoute";
 import LandingPage from "@/pages/LandingPage";
 import JoinWatchPartyPage from "@/pages/JoinWatchPartyPage";
+import NotFoundPage from "@/pages/NotFoundPage";
 
 interface ReactDOMRunProps {}
 
@@ -124,9 +129,18 @@ const router = createBrowserRouter([
     ],
   },
   {
-    path: "*",
+    path: "start",
     element: <LandingPage />,
     errorElement: <ErrorPage />,
+  },
+  {
+    path: "404",
+    element: <NotFoundPage />,
+  },
+  // catches all invalid routes
+  {
+    path: "*",
+    element: <Navigate to="/404" replace />,
   },
 ]);
 
