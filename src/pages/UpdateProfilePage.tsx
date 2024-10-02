@@ -60,7 +60,14 @@ const UpdateProfilePage = () => {
      * Callback function for handling error.
      * @param {Error} error - The error object.
      */
-    onError: (error: Error) => {},
+    onError: (error: Error) => {
+      console.log("Update error:", error);
+      toast({
+        title: "Update failed",
+        description: "There was an error updating your profile",
+        variant: "destructive",
+      });
+    },
   });
 
   /**
