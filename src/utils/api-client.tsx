@@ -258,6 +258,37 @@ export const createWatchParty = async (
   }
 };
 
+export const fetchWatchParties = async (): Promise<WatchPartyResponseData> => {
+  try {
+    const response = await axios.get(
+      "http://localhost:8080/api/watch-party/get",
+      {
+        headers: {
+          "Content-Type": "application/json",
+        },
+        withCredentials: true,
+      }
+    );
+    return response.data;
+  } catch (error) {
+    if (axios.isAxiosError(error)) {
+      if (error.response) {
+        console.log(error.response.data);
+        console.log(error.response.status);
+        console.log(error.response.headers);
+      } else if (error.request) {
+        console.log(error.request);
+      } else {
+        console.log("Error", error.message);
+      }
+      console.log(error.config);
+    } else {
+      console.log("Unexpected error:", error);
+    }
+    throw error;
+  }
+};
+
 export const createPoll = async (
   pollData: PollRequestData
 ): Promise<PollResponseData> => {
