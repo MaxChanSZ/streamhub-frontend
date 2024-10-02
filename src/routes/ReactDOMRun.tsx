@@ -1,5 +1,9 @@
 import React from "react";
-import { createBrowserRouter, RouterProvider } from "react-router-dom";
+import {
+  createBrowserRouter,
+  Navigate,
+  RouterProvider,
+} from "react-router-dom";
 import Root from "@/utils/root";
 import ErrorPage from "@/pages/ErrorPage.tsx";
 import HomePage from "@/pages/HomePage.tsx";
@@ -11,82 +15,134 @@ import UpdateProfilePage from "@/pages/UpdateProfilePage.tsx";
 import SearchPage from "@/pages/SearchPage";
 import RegisterPage from "@/pages/RegisterPage";
 import ContactPage from "@/pages/ContactPage.tsx";
-//import TestPage from "@/pages/TestPage";
-import JoinWatchPartyPage from "@/pages/JoinWatchPartyPage";
-import { useAppContext } from "@/contexts/AppContext";
-import LandingPage from "@/pages/LandingPage";
-import { login } from "@/utils/api-client";
 import PollResultPage from "@/pages/PollResultPage.tsx";
 import SendEmailPage from "@/pages/SendEmailPage.tsx";
+import { ProtectedRoute } from "./ProtectedRoute";
+import LandingPage from "@/pages/LandingPage";
+import JoinWatchPartyPage from "@/pages/JoinWatchPartyPage";
+import NotFoundPage from "@/pages/NotFoundPage";
 
 interface ReactDOMRunProps {
 }
 
 const ReactDOMRun: React.FC<ReactDOMRunProps> = () => {
-  const router = createBrowserRouter([
-    {
-      path: "/",
-      element: <Root />,
-      errorElement: <ErrorPage />,
-      children: [
-        {
-          index: true,
-          element: <HomePage />,
-        },
-        {
-          path: "watch/:seriesId",
-          element: <SeriesPage />,
-        },
-        {
-          path: "watch/:seriesId/:episodeId",
-          element: <WatchPage videoSource="" />,
-        },
-        {
-          path: "watch-party/:sessionId",
-          element: <WatchPartyPage />,
-        },
-        {
-          path: "create-watch-party",
-          element: <CreateWatchPartyPage />,
-        },
-        {
-          path: "join-watch-party",
-          element: <JoinWatchPartyPage />,
-        },
-        {
-        path: "send-email",
-        element: <SendEmailPage />,
-      },
-      {
-          path: "update-profile",
-          element: <UpdateProfilePage />,
-        },
-        {
-        path: "pollResults",
-        element: <PollResultPage />,
-      },
-      {
-          path: "register",
-          element: <RegisterPage />,
-        },
-        {
-          path: "contact",
-          element: <ContactPage />,
-        },
-        {
-          path: "search",
-          element: <SearchPage />,
-        },
-      ],
-    }
-    //{ path: "test", element: <TestPage /> },
-  ]);
-
   return (
     <>
       <RouterProvider router={router} />
     </>
   );
 };
+
+const router = createBrowserRouter([
+  {
+    path: "/",
+    element: <Root />,
+    errorElement: <ErrorPage />,
+    children: [
+      {
+        index: true,
+        element: (
+          <ProtectedRoute>
+            <HomePage />
+          </ProtectedRoute>
+        ),
+      },
+      {
+        path: "watch/:seriesId",
+        element: (
+          <ProtectedRoute>
+            <SeriesPage />
+          </ProtectedRoute>
+        ),
+      },
+      {
+        path: "watch/:seriesId/:episodeId",
+        element: (
+          <ProtectedRoute>
+            <WatchPage videoSource="" />
+          </ProtectedRoute>
+        ),
+      },
+      {
+        path: "watch-party/:sessionId",
+        element: (
+          <ProtectedRoute>
+            <WatchPartyPage />
+          </ProtectedRoute>
+        ),
+      },
+      {
+        path: "create-watch-party",
+        element: (
+          <ProtectedRoute>
+            <CreateWatchPartyPage />
+          </ProtectedRoute>
+        ),
+      },
+      {
+        path: "send-email",
+        element: (
+          <ProtectedRoute>
+            <SendEmailPage />
+          </ProtectedRoute>
+        ),
+      },
+      {
+        path: "update-profile",
+        element: (
+          <ProtectedRoute>
+            <UpdateProfilePage />
+          </ProtectedRoute>
+        ),
+      },
+      {
+        path: "pollResults",
+        element: (
+          <ProtectedRoute>
+            <PollResultPage />
+          </ProtectedRoute>
+        ),
+      },
+      {
+        path: "register",
+        element: <RegisterPage />,
+      },
+      {
+        path: "contact",
+        element: (
+          <ProtectedRoute>
+            <ContactPage />
+          </ProtectedRoute>
+        ),
+      },
+      {
+        path: "search",
+        element: (
+          <ProtectedRoute>
+            <SearchPage />
+          </ProtectedRoute>
+        ),
+      },
+      {
+        path: "join-watch-party",
+        element: <JoinWatchPartyPage />,
+      },
+    ],
+  },
+  {
+    path: "start",
+    element: <LandingPage />,
+    errorElement: <ErrorPage />,
+  },
+  {
+    path: "404",
+    element: <NotFoundPage />,
+  },
+  // catches all invalid routes
+  {
+    path: "*",
+    element: <Navigate to="/404" replace />,
+  },
+]);
 
 export default ReactDOMRun;
