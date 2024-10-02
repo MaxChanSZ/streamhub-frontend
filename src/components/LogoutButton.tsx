@@ -1,9 +1,11 @@
 import { useAppContext } from "@/contexts/AppContext";
 import { toast } from "./shadcn/ui/use-toast";
 import { Button } from "./shadcn/ui/button";
+import { useNavigate } from "react-router-dom";
 
 const LogoutButton = () => {
   const { setIsLoggedIn, setUser } = useAppContext();
+  const navigate = useNavigate();
   const handleLogout = () => {
     try {
       // Set user state to null
@@ -14,6 +16,7 @@ const LogoutButton = () => {
       toast({
         title: "Logged out",
       });
+      navigate("/start");
     } catch (error) {
       // Log the error that occurred during the logout process
       console.error(`Error during logout: ${error}`);
