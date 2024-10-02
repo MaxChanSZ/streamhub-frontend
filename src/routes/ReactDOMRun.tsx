@@ -14,6 +14,10 @@ import ContactPage from "@/pages/ContactPage.tsx";
 import TestPage from "@/pages/TestPage";
 import PollResultPage from "@/pages/PollResultPage.tsx";
 import SendEmailPage from "@/pages/SendEmailPage.tsx";
+import { ProtectedRoute } from "./ProtectedRoute";
+import LandingPage from "@/pages/LandingPage";
+import { useAppContext } from "@/contexts/AppContext";
+import JoinWatchPartyPage from "@/pages/JoinWatchPartyPage";
 
 interface ReactDOMRunProps {}
 
@@ -24,6 +28,9 @@ const ReactDOMRun: React.FC<ReactDOMRunProps> = () => {
     </>
   );
 };
+
+// const { isLoggedIn, setIsLoggedIn } = useAppContext();
+
 const router = createBrowserRouter([
   {
     path: "/",
@@ -32,11 +39,19 @@ const router = createBrowserRouter([
     children: [
       {
         index: true,
-        element: <HomePage />,
+        element: (
+          <ProtectedRoute>
+            <HomePage />
+          </ProtectedRoute>
+        ),
       },
       {
         path: "watch/:seriesId",
-        element: <SeriesPage />,
+        element: (
+          <ProtectedRoute>
+            <SeriesPage />
+          </ProtectedRoute>
+        ),
       },
       {
         path: "watch/:seriesId/:episodeId",
@@ -44,23 +59,43 @@ const router = createBrowserRouter([
       },
       {
         path: "watch-party/:sessionId",
-        element: <WatchPartyPage />,
+        element: (
+          <ProtectedRoute>
+            <WatchPartyPage />
+          </ProtectedRoute>
+        ),
       },
       {
         path: "create-watch-party",
-        element: <CreateWatchPartyPage />,
+        element: (
+          <ProtectedRoute>
+            <CreateWatchPartyPage />
+          </ProtectedRoute>
+        ),
       },
       {
         path: "send-email",
-        element: <SendEmailPage />,
+        element: (
+          <ProtectedRoute>
+            <SendEmailPage />
+          </ProtectedRoute>
+        ),
       },
       {
         path: "update-profile",
-        element: <UpdateProfilePage />,
+        element: (
+          <ProtectedRoute>
+            <UpdateProfilePage />
+          </ProtectedRoute>
+        ),
       },
       {
         path: "pollResults",
-        element: <PollResultPage />,
+        element: (
+          <ProtectedRoute>
+            <PollResultPage />
+          </ProtectedRoute>
+        ),
       },
       {
         path: "register",
@@ -68,15 +103,31 @@ const router = createBrowserRouter([
       },
       {
         path: "contact",
-        element: <ContactPage />,
+        element: (
+          <ProtectedRoute>
+            <ContactPage />
+          </ProtectedRoute>
+        ),
       },
       {
         path: "search",
-        element: <SearchPage />,
+        element: (
+          <ProtectedRoute>
+            <SearchPage />
+          </ProtectedRoute>
+        ),
+      },
+      {
+        path: "join-watch-party",
+        element: <JoinWatchPartyPage />,
       },
     ],
   },
-  { path: "test", element: <TestPage /> },
+  {
+    path: "*",
+    element: <LandingPage />,
+    errorElement: <ErrorPage />,
+  },
 ]);
 
 export default ReactDOMRun;

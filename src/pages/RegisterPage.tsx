@@ -10,6 +10,13 @@ export type RegisterFormData = {
   confirmPassword: string;
 };
 
+interface RegisterResponse {
+  id: string;
+  username: string;
+  email: string;
+  // Add any other fields that your API returns
+}
+
 const RegisterPage = () => {
   const {
     register,
@@ -31,30 +38,37 @@ const RegisterPage = () => {
    * On success, shows a success toast and redirects to the login page.
    * On error, shows an error toast with the error message.
    */
-  const mutation = useMutation(apiClient.register, {
-    // Callback function to handle successful registration
-    onSuccess: () => {
-      // Show success toast
-      toast({
-        title: "Registration success, please login",
-      });
-      // Log success message to console
-      console.log("Registration success");
-      // Redirect to login page
-      window.location.pathname = "/";
-    },
-    // Callback function to handle registration error
-    onError: (error: Error) => {
-      // Show error toast with error message
-      toast({
-        title: "Error",
-        description: `${error.message}`,
-        variant: "destructive",
-      });
-      // Log error to console for debugging
-      console.log(error);
-    },
-  });
+  const mutation = useMutation<RegisterResponse, Error, RegisterFormData>(
+    apiClient.register,
+    {
+      onSuccess: (data: { username: any; id: any; email: any }) => {
+        // Now 'data' is properly typed as RegisterResponse
+        toast({
+          title: "Registration successful",
+          description: `Welcome, ${data.username}! Please login to continue.`,
+        });
+
+        // You can now access specific fields
+        // const userId = data.id;
+        // const userEmail = data.email;
+
+        // Perform any additional actions with the user data
+        // For example, you might want to store some data in local storage
+        // localStorage.setItem("tempUserId", userId);
+
+        // Or you might want to redirect to login page
+        // router.push('/login');
+      },
+      onError: (error: Error) => {
+        toast({
+          title: "Registration failed",
+          description: error.message,
+          variant: "destructive",
+        });
+        console.error("Registration error:", error);
+      },
+    }
+  );
 
   // Send form submit data to API client for registration
   /**

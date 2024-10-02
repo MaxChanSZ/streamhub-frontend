@@ -1,6 +1,12 @@
 import { LoginFormData } from "../pages/LoginPage";
 import { RegisterFormData } from "../pages/RegisterPage";
-import { PollOptionResponseData, PollResponseData, UpdatePollOptionRequestData, WatchPartyFormData, WatchPartyResponseData } from "@/pages/CreateWatchPartyPage";
+import {
+  PollOptionResponseData,
+  PollResponseData,
+  UpdatePollOptionRequestData,
+  WatchPartyFormData,
+  WatchPartyResponseData,
+} from "@/pages/CreateWatchPartyPage";
 import axios from "axios";
 import { User } from "@/utils/types";
 import { UpdateFormData } from "../pages/UpdateProfilePage";
@@ -16,6 +22,7 @@ export const register = async (formData: RegisterFormData) => {
       withCredentials: true,
     })
     .then((response) => {
+      console.log("returning data from apiclient");
       return response.data;
     })
     .catch((error) => {
@@ -37,6 +44,8 @@ export const register = async (formData: RegisterFormData) => {
       console.log(error.config);
       throw new Error(error.message);
     });
+
+  return response;
 };
 
 export const login = async (formData: LoginFormData): Promise<User> => {
@@ -303,7 +312,7 @@ export const createPoll = async (
         withCredentials: true,
       }
     );
-    return response.data; 
+    return response.data;
   } catch (error) {
     if (axios.isAxiosError(error)) {
       if (error.response) {
@@ -323,7 +332,6 @@ export const createPoll = async (
   }
 };
 
-
 export const getPollOptions = async (
   pollId: number
 ): Promise<PollOptionResponseData[]> => {
@@ -337,11 +345,11 @@ export const getPollOptions = async (
         },
         withCredentials: true,
         params: {
-          pollId
-        }
+          pollId,
+        },
       }
     );
-    return response.data; 
+    return response.data;
   } catch (error) {
     if (axios.isAxiosError(error)) {
       if (error.response) {
@@ -381,7 +389,7 @@ export const uploadImage = async (
         withCredentials: true,
       }
     );
-    return response.data; 
+    return response.data;
   } catch (error) {
     if (axios.isAxiosError(error)) {
       if (error.response) {

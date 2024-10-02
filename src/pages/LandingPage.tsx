@@ -5,12 +5,12 @@ import LoginPage from "./LoginPage";
 import RegisterPage from "./RegisterPage";
 import JoinWatchPartyPage from "./JoinWatchPartyPage";
 
-interface LandingPageProps {
-  login: boolean;
-  setLogin: React.Dispatch<React.SetStateAction<boolean>>;
-}
+// interface LandingPageProps {
+//   login: boolean;
+//   setLogin: React.Dispatch<React.SetStateAction<boolean>>;
+// }
 
-const LandingPage: React.FC<LandingPageProps> = () => {
+const LandingPage = () => {
   const [optionSelected, setOptionSelected] = useState<string | null>(null);
   const [transitioning, setTransitioning] = useState(false);
 
