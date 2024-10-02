@@ -6,7 +6,7 @@ export const ProtectedRoute = ({ children }: { children: ReactNode }) => {
   const { isLoggedIn } = useAppContext();
   if (!isLoggedIn) {
     // user is not authenticated
-    return <Navigate to="*" />;
+    return <Navigate to="start" />;
   }
   return children;
 };

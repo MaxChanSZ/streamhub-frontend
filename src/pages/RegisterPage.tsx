@@ -3,6 +3,7 @@ import { useForm } from "react-hook-form";
 import { useMutation } from "react-query";
 import * as apiClient from "@/utils/api-client";
 import { toast } from "@/components/shadcn/ui/use-toast";
+import { useNavigate } from "react-router-dom";
 export type RegisterFormData = {
   username: string;
   email: string;
@@ -24,6 +25,8 @@ const RegisterPage = () => {
     handleSubmit,
     formState: { errors },
   } = useForm<RegisterFormData>();
+
+  const navigate = useNavigate();
 
   // Format strings
   const mainDivFormat = "text-white font-alatsi justify-center w-full"; // format for main div
@@ -47,6 +50,7 @@ const RegisterPage = () => {
           title: "Registration successful",
           description: `Welcome, ${data.username}! Please login to continue.`,
         });
+        navigate("/");
       },
       onError: (error: Error) => {
         toast({

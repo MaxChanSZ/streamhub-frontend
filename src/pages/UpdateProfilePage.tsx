@@ -54,7 +54,7 @@ const UpdateProfilePage = () => {
       console.log("Update success");
       setIsLoggedIn(false);
       setUser(null);
-      navigate("/");
+      navigate("start");
     },
     /**
      * Callback function for handling error.
