@@ -90,7 +90,7 @@ const NavbarProfile = () => {
                             className="w-full text-left text-2xl text-white"
                         >
                             <Link to={`/contact`} onClick={() => setIsProfileMenuOpen(false)}>
-                                TestButton
+                                Contact
                             </Link>
                         </Button>
                         <LogoutButton/>
