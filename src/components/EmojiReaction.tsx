@@ -7,7 +7,6 @@ import { uuid } from "@/utils/emoji-methods";
 export interface EmojiReaction {}
 
 export type Emoji = {
-  timestamp: any;
   TYPE: string;
   SESSION_ID: string;
   SENDER: string | undefined;
@@ -48,7 +47,6 @@ const EmojiReaction = ({ roomID }: { roomID: string }) => {
       SESSION_ID: roomID,
       SENDER: user?.username,
       ID: uuid(),
-      timestamp: Date.now(),
     };
     sendEmoji(emoji);
   };

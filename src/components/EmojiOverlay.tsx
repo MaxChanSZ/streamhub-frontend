@@ -17,7 +17,7 @@ export default function EmojiOverlay({ roomID }: { roomID: string }) {
     const disconnect = EmojiConnection({
       roomID,
       onReceived: (newEmoji) => {
-        const emojiWithTimestamp = { ...newEmoji, timestamp: Date.now() };
+        const emojiWithTimestamp = { ...newEmoji };
         setEmojis((currentEmojis) => [...currentEmojis, emojiWithTimestamp]);
 
         setTimeout(() => {
@@ -37,7 +37,7 @@ export default function EmojiOverlay({ roomID }: { roomID: string }) {
       className="absolute bottom-0 left-0 z-3 h-full w-full pointer-events-none"
     >
       {emojis.map((emoji) => (
-        <EmojiBubble key={`${emoji.ID}-${emoji.timestamp}`} emoji={emoji} />
+        <EmojiBubble key={`${emoji.ID}`} emoji={emoji} />
       ))}
     </div>
   );
