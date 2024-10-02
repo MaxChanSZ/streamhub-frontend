@@ -1,10 +1,17 @@
 import { LoginFormData } from "../pages/LoginPage";
 import { RegisterFormData } from "../pages/RegisterPage";
-import { WatchPartyFormData } from "@/pages/CreateWatchPartyPage";
+import {
+  PollOptionResponseData,
+  PollResponseData,
+  UpdatePollOptionRequestData,
+  WatchPartyFormData,
+  WatchPartyResponseData,
+} from "@/pages/CreateWatchPartyPage";
 import axios from "axios";
 import { User } from "@/utils/types";
 import { UpdateFormData } from "../pages/UpdateProfilePage";
 import { useAppContext } from "../contexts/AppContext";
+import { PollRequestData } from "@/components/Poll";
 
 export const register = async (formData: RegisterFormData) => {
   const response = await axios
@@ -15,6 +22,7 @@ export const register = async (formData: RegisterFormData) => {
       withCredentials: true,
     })
     .then((response) => {
+      console.log("returning data from apiclient");
       return response.data;
     })
     .catch((error) => {
@@ -36,6 +44,8 @@ export const register = async (formData: RegisterFormData) => {
       console.log(error.config);
       throw new Error(error.message);
     });
+
+  return response;
 };
 
 export const login = async (formData: LoginFormData): Promise<User> => {
@@ -225,7 +235,7 @@ export const fetchTopRatedSeries = async () => {
 
 export const createWatchParty = async (
   formData: WatchPartyFormData
-): Promise<any> => {
+): Promise<WatchPartyResponseData> => {
   try {
     const response = await axios.post(
       "http://localhost:8080/api/watch-party/create",
@@ -241,24 +251,160 @@ export const createWatchParty = async (
   } catch (error) {
     if (axios.isAxiosError(error)) {
       if (error.response) {
-        // The request was made and the server responded with a status code that falls out of the range of 2xx
         console.log(error.response.data);
         console.log(error.response.status);
         console.log(error.response.headers);
       } else if (error.request) {
-        // The request was made but no response was received
         console.log(error.request);
       } else {
-        // Something happened in setting up the request that triggered an Error
         console.log("Error", error.message);
       }
       console.log(error.config);
     } else {
-      // Handle non-Axios errors here
-      console.log("Unexpected error", error);
+      console.log("Unexpected error:", error);
     }
-    throw new Error(
-      error instanceof Error ? error.message : "An unknown error occurred"
+    throw error;
+  }
+};
+
+export const fetchWatchParties = async (): Promise<WatchPartyResponseData> => {
+  try {
+    const response = await axios.get(
+      "http://localhost:8080/api/watch-party/get",
+      {
+        headers: {
+          "Content-Type": "application/json",
+        },
+        withCredentials: true,
+      }
     );
+    return response.data;
+  } catch (error) {
+    if (axios.isAxiosError(error)) {
+      if (error.response) {
+        console.log(error.response.data);
+        console.log(error.response.status);
+        console.log(error.response.headers);
+      } else if (error.request) {
+        console.log(error.request);
+      } else {
+        console.log("Error", error.message);
+      }
+      console.log(error.config);
+    } else {
+      console.log("Unexpected error:", error);
+    }
+    throw error;
+  }
+};
+
+export const createPoll = async (
+  pollData: PollRequestData
+): Promise<PollResponseData> => {
+  try {
+    const response = await axios.post(
+      "http://localhost:8080/api/poll/create",
+      pollData,
+      {
+        headers: {
+          "Content-Type": "application/json",
+        },
+        withCredentials: true,
+      }
+    );
+    return response.data;
+  } catch (error) {
+    if (axios.isAxiosError(error)) {
+      if (error.response) {
+        console.log(error.response.data);
+        console.log(error.response.status);
+        console.log(error.response.headers);
+      } else if (error.request) {
+        console.log(error.request);
+      } else {
+        console.log("Error", error.message);
+      }
+      console.log(error.config);
+    } else {
+      console.log("Unexpected error:", error);
+    }
+    throw error;
+  }
+};
+
+export const getPollOptions = async (
+  pollId: number
+): Promise<PollOptionResponseData[]> => {
+  try {
+    const response = await axios.post(
+      "http://localhost:8080/api/poll/get-poll-options-by-poll",
+      null,
+      {
+        headers: {
+          "Content-Type": "application/json",
+        },
+        withCredentials: true,
+        params: {
+          pollId,
+        },
+      }
+    );
+    return response.data;
+  } catch (error) {
+    if (axios.isAxiosError(error)) {
+      if (error.response) {
+        console.log(error.response.data);
+        console.log(error.response.status);
+        console.log(error.response.headers);
+      } else if (error.request) {
+        console.log(error.request);
+      } else {
+        console.log("Error", error.message);
+      }
+      console.log(error.config);
+    } else {
+      console.log("Unexpected error:", error);
+    }
+    throw error;
+  }
+};
+
+export const uploadImage = async (
+  image: File,
+  fileName: string,
+  directory: string
+): Promise<any> => {
+  try {
+    const formData = new FormData();
+    formData.append("image", image);
+    formData.append("fileName", fileName);
+    formData.append("directory", directory);
+    const response = await axios.post(
+      "http://localhost:8080/api/image/upload",
+      formData,
+      {
+        headers: {
+          "Content-Type": "multipart/form-data",
+        },
+        withCredentials: true,
+      }
+    );
+    return response.data;
+  } catch (error) {
+    if (axios.isAxiosError(error)) {
+      if (error.response) {
+        console.log(error.response.data);
+        console.log(error.response.status);
+        console.log(error.response.headers);
+      } else if (error.request) {
+        console.log(error.request);
+      } else {
+        console.log("Error", error.message);
+      }
+      console.log(error.config);
+    } else {
+      console.log("Unexpected error:", error);
+    }
+    throw error;
   }
 };
