@@ -31,7 +31,7 @@ const EmojiReaction = ({ roomID }: { roomID: string }) => {
       toast({
         title: "Please wait",
         description: `You can only send one emoji every ${EMOJI_COOLDOWN_TIME / 1000} seconds`,
-        duration: 1000,
+        duration: 5000,
       });
       return;
     }
