@@ -11,12 +11,10 @@ import UpdateProfilePage from "@/pages/UpdateProfilePage.tsx";
 import SearchPage from "@/pages/SearchPage";
 import RegisterPage from "@/pages/RegisterPage";
 import ContactPage from "@/pages/ContactPage.tsx";
-import TestPage from "@/pages/TestPage";
 import PollResultPage from "@/pages/PollResultPage.tsx";
 import SendEmailPage from "@/pages/SendEmailPage.tsx";
 import { ProtectedRoute } from "./ProtectedRoute";
 import LandingPage from "@/pages/LandingPage";
-import { useAppContext } from "@/contexts/AppContext";
 import JoinWatchPartyPage from "@/pages/JoinWatchPartyPage";
 
 interface ReactDOMRunProps {}
@@ -28,8 +26,6 @@ const ReactDOMRun: React.FC<ReactDOMRunProps> = () => {
     </>
   );
 };
-
-// const { isLoggedIn, setIsLoggedIn } = useAppContext();
 
 const router = createBrowserRouter([
   {
@@ -55,7 +51,11 @@ const router = createBrowserRouter([
       },
       {
         path: "watch/:seriesId/:episodeId",
-        element: <WatchPage videoSource="" />,
+        element: (
+          <ProtectedRoute>
+            <WatchPage videoSource="" />
+          </ProtectedRoute>
+        ),
       },
       {
         path: "watch-party/:sessionId",

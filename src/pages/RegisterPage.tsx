@@ -42,22 +42,11 @@ const RegisterPage = () => {
     apiClient.register,
     {
       onSuccess: (data: { username: any; id: any; email: any }) => {
-        // Now 'data' is properly typed as RegisterResponse
+        // send a toast message on success
         toast({
           title: "Registration successful",
           description: `Welcome, ${data.username}! Please login to continue.`,
         });
-
-        // You can now access specific fields
-        // const userId = data.id;
-        // const userEmail = data.email;
-
-        // Perform any additional actions with the user data
-        // For example, you might want to store some data in local storage
-        // localStorage.setItem("tempUserId", userId);
-
-        // Or you might want to redirect to login page
-        // router.push('/login');
       },
       onError: (error: Error) => {
         toast({
