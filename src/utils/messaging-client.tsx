@@ -23,8 +23,12 @@ let emojiClient: any = null;
 export const initWebSocketConnection = (options: MessagingClientOptions) => {
   const { roomID, onMessageReceived } = options;
 
+  const userToken = localStorage.getItem("watchparty-token");
+  console.log(userToken);
+  let token = userToken?.substring(1, userToken.length - 1);
+
   // Set up WebSocket connection
-  const brokerURL = "http://localhost:8080/chat";
+  const brokerURL = `http://localhost:8080/chat?token=${token}&roomID=${roomID}`;
   if (!client || !client.connected) {
     client = Stomp.over(() => new SockJS(brokerURL));
     client.reconnectDelay = 5000; // Try to reconnect every 5 seconds
@@ -85,10 +89,14 @@ export const sendEmoji = async (reaction: Emoji) => {
 export const EmojiConnection = (options: EmojiClientOptions) => {
   const { roomID, onReceived } = options;
 
+  const userToken = localStorage.getItem("watchparty-token");
+  console.log(userToken);
+  let token = userToken?.substring(1, userToken.length - 1);
+
   // Set up WebSocket connection
   // Avoid re-initializing the WebSocket connection if already connected
   if (!emojiClient || !emojiClient.connected) {
-    emojiClient = Stomp.over(() => new SockJS("http://localhost:8080/emoji"));
+    emojiClient = Stomp.over(() => new SockJS(`http://localhost:8080/emoji?token=${token}&roomID=${roomID}`));
     emojiClient.reconnectDelay = 5000; // Reconnect every 5 seconds if disconnected
 
     emojiClient.connect({}, () => {

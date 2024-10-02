@@ -11,7 +11,7 @@ import UpdateProfilePage from "@/pages/UpdateProfilePage.tsx";
 import SearchPage from "@/pages/SearchPage";
 import RegisterPage from "@/pages/RegisterPage";
 import ContactPage from "@/pages/ContactPage.tsx";
-import TestPage from "@/pages/TestPage";
+//import TestPage from "@/pages/TestPage";
 import JoinWatchPartyPage from "@/pages/JoinWatchPartyPage";
 import { useAppContext } from "@/contexts/AppContext";
 import LandingPage from "@/pages/LandingPage";
@@ -68,8 +68,8 @@ const ReactDOMRun: React.FC<ReactDOMRunProps> = () => {
           element: <SearchPage />,
         },
       ],
-    },
-    { path: "test", element: <TestPage /> },
+    }
+    //{ path: "test", element: <TestPage /> },
   ]);
 
   return (
