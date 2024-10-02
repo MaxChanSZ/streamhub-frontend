@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { Button } from "@/components/shadcn/ui/button";
 import { Input } from "@/components/shadcn/ui/input";
 import { 
@@ -9,6 +9,7 @@ import {
 } from "@/utils/api-client";
 import { useAppContext } from "@/contexts/AppContext";
 import Poll, { PollOptionRequestData, PollRequestData } from "@/components/Poll";
+import { useNavigate } from "react-router-dom";
 
 export type WatchPartyFormData = {
   partyName: string;
@@ -62,6 +63,17 @@ const CreateWatchPartyPage = () => {
   const [error, setError] = useState<string | null>(null);
   const [isPollCreated, setIsPollCreated] = useState<boolean>(false);
   const { user } = useAppContext();
+  const navigate = useNavigate();
+  const [countdown, setCountdown] = useState<number | null>(null);
+
+  useEffect(() => {
+    if (countdown !== null && countdown > 0) {
+      const timer = setTimeout(() => setCountdown(countdown - 1), 1000);
+      return () => clearTimeout(timer);
+    } else if (countdown === 0) {
+      navigate(`/watch-party/${partyCode}`);
+    }
+  }, [countdown, navigate, partyCode]);
 
   const onPollCreate = async(poll: Poll, watchPartyId: number) => {
     let optionRequestsData: PollOptionRequestData[] = [];
@@ -130,10 +142,10 @@ const CreateWatchPartyPage = () => {
       const response = await createWatchParty(formData);
       setPartyCode(response.code);
       console.log('Watch Party created:', response);
-      // create a poll if there is one
       if (poll) {
-        onPollCreate(poll, response.id);
+        await onPollCreate(poll, response.id);
       }
+      setCountdown(5); 
     } catch (error) {
       console.error('Error creating watch party:', error);
       setError('Failed to create watch party. Please try again.');
@@ -142,109 +154,107 @@ const CreateWatchPartyPage = () => {
     }
   };
 
-  return (
-    <div className="max-w-md mx-auto mt-8">
-      <h2 className="text-2xl text-white font-semibold mb-6 text-center font-alatsi">
-        Create Watch Party
-      </h2>
-      <form onSubmit={onFormSubmit} className="space-y-4">
-        <div>
-          <Label htmlFor="partyName">Watch Party Name</Label>
-          <Input
-            id="partyName"
-            type="text"
-            placeholder="e.g., Horror Night"
-            value={partyName}
-            onChange={(e) => setPartyName(e.target.value)}
-            className="w-full font-alatsi"
-            required
-          />
-        </div>
-        <div>
-          <Label htmlFor="scheduledDate">Date</Label>
-          <Input
-            id="scheduledDate"
-            type="date"
-            value={scheduledDate}
-            onChange={(e) => setScheduledDate(e.target.value)}
-            className="w-full font-alatsi"
-            required
-          />
-        </div>
-        <div>
-          <Label htmlFor="scheduledTime">Time</Label>
-          <Input
-            id="scheduledTime"
-            type="time"
-            value={scheduledTime}
-            onChange={(e) => setScheduledTime(e.target.value)}
-            className="w-full font-alatsi"
-            required
-          />
-        </div>
-        
-        {/* POLL FOR WATCH PARTY */}
-        {poll ? (
-          <div>
-            <Poll 
-              poll={poll}
-              setPoll={setPoll}
-            />
-            <Button
+    return (
+      <div className="max-w-md mx-auto mt-8">
+        <h2 className="text-2xl text-white font-semibold mb-6 text-center font-alatsi">
+          Create Watch Party
+        </h2>
+        {countdown === null ? (
+          <form onSubmit={onFormSubmit} className="space-y-4">
+            <div>
+              <Label htmlFor="partyName">Watch Party Name</Label>
+              <Input
+                id="partyName"
+                type="text"
+                placeholder="e.g., Horror Night"
+                value={partyName}
+                onChange={(e) => setPartyName(e.target.value)}
+                className="w-full font-alatsi"
+                required
+              />
+            </div>
+            <div>
+              <Label htmlFor="scheduledDate">Date</Label>
+              <Input
+                id="scheduledDate"
+                type="date"
+                value={scheduledDate}
+                onChange={(e) => setScheduledDate(e.target.value)}
+                className="w-full font-alatsi"
+                required
+              />
+            </div>
+            <div>
+              <Label htmlFor="scheduledTime">Time</Label>
+              <Input
+                id="scheduledTime"
+                type="time"
+                value={scheduledTime}
+                onChange={(e) => setScheduledTime(e.target.value)}
+                className="w-full font-alatsi"
+                required
+              />
+            </div>
+            
+            {/* POLL FOR WATCH PARTY */}
+            {poll ? (
+              <div>
+                <Poll 
+                  poll={poll}
+                  setPoll={setPoll}
+                />
+                <Button
+                  type="button"
+                  variant="default"
+                  className="w-full text-base py-2 font-alatsi border"
+                  onClick={() => setPoll(null)}
+                >
+                Cancel Poll
+              </Button>
+              </div>
+            ) : (
+              <Button
               type="button"
               variant="default"
-              className="w-full text-base py-2 font-alatsi border"
-              onClick={() => setPoll(null)}
+              className="w-full text-white py-2 font-alatsi border"
+              onClick={() => setPoll({
+                question: "",
+                options: [
+                  {value: "", description: "", image: null, imageOptionUrl: ""},
+                  {value: "", description: "", image: null, imageOptionUrl: ""}
+                ],
+                optionSize: 2
+              })}
             >
-            Cancel Poll
-          </Button>
-          </div>
+              Create Poll
+            </Button>
+            )}
+            
+            {/* SUBMIT FORM BUTTON */}
+            <Button
+              type="submit"
+              variant="secondary"
+              className="w-full text-base py-2 font-alatsi"
+              disabled={isLoading}
+            >
+              {isLoading ? 'Creating...' : 'Create Watch Party'}
+            </Button>
+          </form>
         ) : (
-          <Button
-          type="button"
-          variant="default"
-          className="w-full text-white py-2 font-alatsi border"
-          onClick={() => setPoll({
-            question: "",
-            options: [
-              {value: "", description: "", image: null, imageOptionUrl: ""},
-              {value: "", description: "", image: null, imageOptionUrl: ""}
-            ],
-            optionSize: 2
-          })}
-        >
-          Create Poll
-        </Button>
+          <div className="mt-4 p-4 bg-green-100 border border-green-400 text-green-700 rounded">
+            <p>Your party code is: <strong>{partyCode}</strong></p>
+            <p className="mt-2 text-sm">Share this code with your friends to invite them to your watch party!</p>
+            <p className="mt-2">Redirecting in {countdown} seconds...</p>
+          </div>
         )}
-        
-        {/* SUBMIT FORM BUTTON */}
-        <Button
-          type="submit"
-          variant="secondary"
-          className="w-full text-base py-2 font-alatsi"
-          disabled={isLoading}
-        >
-          {isLoading ? 'Creating...' : 'Create Watch Party'}
-        </Button>
-      </form>
-      {error && (
-        <div className="mt-4 p-4 bg-red-100 border border-red-400 text-red-700 rounded">
-          <p>{error}</p>
-        </div>
-      )}
-      {partyCode && (
-        <div className="mt-4 p-4 bg-green-100 border border-green-400 text-green-700 rounded">
-          <p>Your party code is: <strong>{partyCode}</strong></p>
-          <p className="mt-2 text-sm">Share this code with your friends to invite them to your watch party!</p>
-        </div>
-      )}
-       {isPollCreated && (
-        <div className="mt-4 p-4 bg-green-100 border border-green-400 text-green-700 rounded">
-          <p className="mt-2 text-sm">Poll successfully created!</p>
-        </div>
-      )}
-    </div>
-  );
-};
+        {error && (
+          <div className="mt-4 p-4 bg-red-100 border border-red-400 text-red-700 rounded">
+            <p>{error}</p>
+          </div>
+        )}
+      </div>
+    );
+  };
+
 
 export default CreateWatchPartyPage;
