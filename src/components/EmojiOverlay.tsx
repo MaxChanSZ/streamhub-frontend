@@ -2,10 +2,11 @@ import { useEffect, useState, useCallback } from "react";
 import { EmojiConnection } from "@/utils/messaging-client";
 import { EmojiBubble } from "./EmojiBubble";
 import { Emoji } from "./EmojiReaction";
+import { EMOJI_REMOVE_DURATION } from "@/utils/constants";
 
 export default function EmojiOverlay({ roomID }: { roomID: string }) {
   const [emojis, setEmojis] = useState<Emoji[]>([]);
-  const EMOJI_DELAY = 6500;
+  const EMOJI_DELAY = EMOJI_REMOVE_DURATION;
 
   const removeEmoji = useCallback((emojiId: string) => {
     setEmojis((currentEmojis) =>
