@@ -8,7 +8,7 @@ import {
   uploadImage
 } from "@/utils/api-client";
 import { useAppContext } from "@/contexts/AppContext";
-import Poll, { PollOptionRequestData, PollRequestData } from "@/components/Poll";
+import PollForm, { PollOptionRequestData, PollRequestData, Poll } from "@/components/PollForm";
 
 export type WatchPartyFormData = {
   partyName: string;
@@ -35,7 +35,7 @@ export type PollResponseData = {
 };
 
 export type PollOptionResponseData = {
-  id: number;
+  id?: number;
   value: string;
   description: string;
   imageUrl: string;
@@ -201,7 +201,7 @@ const CreateWatchPartyPage = () => {
         {/* POLL FOR WATCH PARTY */}
         {poll ? (
           <div>
-            <Poll 
+            <PollForm 
               poll={poll}
               setPoll={setPoll}
             />

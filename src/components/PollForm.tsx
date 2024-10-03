@@ -52,7 +52,7 @@ export type PollOptionRequestData = {
 const MIN_SIZE = 2;
 const MAX_SIZE = 8;
 
-export const Poll: React.FC<PollProps> = ({ poll, setPoll }) => {
+export const PollForm: React.FC<PollProps> = ({ poll, setPoll }) => {
     const [question, setQuestion] = useState<string>('');
     const [optionSize, setOptionSize] = useState<number>(2);
     const [options, setOptions] = useState<PollOption[]>([
@@ -236,4 +236,4 @@ export const Poll: React.FC<PollProps> = ({ poll, setPoll }) => {
     );
   };
 
-  export default Poll;
+  export default PollForm;
