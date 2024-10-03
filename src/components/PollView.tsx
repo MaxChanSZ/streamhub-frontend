@@ -32,6 +32,7 @@ export const PollView : React.FC<PollViewProps> = ({ poll, optionChecked, onCrea
         setVoteable(false);
         onChangeVote();
     }
+    
     return (
         <div>
             <form className="space-y-4 text-white">
@@ -69,7 +70,7 @@ export const PollView : React.FC<PollViewProps> = ({ poll, optionChecked, onCrea
                     </Button>
                 }
                 
-                  {/* CHANGE VOTE BUTTON */}
+                {/* CHANGE VOTE BUTTON */}
                 {voteSaved &&
                     <div className="space-y-4">
                         <div className="mt-4 p-4 bg-yellow-100 border border-yellow-400 text-yellow-700 rounded">
