@@ -22,45 +22,18 @@ const WatchPartyPage = () => {
 
   const [roomID, setRoomID] = useState(sessionId);
 
-  const changeRoomID = (newRoomID: string) => {
-    if (newRoomID !== roomID) {
-      // Clear previous messages
-      setRoomID(newRoomID);
-    }
-  };
-
   return (
-    <div className="grid grid-cols-4 gap-2">
-      {/* roomID input for development only */}
-      {/* <form
-          className="flex text-center justify-center items-center"
-          onSubmit={(event) => {
-            event.preventDefault();
-            changeRoomID(roomID);
-          }}
-        >
-          <label className="text-xs font-bold">Enter Room ID:</label>
-          <input
-            type="text"
-            value={roomID}
-            onChange={(event) => setRoomID(event.target.value.toString())}
-            className="text-black text-center mx-4 py-2 px-1 font-semibold grow-0 border-none"
-          ></input>
-
-          <Button type="submit" variant="secondary">
-            Enter
-          </Button>
-      </form> */}
-
-      <div className="col-span-3">
+    <div className="grid grid-cols-1 gap-y-2 md:grid-cols-4 md:gap-x-4 ">
+      <div className="col-span-3 min-h-80">
         <VideoJSSynced
           options={videoJsOptions}
           roomID={roomID}
           setRoomID={setRoomID}
         />
       </div>
-
-      <LiveChat roomID={roomID} setRoomID={setRoomID} />
+      <div className="col-span-1">
+        <LiveChat roomID={roomID} />
+      </div>
     </div>
   );
 };
