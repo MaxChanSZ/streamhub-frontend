@@ -1,20 +1,20 @@
 import LiveChat from "@/components/LiveChat";
 import VideoJSSynced from "@/components/VideoJSSynced";
 import { useState } from "react";
-import { useParams } from "react-router";
+import { useLocation, useParams } from "react-router";
 
 const WatchPartyPage = () => {
   const params = useParams();
 
-  // console.log(params.sessionId);
+  let location = useLocation();
+  const data = location.state;
 
   const sessionId = params.sessionId ? params.sessionId.toString() : "1";
 
   const videoJsOptions = {
     sources: [
       {
-        // replace src with videoSource once that functionality has been created
-        src: "http://localhost:8080/encoded/steamboatwillie_001/master.m3u8",
+        src: data.videoSource,
         type: "application/x-mpegURL",
       },
     ],
