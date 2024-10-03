@@ -1,11 +1,13 @@
+import { EMOJI_FONT_SIZES, EMOJI_DURATIONS } from "./constants";
+
 export const getRandomFontSize = () => {
-  const [min, max] = [3, 5];
+  const [min, max] = EMOJI_FONT_SIZES;
   return Number((Math.random() * (max - min + 1) + min).toFixed(1));
 }
 
 export const getRandomLeftPos = () => Math.floor(Math.random() * 80 + 1);
 
-export const getRandomDuration = (min: number = 3, max: number = 5) => 
+export const getRandomDuration = (min: number = EMOJI_DURATIONS[0], max: number = EMOJI_DURATIONS[1]) => 
   Math.floor(Math.random() * (max - min + 1)) + min;
 
 export const uuid = () => {

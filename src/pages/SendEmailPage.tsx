@@ -9,6 +9,7 @@ interface WatchParty {
   scheduledTime: string;
   code: string; 
   createdDate: number[]; 
+  password: string;
 }
 
 const SendEmailPage: React.FC = () => {
@@ -44,19 +45,20 @@ const SendEmailPage: React.FC = () => {
   const generateEmailBody = (party: WatchParty, additionalMessage: string) => {
     const partyLink = `http://localhost:5173/watch-party/${party.code}`; 
     return `
-You are invited to join our Watch Party!
+      You are invited to join our Watch Party!
 
-Event Details:
-- Party Name: ${party.partyName}
-- Date: ${party.scheduledDate}
-- Time: ${party.scheduledTime}
-- Party Link: ${partyLink}
+      Event Details:
+      - Party Name: ${party.partyName}
+      - Date: ${party.scheduledDate}
+      - Time: ${party.scheduledTime}
+      - Password: ${party.password}
+      - Party Link: ${partyLink}
 
-To join the watch party, please click on the link above or enter the party code: ${party.code}
+      To join the watch party, please click on the link above or enter the party code: ${party.code}
 
-${additionalMessage}
+      ${additionalMessage}
 
-We hope to see you there!
+      We hope to see you there!
     `.trim();
   };
 

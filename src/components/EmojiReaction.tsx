@@ -4,6 +4,7 @@ import { useState } from "react";
 import { toast } from "./shadcn/ui/use-toast";
 import { Switch } from "./shadcn/ui/switch";
 import { uuid } from "@/utils/emoji-methods";
+import { EMOJI_ClICK_COOLDOWN } from "@/utils/constants";
 export interface EmojiReaction {}
 
 export type Emoji = {
@@ -17,7 +18,7 @@ const EmojiReaction = ({ roomID }: { roomID: string }) => {
   const { user } = useAppContext();
   const [waiting, setWaiting] = useState<boolean>(false);
   const [enableCooldown, setEnableCooldown] = useState<boolean>(false);
-  const EMOJI_COOLDOWN_TIME = 2000;
+  const EMOJI_COOLDOWN_TIME = EMOJI_ClICK_COOLDOWN;
 
   const emojiCoolDown = () => {
     setWaiting(true);
@@ -31,7 +32,7 @@ const EmojiReaction = ({ roomID }: { roomID: string }) => {
       toast({
         title: "Please wait",
         description: `You can only send one emoji every ${EMOJI_COOLDOWN_TIME / 1000} seconds`,
-        duration: 1000,
+        duration: 5000,
       });
       return;
     }

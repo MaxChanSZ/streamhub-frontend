@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { Button } from "@/components/shadcn/ui/button";
 import { Input } from "@/components/shadcn/ui/input";
 import { 
@@ -9,6 +9,7 @@ import {
 } from "@/utils/api-client";
 import { useAppContext } from "@/contexts/AppContext";
 import Poll, { PollOptionRequestData, PollRequestData } from "@/components/Poll";
+import { useNavigate } from "react-router-dom";
 
 export type WatchPartyFormData = {
   partyName: string;
@@ -64,6 +65,21 @@ const CreateWatchPartyPage = () => {
   const [error, setError] = useState<string | null>(null);
   const [isPollCreated, setIsPollCreated] = useState<boolean>(false);
   const { user } = useAppContext();
+  const navigate = useNavigate();
+  const [countdown, setCountdown] = useState<number | null>(null);
+
+  useEffect(() => {
+    if (countdown !== null && countdown > 0) {
+      const timer = setTimeout(() => setCountdown(countdown - 1), 1000);
+      return () => clearTimeout(timer);
+    } else if (countdown === 0) {
+      // TODO
+      // we need to store the video url in the state from the create watch party response before we can
+      // navigate to the next page.
+      // if not, the video source will be null and there will be an error
+      // navigate(`/watch-party/${partyCode}`);
+    }
+  }, [countdown, navigate, partyCode]);
 
   const onPollCreate = async(poll: Poll, watchPartyId: number) => {
     let optionRequestsData: PollOptionRequestData[] = [];
@@ -133,10 +149,10 @@ const CreateWatchPartyPage = () => {
       const response = await createWatchParty(formData);
       setPartyCode(response.code);
       console.log('Watch Party created:', response);
-      // create a poll if there is one
       if (poll) {
-        onPollCreate(poll, response.id);
+        await onPollCreate(poll, response.id);
       }
+      setCountdown(5); 
     } catch (error) {
       console.error('Error creating watch party:', error);
       setError('Failed to create watch party. Please try again.');
@@ -261,5 +277,6 @@ const CreateWatchPartyPage = () => {
     </div>
   );
 };
+
 
 export default CreateWatchPartyPage;
