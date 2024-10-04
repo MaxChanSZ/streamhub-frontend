@@ -13,6 +13,7 @@ import { UpdateFormData } from "../pages/UpdateProfilePage";
 import { useAppContext } from "../contexts/AppContext";
 import { PollRequestData } from "@/components/PollForm";
 import { PollResponse } from "@/pages/WatchPartyPage";
+import { WatchPartyResponse } from "@/pages/PollResultPage";
 
 export const register = async (formData: RegisterFormData) => {
   const response = await axios
@@ -268,7 +269,7 @@ export const createWatchParty = async (
   }
 };
 
-export const fetchWatchParties = async (): Promise<WatchPartyResponseData> => {
+export const fetchWatchParties = async (): Promise<WatchPartyResponse[]> => {
   try {
     const response = await axios.get(
       "http://localhost:8080/api/watch-party/get",

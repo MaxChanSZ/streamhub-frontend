@@ -24,7 +24,7 @@ const SendEmailPage: React.FC = () => {
     if (user) {
       fetchWatchParties();
     }
-  }, [user]);  
+  }, [user]);
 
   const fetchWatchParties = async () => {
     try {

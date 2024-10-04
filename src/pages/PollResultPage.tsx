@@ -2,10 +2,19 @@ import React, { useState, useRef, useEffect } from 'react';
 import { ChevronDown, ChevronUp } from 'lucide-react';
 import { useAppContext } from "@/contexts/AppContext";
 import axios from 'axios';
-import { getWatchpartyPoll } from '@/utils/api-client';
+import { fetchWatchParties, getWatchpartyPoll } from '@/utils/api-client';
 import { PollOptionResponse, PollResponse } from './WatchPartyPage';
 
 interface WatchParty {
+  id: number;
+  partyName: string;
+  scheduledDate: string;
+  scheduledTime: string;
+  code: string;
+  createdDate: number[];
+}
+
+export type WatchPartyResponse = {
   id: number;
   partyName: string;
   scheduledDate: string;
@@ -133,15 +142,15 @@ const WatchPartyDropdown: React.FC<{ onSelect: (partyCode: string) => void, setE
 
   useEffect(() => {
     if (user) {
-      fetchWatchParties();
+      fetchAllWatchParties();
     }
   }, [user]);
 
-  const fetchWatchParties = async () => {
+  const fetchAllWatchParties = async () => {
     try {
       if (user && user.id) {
-        const response = await axios.get<WatchParty[]>(`http://localhost:8080/api/watch-party/get/${user.id}`);
-        setWatchParties(response.data);
+        const response = await fetchWatchParties();
+        setWatchParties(response);
       }
     } catch (error) {
       setError("Error fetching watch parties");
