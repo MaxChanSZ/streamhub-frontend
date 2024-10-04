@@ -1,7 +1,6 @@
 import React, { useState, useRef, useEffect } from 'react';
 import { ChevronDown, ChevronUp } from 'lucide-react';
 import { useAppContext } from "@/contexts/AppContext";
-import axios from 'axios';
 import { fetchWatchParties, getWatchpartyPoll } from '@/utils/api-client';
 import { PollOptionResponse, PollResponse } from './WatchPartyPage';
 
@@ -39,7 +38,7 @@ const PollOptionCard: React.FC<{ pollOption: PollOptionResponse; totalVotes: num
   const [expanded, setExpanded] = useState(false);
   const [isOverflowing, setIsOverflowing] = useState(false);
   const descriptionRef = useRef<HTMLParagraphElement>(null);
-  const votePercentage = (pollOption.voteCount / totalVotes) * 100;
+  const votePercentage = totalVotes > 0 ? (pollOption.voteCount / totalVotes) * 100 : 0;
   const isTopThree = place <= 3;
 
   useEffect(() => {
@@ -56,31 +55,35 @@ const PollOptionCard: React.FC<{ pollOption: PollOptionResponse; totalVotes: num
     return () => window.removeEventListener('resize', checkOverflow);
   }, [pollOption.description]);
 
-  const imageUrl = "http://localhost:8080/pollOptionImages/" + pollOption.imageUrl;
+  const imageUrl = pollOption.imageUrl ? "http://localhost:8080/pollOptionImages/" + pollOption.imageUrl : null;
 
   return (
     <div className={`bg-gray-800 rounded-lg shadow-lg overflow-hidden flex flex-col h-full border border-gray-700 ${
       isTopThree ? 'transform hover:scale-105 transition-transform duration-300' : ''
     }`}>
-      <div className="relative pt-[100%]"> 
-        <img 
-          src={imageUrl} 
-          alt={pollOption.value}
-          className="absolute top-0 left-0 w-full h-full object-cover object-top"
-        />
-      </div>
+      {imageUrl &&
+        <div className="relative pt-[100%]"> 
+          <img 
+            src={imageUrl} 
+            alt={pollOption.value}
+            className="absolute top-0 left-0 w-full h-full object-cover object-top"
+          />
+        </div>
+      }
       <div className="p-4 flex-grow flex flex-col justify-between relative z-10">
         <div>
           <h3 className={`font-semibold mb-2 text-white ${isTopThree ? 'text-xl' : 'text-lg'} flex items-center`}>
             {isTopThree && <MedalIcon place={place} />}
             <span>{pollOption.value}</span>
           </h3>
-          <p 
+          {pollOption.description &&
+          <p
             ref={descriptionRef}
             className={`text-gray-400 mb-2 ${expanded ? '' : 'line-clamp-2'} ${isTopThree ? 'text-base' : 'text-sm'}`}
           >
             {pollOption.description}
           </p>
+          }
           {isOverflowing && (
             <button 
               onClick={() => setExpanded(!expanded)} 
@@ -204,7 +207,7 @@ const PollResultPage: React.FC = () => {
 
   return (
     <div className="container mx-auto px-2 py-4 text-white min-h-screen">
-      <h1 className="text-3xl md:text-4xl font-bold mb-2">Movie Poll Results</h1>
+      <h1 className="text-3xl md:text-4xl font-bold mb-2">Poll Results</h1>
       <WatchPartyDropdown onSelect={handlePartySelect} setError={setError} />
       {watchpartyPoll && (
         <>

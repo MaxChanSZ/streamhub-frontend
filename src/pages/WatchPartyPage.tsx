@@ -2,7 +2,7 @@ import LiveChat from "@/components/LiveChat";
 import PollView from "@/components/PollView";
 import VideoJSSynced from "@/components/VideoJSSynced";
 import { addVote, changeVote, getWatchpartyPoll } from "@/utils/api-client";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useParams } from "react-router";
 import { useAppContext } from "@/contexts/AppContext";
 
@@ -41,12 +41,18 @@ const WatchPartyPage = () => {
   const [roomID, setRoomID] = useState(sessionId);
   const [watchpartyPoll, setWatchPartyPoll] = useState<PollResponse|null>(null);
   const [optionChecked, setOptionChecked] = useState<PollOptionResponse|null>(null);
+  const [blockDisposePlayer, setBlockDisposePlayer] = useState<boolean>(false);
   const [voteSaved, setVoteSaved] = useState(false);
   const [pollLoaded, setPollLoaded] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [success, setSuccess] = useState<string | null>(null);
   
   const { user } = useAppContext();
+
+  useEffect(() => {
+    // do not dispose player on option change
+    setBlockDisposePlayer(true);
+  }, [optionChecked]);
 
   // to retrieve poll and its option
   const onPollLoad = async() => {
@@ -99,21 +105,22 @@ const WatchPartyPage = () => {
 
   return (
     <div>
-       <div className="grid grid-cols-1 gap-y-2 md:grid-cols-4 md:gap-x-4 ">
-      <div className="col-span-3 min-h-80">
-        <VideoJSSynced
-          options={videoJsOptions}
-          roomID={roomID}
-          setRoomID={setRoomID}
-        />
+      <div className="grid grid-cols-1 gap-y-2 md:grid-cols-4 md:gap-x-4 ">
+        <div className="col-span-3 min-h-80">
+          <VideoJSSynced
+            blockDisposePlayer={blockDisposePlayer}
+            options={videoJsOptions}
+            roomID={roomID}
+            setRoomID={setRoomID}
+          />
+        </div>
+        <div className="col-span-1">
+          <LiveChat roomID={roomID} />
+        </div>
       </div>
-      <div className="col-span-1">
-        <LiveChat roomID={roomID} />
-      </div>
-    </div>
       {pollLoaded && watchpartyPoll && user &&
         <div>
-          <PollView 
+          <PollView
             poll={watchpartyPoll}
             optionChecked={optionChecked}
             voteSaved={voteSaved}
