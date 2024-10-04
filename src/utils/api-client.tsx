@@ -11,7 +11,8 @@ import axios from "axios";
 import { User } from "@/utils/types";
 import { UpdateFormData } from "../pages/UpdateProfilePage";
 import { useAppContext } from "../contexts/AppContext";
-import { PollRequestData } from "@/components/Poll";
+import { PollRequestData } from "@/components/PollForm";
+import { PollResponse } from "@/pages/WatchPartyPage";
 
 export const register = async (formData: RegisterFormData) => {
   const response = await axios
@@ -390,6 +391,132 @@ export const uploadImage = async (
       }
     );
     return response.data;
+  } catch (error) {
+    if (axios.isAxiosError(error)) {
+      if (error.response) {
+        console.log(error.response.data);
+        console.log(error.response.status);
+        console.log(error.response.headers);
+      } else if (error.request) {
+        console.log(error.request);
+      } else {
+        console.log("Error", error.message);
+      }
+      console.log(error.config);
+    } else {
+      console.log("Unexpected error:", error);
+    }
+    throw error;
+  }
+};
+
+export const getWatchpartyPoll = async (
+  code: string,
+  userId: number
+): Promise<PollResponse> => {
+  try {
+    const response = await axios.post(
+      "http://localhost:8080/api/poll/get-watchparty-poll-by-code",
+      null,
+      {
+        headers: {
+          "Content-Type": "application/json",
+        },
+        withCredentials: true,
+        params: {
+          code,
+          userId
+        }
+      }
+    );
+    console.log(response.data);
+    return response.data; 
+  } catch (error) {
+    if (axios.isAxiosError(error)) {
+      if (error.response) {
+        console.log(error.response.data);
+        console.log(error.response.status);
+        console.log(error.response.headers);
+      } else if (error.request) {
+        console.log(error.request);
+      } else {
+        console.log("Error", error.message);
+      }
+      console.log(error.config);
+    } else {
+      console.log("Unexpected error:", error);
+    }
+    throw error;
+  }
+};
+
+export const addVote = async (
+  pollId: number,
+  pollOptionId: number,
+  accountId: number
+): Promise<any> => {
+
+  try {
+    const response = await axios.post(
+      "http://localhost:8080/api/vote/create",
+      null,
+      {
+        headers: {
+          "Content-Type": "application/json",
+        },
+        withCredentials: true,
+        params: {
+          pollId,
+          pollOptionId,
+          accountId
+        }
+      }
+    );
+    console.log(response.data);
+    return response.data; 
+  } catch (error) {
+    if (axios.isAxiosError(error)) {
+      if (error.response) {
+        console.log(error.response.data);
+        console.log(error.response.status);
+        console.log(error.response.headers);
+      } else if (error.request) {
+        console.log(error.request);
+      } else {
+        console.log("Error", error.message);
+      }
+      console.log(error.config);
+    } else {
+      console.log("Unexpected error:", error);
+    }
+    throw error;
+  }
+};
+
+export const changeVote = async (
+  pollId: number,
+  newPollOptionId: number,
+  accountId: number
+): Promise<any> => {
+
+  try {
+    const response = await axios.post(
+      "http://localhost:8080/api/vote/change",
+      null,
+      {
+        headers: {
+          "Content-Type": "application/json",
+        },
+        withCredentials: true,
+        params: {
+          pollId,
+          newPollOptionId,
+          accountId
+        }
+      }
+    );
+    console.log(response.data);
+    return response.data; 
   } catch (error) {
     if (axios.isAxiosError(error)) {
       if (error.response) {

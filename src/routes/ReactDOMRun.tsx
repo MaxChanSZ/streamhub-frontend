@@ -22,7 +22,8 @@ import LandingPage from "@/pages/LandingPage";
 import JoinWatchPartyPage from "@/pages/JoinWatchPartyPage";
 import NotFoundPage from "@/pages/NotFoundPage";
 
-interface ReactDOMRunProps {}
+interface ReactDOMRunProps {
+}
 
 const ReactDOMRun: React.FC<ReactDOMRunProps> = () => {
   return (

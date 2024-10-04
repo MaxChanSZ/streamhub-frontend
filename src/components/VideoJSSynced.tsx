@@ -138,12 +138,18 @@ const VideoJSSynced: React.FC<IVideoPlayerProps> = ({
 
   // Create a web socket connection with the server for video player synchronization
   React.useEffect(() => {
-    const socket = new SockJS("http://localhost:8080/video-sync");
+    const userToken = localStorage.getItem("watchparty-token");
+    console.log(userToken);
+    let token = userToken?.substring(1, userToken.length - 1);
+    const socket = new SockJS(`http://localhost:8080/video-sync?token=${token}&roomID=${roomID}`);
     const client = Stomp.over(socket);
 
     // console.log(stompClient);
+    
 
-    client.connect({}, () => {
+    client.connect(
+      { Authorization: `Bearer ${userToken}` }, 
+      () => {
       // subscribe to room id 1234 for now. will need to modify this based on watchparty session eventually
       const topic = `/topic/video/${roomID}`;
       client.subscribe(topic, (videoSyncAction) => {
