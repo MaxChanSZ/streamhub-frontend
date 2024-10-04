@@ -7,6 +7,7 @@ import * as apiClient from "@/utils/api-client";
 import { User } from "@/utils/types";
 import WordleLoginButton from "@/components/WordleLoginButton";
 
+
 export type LoginFormData = {
   username: string;
   password: string;
@@ -14,6 +15,7 @@ export type LoginFormData = {
 
 const LoginPage = () => {
   const { setIsLoggedIn, setUser } = useAppContext();
+  const navigate = useNavigate();
 
   const {
     register,
@@ -32,6 +34,7 @@ const LoginPage = () => {
         username: data.username,
       });
       setIsLoggedIn(true);
+      navigate("/");
     },
     onError: (error: Error) => {
       toast({

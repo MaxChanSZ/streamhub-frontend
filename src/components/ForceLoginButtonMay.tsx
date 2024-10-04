@@ -1,9 +1,11 @@
 import { useAppContext } from "@/contexts/AppContext";
 import { Button } from "./shadcn/ui/button";
 import { User } from "@/utils/types";
+import { useNavigate } from "react-router-dom";
 
 const ForceLoginButtonMay = () => {
   const { setIsLoggedIn, setUser } = useAppContext();
+  const navigate = useNavigate();
 
   const fakeUsers: User[] = [
     {
@@ -37,6 +39,7 @@ const ForceLoginButtonMay = () => {
     setUser(pickRandomUser());
     // Set isLoggedIn flag in context to true
     setIsLoggedIn(true);
+    navigate("/");
   };
 
   return (
