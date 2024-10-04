@@ -12,6 +12,7 @@ import {
   AlertDialogTitle,
   AlertDialogTrigger,
 } from "@/components/shadcn/ui/alert-dialog";
+import { toast } from "./shadcn/ui/use-toast";
 
 const DeleteAccountButton = () => {
   const { setIsLoggedIn, user, setUser } = useAppContext();
@@ -21,6 +22,12 @@ const DeleteAccountButton = () => {
       apiClient.deleteUser(user?.id);
       setIsLoggedIn(false);
       setUser(null);
+      toast({
+        title: "Account Deleted",
+        description: "Your account has been deleted.",
+        duration: 5000,
+        variant: "destructive",
+      });
       navigate("/");
     }
   };

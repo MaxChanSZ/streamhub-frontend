@@ -1,6 +1,6 @@
-import { set, useForm } from "react-hook-form";
+import { useForm } from "react-hook-form";
 import { Button } from "@/components/shadcn/ui/button";
-import { Link, useNavigate } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import { useMutation } from "react-query";
 import { toast } from "@/components/shadcn/ui/use-toast";
 import * as apiClient from "@/utils/api-client";
@@ -54,13 +54,20 @@ const UpdateProfilePage = () => {
       console.log("Update success");
       setIsLoggedIn(false);
       setUser(null);
-      navigate("/");
+      navigate("start");
     },
     /**
      * Callback function for handling error.
      * @param {Error} error - The error object.
      */
-    onError: (error: Error) => {},
+    onError: (error: Error) => {
+      console.log("Update error:", error);
+      toast({
+        title: "Update failed",
+        description: "There was an error updating your profile",
+        variant: "destructive",
+      });
+    },
   });
 
   /**

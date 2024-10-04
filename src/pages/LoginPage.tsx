@@ -6,6 +6,7 @@ import { useMutation } from "react-query";
 import * as apiClient from "@/utils/api-client";
 import { User } from "@/utils/types";
 import ForceLoginButtonMay from "@/components/ForceLoginButtonMay";
+import { useNavigate } from "react-router-dom";
 
 export type LoginFormData = {
   username: string;
@@ -14,6 +15,7 @@ export type LoginFormData = {
 
 const LoginPage = () => {
   const { setIsLoggedIn, setUser } = useAppContext();
+  const navigate = useNavigate();
 
   const {
     register,
@@ -41,6 +43,7 @@ const LoginPage = () => {
       });
       // Set isLoggedIn flag in context to true
       setIsLoggedIn(true);
+      navigate("/");
     },
     // Callback function to handle login error
     onError: (error: Error) => {

@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { Button } from "@/components/shadcn/ui/button";
 import { Input } from "@/components/shadcn/ui/input";
 import { 
@@ -9,6 +9,7 @@ import {
 } from "@/utils/api-client";
 import { useAppContext } from "@/contexts/AppContext";
 import PollForm, { PollOptionRequestData, PollRequestData, Poll } from "@/components/PollForm";
+import { useNavigate } from "react-router-dom";
 
 export type WatchPartyFormData = {
   partyName: string;
@@ -64,6 +65,17 @@ const CreateWatchPartyPage = () => {
   const [error, setError] = useState<string | null>(null);
   const [isPollCreated, setIsPollCreated] = useState<boolean>(false);
   const { user } = useAppContext();
+  const navigate = useNavigate();
+  const [countdown, setCountdown] = useState<number | null>(null);
+
+  useEffect(() => {
+    if (countdown !== null && countdown > 0) {
+      const timer = setTimeout(() => setCountdown(countdown - 1), 1000);
+      return () => clearTimeout(timer);
+    } else if (countdown === 0) {
+      navigate(`/watch-party/${partyCode}`);
+    }
+  }, [countdown, navigate, partyCode]);
 
   const onPollCreate = async(poll: Poll, watchPartyId: number) => {
     let optionRequestsData: PollOptionRequestData[] = [];
@@ -133,10 +145,10 @@ const CreateWatchPartyPage = () => {
       const response = await createWatchParty(formData);
       setPartyCode(response.code);
       console.log('Watch Party created:', response);
-      // create a poll if there is one
       if (poll) {
-        onPollCreate(poll, response.id);
+        await onPollCreate(poll, response.id);
       }
+      setCountdown(5); 
     } catch (error) {
       console.error('Error creating watch party:', error);
       setError('Failed to create watch party. Please try again.');
@@ -251,6 +263,7 @@ const CreateWatchPartyPage = () => {
         <div className="mt-4 p-4 bg-green-100 border border-green-400 text-green-700 rounded">
           <p>Your party code is: <strong>{partyCode}</strong></p>
           <p className="mt-2 text-sm">Share this code with your friends to invite them to your watch party!</p>
+          <p className="mt-2">Redirecting in {countdown} seconds...</p>
         </div>
       )}
        {isPollCreated && (
@@ -261,5 +274,6 @@ const CreateWatchPartyPage = () => {
     </div>
   );
 };
+
 
 export default CreateWatchPartyPage;
