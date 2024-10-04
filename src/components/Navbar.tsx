@@ -320,28 +320,15 @@ export default Navbar;
 
 const categories: { title: string; href: string }[] = [
   { title: "Category 1", href: "/watch/1/1" },
-<<<<<<< HEAD
-  { title: "Category 2", href: "/category2" },
-  { title: "Category 3", href: "/category3" },
-  { title: "Category 4", href: "/category4" },
-  { title: "Category 5", href: "/category5" },
-  { title: "Category 6", href: "/category6" },
-=======
   { title: "Category 2", href: "/watch/1/1" },
   { title: "Category 3", href: "/watch/1/1" },
   { title: "Category 4", href: "/watch/1/1" },
   { title: "Category 5", href: "/watch/1/1" },
   { title: "Category 6", href: "/watch/1/1" },
->>>>>>> main
 ];
 
 const wpCategories: { title: string; href: string }[] = [
   { title: "Join Watch Party", href: "/join-watch-party" },
   { title: "Create Watch Party", href: "/create-watch-party" },
   { title: "Send Invitation", href: "/send-email" },
-];
-
-const watchPartyActions: { title: string; href: string }[] = [
-  { title: "Create a Watch Party", href: "/create-watch-party" },
-  { title: "Join Watch Party", href: "/join-watch-party" },
 ];
