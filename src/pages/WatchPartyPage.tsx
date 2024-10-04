@@ -95,9 +95,7 @@ const WatchPartyPage = () => {
 
   if (!pollLoaded) {
     onPollLoad();
-    console.log(voteSaved);
   }
-
 
   return (
     <div>
