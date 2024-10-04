@@ -12,6 +12,7 @@ interface IVideoPlayerProps {
   options: videojs.PlayerOptions;
   roomID: string;
   setRoomID: (roomID: string) => void;
+  blockDisposePlayer?: boolean;
 }
 
 const initialOptions: any = {
@@ -39,6 +40,7 @@ const VideoJSSynced: React.FC<IVideoPlayerProps> = ({
   options,
   roomID,
   setRoomID,
+  blockDisposePlayer
 }) => {
   const videoNode = React.useRef<HTMLVideoElement>(null);
   const playerRef = React.useRef<any>();
@@ -127,7 +129,7 @@ const VideoJSSynced: React.FC<IVideoPlayerProps> = ({
     }
 
     return () => {
-      if (player) {
+      if (player && !blockDisposePlayer) {
         console.log("Disposing player");
         player.dispose();
         playerRef.current = null;
