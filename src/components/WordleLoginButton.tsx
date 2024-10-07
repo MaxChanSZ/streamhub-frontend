@@ -5,6 +5,7 @@ import { User } from "@/utils/types";
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/shadcn/ui/dialog";
 import { Input } from "@/components/shadcn/ui/input";
 import { toast } from "@/components/shadcn/ui/use-toast";
+import { useNavigate } from 'react-router-dom';
 
 const WordleLoginButton: React.FC = () => {
   const { setIsLoggedIn, setUser } = useAppContext();
@@ -13,6 +14,7 @@ const WordleLoginButton: React.FC = () => {
   const [hint, setHint] = useState('');
   const [guesses, setGuesses] = useState<string[]>([]);
   const [currentGuess, setCurrentGuess] = useState('');
+  const navigate = useNavigate();
 
   const fakeUsers: User[] = [
     { id: 9999, username: "maylwin.dev", email: "watergirl@example.com" },
@@ -64,6 +66,7 @@ const WordleLoginButton: React.FC = () => {
       setIsLoggedIn(true);
       toast({ title: "Success", description: "You've won! Logged in successfully!" });
       setIsOpen(false);
+      navigate('/');
     } else if (newGuesses.length >= 5) {
       toast({ title: "Game Over", description: `The word was: ${word}`, variant: "destructive" });
       setIsOpen(false);
