@@ -43,7 +43,7 @@ const SendEmailPage: React.FC = () => {
   };
 
   const generateEmailBody = (party: WatchParty, additionalMessage: string) => {
-    const partyLink = `localhost:5173/join-watch-party`; 
+    const partyLink = `http://localhost:5173/join-watch-party`;
     return `
       You are invited to join our Watch Party!
 
@@ -56,6 +56,7 @@ const SendEmailPage: React.FC = () => {
 
       To join the watch party, please click on the link above or enter the party code: ${party.code}
 
+      Message from the Host:
       ${additionalMessage}
 
       We hope to see you there!
