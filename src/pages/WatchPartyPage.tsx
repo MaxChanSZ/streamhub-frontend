@@ -35,8 +35,8 @@ const WatchPartyPage = () => {
   const videoJsOptions = {
     sources: [
       {
-        // src: data.videoSource,
-        src: "http://localhost:8080/encoded/steamboatwillie_001/master.m3u8",
+         src: data.videoSource,
+        // src: "http://localhost:8080/encoded/steamboatwillie_001/master.m3u8",
         type: "application/x-mpegURL",
       },
     ],
