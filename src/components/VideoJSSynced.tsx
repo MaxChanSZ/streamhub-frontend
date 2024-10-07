@@ -11,6 +11,7 @@ import { CompatClient, Stomp } from "@stomp/stompjs";
 interface IVideoPlayerProps {
   options: videojs.PlayerOptions;
   roomID: string;
+  isHost: boolean;
   setRoomID: (roomID: string) => void;
   blockDisposePlayer?: boolean;
 }
@@ -39,6 +40,7 @@ export interface VideoSyncAction {
 const VideoJSSynced: React.FC<IVideoPlayerProps> = ({
   options,
   roomID,
+  isHost,
   setRoomID,
   blockDisposePlayer
 }) => {
@@ -47,6 +49,7 @@ const VideoJSSynced: React.FC<IVideoPlayerProps> = ({
   let player: any;
   let isReceived: boolean = false;
   const sender = Date.now().toString();
+
 
   // this stomp client will later be accessed by the
   //const [stompClient, setStompClient] = useState<CompatClient | null>(null);
@@ -141,7 +144,7 @@ const VideoJSSynced: React.FC<IVideoPlayerProps> = ({
   // Create a web socket connection with the server for video player synchronization
   React.useEffect(() => {
     const userToken = localStorage.getItem("watchparty-token");
-    console.log(userToken);
+    
     let token = userToken?.substring(1, userToken.length - 1);
     const socket = new SockJS(`http://localhost:8080/video-sync?token=${token}&roomID=${roomID}`);
     const client = Stomp.over(socket);
@@ -192,8 +195,10 @@ const VideoJSSynced: React.FC<IVideoPlayerProps> = ({
 
   // function to send message to server when user plays, pauses, or forwards the video
   const sendVideoActionMessage = (action: VideoSyncAction) => {
+    // only send video actions if the individual is a host
+    // change this condition to 'isHost'
     if (true) {
-      console.log("Sending message to server");
+      console.log("Host is sending message to server");
       stompClient?.send("/app/video", {}, JSON.stringify(action));
     }
   };

@@ -1,20 +1,21 @@
 import { Button } from "@/components/shadcn/ui/button";
-import {
-  AlertDialog,
-  AlertDialogTrigger,
-  AlertDialogContent,
-  AlertDialogHeader,
-  AlertDialogTitle,
-  AlertDialogDescription,
-  AlertDialogFooter,
-  AlertDialogCancel,
-  AlertDialogAction,
-} from "@/components/shadcn/ui/alert-dialog";
+// import {
+//   AlertDialog,
+//   AlertDialogTrigger,
+//   AlertDialogContent,
+//   AlertDialogHeader,
+//   AlertDialogTitle,
+//   AlertDialogDescription,
+//   AlertDialogFooter,
+//   AlertDialogCancel,
+//   AlertDialogAction,
+// } from "@/components/shadcn/ui/alert-dialog";
 import { Input } from "@/components/shadcn/ui/input";
 import { useAppContext } from "@/contexts/AppContext";
 import { useState } from "react";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
+import { toast } from "@/components/shadcn/ui/use-toast";
 
 /**
  * WatchPartyPage component is responsible for rendering the page where users can enter the watch party code.
@@ -26,8 +27,6 @@ const JoinWatchPartyPage = () => {
   var { isLoggedIn } = useAppContext();
   
   // const navigate = useNavigate();
-
-  
 
   if (isLoggedIn) {
     const [ code, setCode ] = useState('');
@@ -45,22 +44,36 @@ const JoinWatchPartyPage = () => {
       )
       .then(
         ( response ) => {
-          console.log(response.data)
-          console.log(response.status)
           if ( response.status == 200 ) {
             if (response.data.token) {
               localStorage.setItem("watchparty-token", JSON.stringify(response.data.token));
               // once the token has been set, redirect to the watch party page with the token
               // already stored in the local storage
-              navigate(`watch-party/${code}`)
+
+              console.log(response.data);
+
+              // store the video url in the state, so it can be accessed by the watchparty page
+              console.log("User is host is: " + response.data.host);
+              navigate(`/watch-party/${code}`, 
+                {
+                  state : {
+                    videoSource: response.data.videoSource,
+                    isHost: response.data.host
+                  }
+                }
+              );
             }
           }
         } 
-      
       )
       .catch(
         ( error ) =>  {
-          console.log("Error encountered" + error)
+          toast({
+            title: "Login Error",
+            description: error.response ? error.response.data : null,
+            variant: "destructive",
+          });
+          console.log(error);
         }
       )
     }
@@ -70,7 +83,7 @@ const JoinWatchPartyPage = () => {
       // make an api call to the backend with the form details to join the watch party
       await joinWatchParty(code, password);
 
-      navigate(`watch-party/${code}`);
+      // navigate(`watch-party/${code}`);
     }
 
     return (
@@ -161,7 +174,7 @@ const JoinWatchPartyPage = () => {
               localStorage.setItem("watchparty-token", JSON.stringify(response.data.token));
               // once the token has been set, redirect to the watch party page with the token
               // already stored in the local storage
-              navigate(`watch-party/${code}`)
+              //navigate(`watch-party/${code}`)
             }
           }
         } 

@@ -3,7 +3,7 @@ import PollView from "@/components/PollView";
 import VideoJSSynced from "@/components/VideoJSSynced";
 import { addVote, changeVote, getWatchpartyPoll } from "@/utils/api-client";
 import { useEffect, useState } from "react";
-import { useParams } from "react-router";
+import { useLocation, useParams } from "react-router";
 import { useAppContext } from "@/contexts/AppContext";
 
 export type PollResponse = {
@@ -24,15 +24,19 @@ export type PollOptionResponse = {
 const WatchPartyPage = () => {
   const params = useParams();
 
-  // console.log(params.sessionId);
+  let location = useLocation();
+  const data = location.state;
+  const isHost = data.isHost;
+  console.log("User is host: " + isHost);
+  console.log("Video url is: " + data.videoSource);
 
   const sessionId = params.sessionId ? params.sessionId.toString() : "1";
 
   const videoJsOptions = {
     sources: [
       {
-        // replace src with videoSource once that functionality has been created
-        src: "http://localhost:8080/encoded/steamboatwillie_001/master.m3u8",
+         src: data.videoSource,
+        // src: "http://localhost:8080/encoded/steamboatwillie_001/master.m3u8",
         type: "application/x-mpegURL",
       },
     ],
@@ -112,6 +116,7 @@ const WatchPartyPage = () => {
             options={videoJsOptions}
             roomID={roomID}
             setRoomID={setRoomID}
+          isHost={isHost}
           />
         </div>
         <div className="col-span-1">
