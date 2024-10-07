@@ -152,6 +152,7 @@ const JoinWatchPartyPage = () => {
   } else {
     const [ code, setCode ] = useState('');
     const [ password, setPassword ] = useState('');
+    const navigate = useNavigate();
 
     const joinWatchParty = async (code: string, password: string) => {
       await axios
@@ -171,7 +172,14 @@ const JoinWatchPartyPage = () => {
               localStorage.setItem("watchparty-token", JSON.stringify(response.data.token));
               // once the token has been set, redirect to the watch party page with the token
               // already stored in the local storage
-              //navigate(`watch-party/${code}`)
+              
+              navigate(`/watch-party/${code}`, 
+                {
+                  state : {
+                    videoSource: response.data.videoSource
+                  }
+                }
+              );
             }
           }
         } 
