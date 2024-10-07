@@ -15,7 +15,7 @@ const WordleLoginButton: React.FC = () => {
   const [guesses, setGuesses] = useState<string[]>([]);
   const [currentGuess, setCurrentGuess] = useState('');
   const [showSuccessDialog, setShowSuccessDialog] = useState(false);
-  const [countdown, setCountdown] = useState(2);
+  const [countdown, setCountdown] = useState(3);
   const navigate = useNavigate();
 
   const fakeUsers: User[] = [
@@ -84,7 +84,7 @@ const WordleLoginButton: React.FC = () => {
             setShowSuccessDialog(false);
             setIsOpen(false);
             navigate('/');  
-            return 2;
+            return 3;
           }
           return prevCount - 1;
         });
@@ -133,11 +133,6 @@ const WordleLoginButton: React.FC = () => {
                 <p>Congratulations! You've guessed the word correctly.</p>
                 <p>The word was: <strong>{word}</strong></p>
                 <p>Redirecting in {countdown} seconds...</p>
-                <div className="flex justify-center">
-                  <div className="w-20 h-20 border-4 border-blue-500 rounded-full flex items-center justify-center text-4xl font-bold text-blue-500">
-                    {countdown}
-                  </div>
-                </div>
               </div>
             ) : (
               <div className="space-y-4 text-black">
@@ -162,7 +157,7 @@ const WordleLoginButton: React.FC = () => {
                 <div className="flex space-x-2">
                   <Input
                     value={currentGuess}
-                    onChange={(e) => setCurrentGuess(e.target.value.toLowerCase())}
+                    onChange={(e: { target: { value: string; }; }) => setCurrentGuess(e.target.value.toLowerCase())}
                     maxLength={5}
                     placeholder="Enter your guess"
                     className="text-black"
