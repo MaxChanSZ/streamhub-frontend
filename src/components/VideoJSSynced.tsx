@@ -196,7 +196,8 @@ const VideoJSSynced: React.FC<IVideoPlayerProps> = ({
   // function to send message to server when user plays, pauses, or forwards the video
   const sendVideoActionMessage = (action: VideoSyncAction) => {
     // only send video actions if the individual is a host
-    if (isHost) {
+    // change this condition to 'isHost'
+    if (true) {
       console.log("Host is sending message to server");
       stompClient?.send("/app/video", {}, JSON.stringify(action));
     }
