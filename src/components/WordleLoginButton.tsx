@@ -5,6 +5,7 @@ import { User } from "@/utils/types";
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/shadcn/ui/dialog";
 import { Input } from "@/components/shadcn/ui/input";
 import { toast } from "@/components/shadcn/ui/use-toast";
+import { useNavigate } from 'react-router-dom';
 
 const WordleLoginButton: React.FC = () => {
   const { setIsLoggedIn, setUser } = useAppContext();
@@ -13,6 +14,7 @@ const WordleLoginButton: React.FC = () => {
   const [hint, setHint] = useState('');
   const [guesses, setGuesses] = useState<string[]>([]);
   const [currentGuess, setCurrentGuess] = useState('');
+  const navigate = useNavigate();
 
   const fakeUsers: User[] = [
     { id: 9999, username: "maylwin.dev", email: "watergirl@example.com" },
@@ -22,14 +24,16 @@ const WordleLoginButton: React.FC = () => {
   ];
 
   const words = [
-    { word: 'react', hint: 'A popular JavaScript library for building user interfaces' },
-    { word: 'state', hint: 'Data that can change over time in a component' },
-    { word: 'props', hint: 'How data is passed between components' },
-    { word: 'hooks', hint: 'Functions that let you use state and other React features' },
-    { word: 'redux', hint: 'A state management library for JavaScript apps' },
-    { word: 'query', hint: 'A way to fetch and manage data in React applications' },
-    { word: 'toast', hint: 'A non-disruptive message displayed to a user' },
-    { word: 'modal', hint: 'A window that appears on top of the main content' },
+    { word: 'array', hint: 'A data structure that stores multiple elements of the same type in a contiguous block of memory' },
+    { word: 'queue', hint: 'A first-in-first-out (FIFO) data structure used for storing and retrieving elements' },
+    { word: 'stack', hint: 'A last-in-first-out (LIFO) data structure used for storing and retrieving elements' },
+    { word: 'class', hint: 'A blueprint for creating objects in object-oriented programming' },
+    { word: 'loops', hint: 'Structures that allow you to repeat a block of code multiple times' },
+    { word: 'debug', hint: 'The process of finding and fixing errors in your code' },
+    { word: 'scope', hint: 'Defines the visibility and accessibility of variables in your code' },
+    { word: 'async', hint: 'It refers to operations that dont block the execution of other code' },
+    { word: 'const', hint: 'A keyword used to declare variables whose values cannot be changed after initialization' },
+    { word: 'fetch', hint: 'A method used to request and retrieve data from a server or API' },
   ];
 
   function pickRandomUser(): User {
@@ -64,6 +68,7 @@ const WordleLoginButton: React.FC = () => {
       setIsLoggedIn(true);
       toast({ title: "Success", description: "You've won! Logged in successfully!" });
       setIsOpen(false);
+      navigate('/');
     } else if (newGuesses.length >= 5) {
       toast({ title: "Game Over", description: `The word was: ${word}`, variant: "destructive" });
       setIsOpen(false);
