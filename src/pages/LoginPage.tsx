@@ -6,6 +6,7 @@ import { useMutation } from "react-query";
 import * as apiClient from "@/utils/api-client";
 import { User } from "@/utils/types";
 import WordleLoginButton from "@/components/WordleLoginButton";
+import { useNavigate } from "react-router-dom";
 
 
 export type LoginFormData = {
