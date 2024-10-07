@@ -6,7 +6,7 @@ import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/s
 import { Input } from "@/components/shadcn/ui/input";
 import { toast } from "@/components/shadcn/ui/use-toast";
 import { useNavigate } from 'react-router-dom';
-import { useNavigate } from 'react-router-dom';
+
 
 const WordleLoginButton: React.FC = () => {
   const { setIsLoggedIn, setUser } = useAppContext();
