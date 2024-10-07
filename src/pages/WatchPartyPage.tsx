@@ -8,6 +8,9 @@ const WatchPartyPage = () => {
 
   let location = useLocation();
   const data = location.state;
+  const isHost = data.isHost;
+  console.log("User is host: " + isHost);
+  console.log("Video url is: " + data.videoSource);
 
   const sessionId = params.sessionId ? params.sessionId.toString() : "1";
 
@@ -29,6 +32,7 @@ const WatchPartyPage = () => {
           options={videoJsOptions}
           roomID={roomID}
           setRoomID={setRoomID}
+          isHost={isHost}
         />
       </div>
       <div className="col-span-1">

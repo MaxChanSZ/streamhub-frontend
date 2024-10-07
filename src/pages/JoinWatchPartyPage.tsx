@@ -50,12 +50,15 @@ const JoinWatchPartyPage = () => {
               // once the token has been set, redirect to the watch party page with the token
               // already stored in the local storage
 
-              // store the video url in the state, so it can be accessed by the watchparty page
+              console.log(response.data);
 
+              // store the video url in the state, so it can be accessed by the watchparty page
+              console.log("User is host is: " + response.data.host);
               navigate(`/watch-party/${code}`, 
                 {
                   state : {
-                    videoSource: response.data.videoSource
+                    videoSource: response.data.videoSource,
+                    isHost: response.data.host
                   }
                 }
               );

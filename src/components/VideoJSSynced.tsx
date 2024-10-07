@@ -11,6 +11,7 @@ import { CompatClient, Stomp } from "@stomp/stompjs";
 interface IVideoPlayerProps {
   options: videojs.PlayerOptions;
   roomID: string;
+  isHost: boolean;
   setRoomID: (roomID: string) => void;
 }
 
@@ -38,6 +39,7 @@ export interface VideoSyncAction {
 const VideoJSSynced: React.FC<IVideoPlayerProps> = ({
   options,
   roomID,
+  isHost,
   setRoomID,
 }) => {
   const videoNode = React.useRef<HTMLVideoElement>(null);
@@ -45,6 +47,7 @@ const VideoJSSynced: React.FC<IVideoPlayerProps> = ({
   let player: any;
   let isReceived: boolean = false;
   const sender = Date.now().toString();
+
 
   // this stomp client will later be accessed by the
   //const [stompClient, setStompClient] = useState<CompatClient | null>(null);
@@ -190,8 +193,9 @@ const VideoJSSynced: React.FC<IVideoPlayerProps> = ({
 
   // function to send message to server when user plays, pauses, or forwards the video
   const sendVideoActionMessage = (action: VideoSyncAction) => {
-    if (true) {
-      console.log("Sending message to server");
+    // only send video actions if the individual is a host
+    if (isHost) {
+      console.log("Host is sending message to server");
       stompClient?.send("/app/video", {}, JSON.stringify(action));
     }
   };

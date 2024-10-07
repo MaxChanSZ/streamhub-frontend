@@ -27,6 +27,9 @@ export type UpdatePollOptionRequestData = {
 export type WatchPartyResponseData = {
   id: number;
   code: string;
+  token: string;
+  host: boolean;
+  videoSource: string;
   createdDate: number[];
 };
 
@@ -60,6 +63,9 @@ const CreateWatchPartyPage = () => {
   const [scheduledTime, setScheduledTime] = useState<string>('');
   const [partyCode, setPartyCode] = useState<string>('');
   const [password, setPassword] = useState<string>('');
+  // add properties for video source and host
+  const [videoSource, setVideoSource] = useState<string>('');
+  const [ isHost, setIsHost ] = useState<boolean>(false); 
   const [isLoading, setIsLoading] = useState<boolean>(false);
   const [poll, setPoll] = useState<null|Poll>(null);
   const [error, setError] = useState<string | null>(null);
@@ -77,7 +83,16 @@ const CreateWatchPartyPage = () => {
       // we need to store the video url in the state from the create watch party response before we can
       // navigate to the next page.
       // if not, the video source will be null and there will be an error
-      // navigate(`/watch-party/${partyCode}`);
+      // set the isHost and video source values in the state so it can be used in the next page
+
+      navigate(`/watch-party/${partyCode}`,
+        {
+          state : {
+            videoSource: videoSource,
+            isHost: isHost
+          }
+        }
+      );
     }
   }, [countdown, navigate, partyCode]);
 
@@ -148,6 +163,13 @@ const CreateWatchPartyPage = () => {
     try {
       const response = await createWatchParty(formData);
       setPartyCode(response.code);
+      setVideoSource(response.videoSource);
+      setIsHost(response.host);
+      console.log("Is host is set to: " + isHost);
+
+      // store the token for the host
+      localStorage.setItem("watchparty-token", JSON.stringify(response.token));
+
       console.log('Watch Party created:', response);
       if (poll) {
         await onPollCreate(poll, response.id);
