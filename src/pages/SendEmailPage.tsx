@@ -41,26 +41,33 @@ const SendEmailPage: React.FC = () => {
   const generateEmailSubject = (party: WatchParty) => {
     return `Invitation to Watch Party: ${party.partyName}`;
   };
-
+  
   const generateEmailBody = (party: WatchParty, additionalMessage: string) => {
-    const partyLink = `localhost:5173/join-watch-party`; 
+    const partyLink = `http://localhost:5173/join-watch-party`; 
     return `
-      You are invited to join our Watch Party!
-
-      Event Details:
-      - Party Name: ${party.partyName}
-      - Date: ${party.scheduledDate}
-      - Time: ${party.scheduledTime}
-      - Password: ${party.password}
-      - Party Link: ${partyLink}
-
-      To join the watch party, please click on the link above or enter the party code: ${party.code}
-
-      ${additionalMessage}
-
-      We hope to see you there!
+      <html>
+      <body>
+        <p>You are invited to join our Watch Party!</p>
+  
+        <h3>Event Details:</h3>
+        <ul>
+          <li>Party Name: ${party.partyName}</li>
+          <li>Date: ${party.scheduledDate}</li>
+          <li>Time: ${party.scheduledTime}</li>
+          <li>Password: ${party.password}</li>
+          <li>Party Link: <a href="${partyLink}">${partyLink}</a></li>
+        </ul>
+  
+        <p>To join the watch party, please click on the link above or enter the party code: ${party.code}</p>
+  
+        <p>${additionalMessage}</p>
+  
+        <p>We hope to see you there!</p>
+      </body>
+      </html>
     `.trim();
   };
+  
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
