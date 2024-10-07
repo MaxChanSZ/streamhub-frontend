@@ -8,7 +8,7 @@ import {
   uploadImage
 } from "@/utils/api-client";
 import { useAppContext } from "@/contexts/AppContext";
-import Poll, { PollOptionRequestData, PollRequestData } from "@/components/Poll";
+import PollForm, { PollOptionRequestData, PollRequestData, Poll } from "@/components/PollForm";
 import { useNavigate } from "react-router-dom";
 
 export type WatchPartyFormData = {
@@ -36,7 +36,7 @@ export type PollResponseData = {
 };
 
 export type PollOptionResponseData = {
-  id: number;
+  id?: number;
   value: string;
   description: string;
   imageUrl: string;
@@ -217,7 +217,7 @@ const CreateWatchPartyPage = () => {
         {/* POLL FOR WATCH PARTY */}
         {poll ? (
           <div>
-            <Poll 
+            <PollForm 
               poll={poll}
               setPoll={setPoll}
             />
@@ -267,6 +267,7 @@ const CreateWatchPartyPage = () => {
         <div className="mt-4 p-4 bg-green-100 border border-green-400 text-green-700 rounded">
           <p>Your party code is: <strong>{partyCode}</strong></p>
           <p className="mt-2 text-sm">Share this code with your friends to invite them to your watch party!</p>
+          <p className="mt-2">Redirecting in {countdown} seconds...</p>
         </div>
       )}
        {isPollCreated && (
