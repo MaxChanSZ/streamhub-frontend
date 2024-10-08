@@ -12,41 +12,47 @@ export type PollResponse = {
   pollOptionList: PollOptionResponse[];
   voted: boolean;
   selectedPollOption: PollOptionResponse;
-}
+};
 export type PollOptionResponse = {
   pollOptionId: number;
   value: string;
   description: string;
   imageUrl: string;
   voteCount: number;
-}
+};
 
 const WatchPartyPage = () => {
   const params = useParams();
 
   let location = useLocation();
   const data = location.state;
+  console.log(data);
 
   const sessionId = params.sessionId ? params.sessionId.toString() : "1";
 
   const videoJsOptions = {
     sources: [
       {
-        src: data.videoSource,
+        // src: data.videoSource,
+        src: "http://localhost:8080/encoded/steamboatwillie_001/master.m3u8",
         type: "application/x-mpegURL",
       },
     ],
   };
 
   const [roomID, setRoomID] = useState(sessionId);
-  const [watchpartyPoll, setWatchPartyPoll] = useState<PollResponse|null>(null);
-  const [optionChecked, setOptionChecked] = useState<PollOptionResponse|null>(null);
+  const [watchpartyPoll, setWatchPartyPoll] = useState<PollResponse | null>(
+    null
+  );
+  const [optionChecked, setOptionChecked] = useState<PollOptionResponse | null>(
+    null
+  );
   const [blockDisposePlayer, setBlockDisposePlayer] = useState<boolean>(false);
   const [voteSaved, setVoteSaved] = useState(false);
   const [pollLoaded, setPollLoaded] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [success, setSuccess] = useState<string | null>(null);
-  
+
   const { user } = useAppContext();
 
   useEffect(() => {
@@ -55,9 +61,9 @@ const WatchPartyPage = () => {
   }, [optionChecked]);
 
   // to retrieve poll and its option
-  const onPollLoad = async() => {
+  const onPollLoad = async () => {
     try {
-      if(user) {
+      if (user) {
         const response = await getWatchpartyPoll(sessionId, user?.id);
         setWatchPartyPoll(response);
         setPollLoaded(true);
@@ -69,9 +75,9 @@ const WatchPartyPage = () => {
         }
       }
     } catch (error) {
-        setError("Error retrieving poll");
+      setError("Error retrieving poll");
     }
-  }
+  };
 
   // when user votes for first time on a poll
   const onVoteCreate = async () => {
@@ -90,12 +96,15 @@ const WatchPartyPage = () => {
   const onVoteChange = async () => {
     if (watchpartyPoll && optionChecked && user) {
       try {
-        changeVote(watchpartyPoll?.pollId, optionChecked?.pollOptionId, user?.id);
+        changeVote(
+          watchpartyPoll?.pollId,
+          optionChecked?.pollOptionId,
+          user?.id
+        );
         setSuccess("Voting updated successfully!");
       } catch (error) {
         setError("Error updating vote on this poll");
       }
-      
     }
   };
 
@@ -118,7 +127,7 @@ const WatchPartyPage = () => {
           <LiveChat roomID={roomID} />
         </div>
       </div>
-      {pollLoaded && watchpartyPoll && user &&
+      {pollLoaded && watchpartyPoll && user && (
         <div>
           <PollView
             poll={watchpartyPoll}
@@ -139,11 +148,9 @@ const WatchPartyPage = () => {
             </div>
           )}
         </div>
-      }
+      )}
     </div>
   );
 };
 
 export default WatchPartyPage;
-
-
