@@ -77,7 +77,7 @@ const CreateWatchPartyPage = () => {
       // we need to store the video url in the state from the create watch party response before we can
       // navigate to the next page.
       // if not, the video source will be null and there will be an error
-      // navigate(`/watch-party/${partyCode}`);
+      navigate(`/watch-party/${partyCode}`);
     }
   }, [countdown, navigate, partyCode]);
 
