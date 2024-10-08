@@ -78,7 +78,7 @@ const LandingPage = () => {
         />
 
         <div className={`text-white `}>
-          <div className="py-4">
+          <div className="py-4 text-center">
             <Button
               onClick={() => handleButtonClick("login")}
               variant="ghost"
@@ -93,13 +93,13 @@ const LandingPage = () => {
             >
               Register
             </Button>
-            <Button
+            {/* <Button
               variant="ghost"
               className={buttonTextFormat}
               onClick={() => handleButtonClick("watch")}
             >
               Join Watch Party
-            </Button>
+            </Button> */}
           </div>
         </div>
       </div>
