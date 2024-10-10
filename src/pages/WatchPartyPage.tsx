@@ -31,7 +31,6 @@ const WatchPartyPage = () => {
   console.log("Video url is: " + data.videoSource);
 
   const sessionId = params.sessionId ? params.sessionId.toString() : "1";
-
   const videoJsOptions = {
     sources: [
       {
@@ -116,7 +115,7 @@ const WatchPartyPage = () => {
             options={videoJsOptions}
             roomID={roomID}
             setRoomID={setRoomID}
-          isHost={isHost}
+            isHost={isHost}
           />
         </div>
         <div className="col-span-1">
@@ -126,6 +125,7 @@ const WatchPartyPage = () => {
       {pollLoaded && watchpartyPoll && user &&
         <div>
           <PollView
+            watchPartyCode={sessionId}
             poll={watchpartyPoll}
             optionChecked={optionChecked}
             voteSaved={voteSaved}

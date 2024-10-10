@@ -96,7 +96,7 @@ const CreateWatchPartyPage = () => {
     }
   }, [countdown, navigate, partyCode]);
 
-  const onPollCreate = async(poll: Poll, watchPartyId: number) => {
+  const onPollCreate = async(poll: Poll, partyCode: string) => {
     let optionRequestsData: PollOptionRequestData[] = [];
       for (let i=0; i<poll.optionSize; i++) {
         const {
@@ -114,7 +114,7 @@ const CreateWatchPartyPage = () => {
       }
 
       const pollRequestData: PollRequestData = {
-        watchPartyID: watchPartyId,
+        partyCode,
         question: poll.question,
         pollOptionRequests: optionRequestsData
       }
@@ -172,7 +172,7 @@ const CreateWatchPartyPage = () => {
 
       console.log('Watch Party created:', response);
       if (poll) {
-        await onPollCreate(poll, response.id);
+        await onPollCreate(poll, response.code);
       }
       setCountdown(5); 
     } catch (error) {
