@@ -324,7 +324,7 @@ const categories: { title: string; href: string }[] = [
   { title: "Category 3", href: "/watch/1/1" },
   { title: "Category 4", href: "/watch/1/1" },
   { title: "Category 5", href: "/watch/1/1" },
-  { title: "Category 6", href: "/watch/1/1" },
+  { title: "Category 6", href: "/game" },
 ];
 
 const wpCategories: { title: string; href: string }[] = [
