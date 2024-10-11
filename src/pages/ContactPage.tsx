@@ -27,7 +27,7 @@ const ContactPage: React.FC = () => {
             </div>
             <div className="flex items-center">
               <Mail className="mr-2" />
-              <p>info@fdmsingapore.com</p>
+              <p>kevin.yeong@fdmsingapore.com</p>
             </div>
             <div className="flex items-center">
               <Linkedin className="mr-2" />
