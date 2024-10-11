@@ -1,0 +1,118 @@
+/* Navbar.css */
+
+/* Container for the navbar */
+.navbar-container {
+    height: 10.5vh; /* Base height */
+    background-color: black;
+    display: flex;
+    align-items: center;
+    padding: 0 1rem; /* Horizontal padding */
+    margin-top: 0.75rem; /* mt-3 */
+    padding-bottom: 1rem; /* pb-4 */
+}
+
+/* Logo wrapper styles */
+.logo-wrapper {
+    flex-shrink: 0;
+    margin-left: 0.5rem; /* ml-2 */
+    margin-right: 0.5rem; /* mr-2 */
+}
+
+/* Responsive margin adjustments */
+@media (min-width: 640px) {
+    .logo-wrapper {
+        margin-left: 2.5rem; /* sm:ml-10 */
+        margin-right: 1.5rem; /* sm:mr-6 */
+    }
+}
+@media (min-width: 768px) {
+    .logo-wrapper {
+        margin-left: 2.5rem; /* md:ml-10 */
+        margin-right: 1.5rem; /* md:mr-6 */
+    }
+}
+@media (min-width: 1024px) {
+    .logo-wrapper {
+        margin-left: 3.5rem; /* lg:ml-14 */
+        margin-right: 2.5rem; /* lg:mr-10 */
+    }
+}
+@media (min-width: 1280px) {
+    .logo-wrapper {
+        margin-left: 4rem; /* xl:ml-16 */
+        margin-right: 3rem; /* xl:mr-12 */
+    }
+}
+@media (min-width: 1536px) {
+    .logo-wrapper {
+        margin-left: 4.5rem; /* 2xl:ml-18 */
+        margin-right: 3.5rem; /* 2xl:mr-14 */
+    }
+}
+@media (min-width: 1600px) {
+    .logo-wrapper {
+        margin-left: 5rem; /* 3xl:ml-20 */
+        margin-right: 4rem; /* 3xl:mr-16 */
+    }
+}
+@media (min-width: 1920px) {
+    .logo-wrapper {
+        margin-left: 5.5rem; /* 4xl:ml-22 */
+        margin-right: 4.5rem; /* 4xl:mr-18 */
+    }
+}
+@media (min-width: 2560px) {
+    .logo-wrapper {
+        margin-left: 6rem; /* 5xl:ml-24 */
+        margin-right: 5rem; /* 5xl:mr-20 */
+    }
+}
+
+/* Logo styles */
+.logo {
+    width: 8rem; /* Base width */
+    height: auto;
+    object-fit: contain;
+}
+
+/* Responsive logo sizes */
+@media (min-width: 640px) {
+    .logo {
+        width: 12rem; /* sm:w-[12rem] */
+    }
+}
+@media (min-width: 768px) {
+    .logo {
+        width: 12rem; /* md:w-[12rem] */
+    }
+}
+@media (min-width: 1024px) {
+    .logo {
+        width: 12rem; /* lg:w-[12rem] */
+    }
+}
+@media (min-width: 1280px) {
+    .logo {
+        width: 14rem; /* xl:w-[14rem] */
+    }
+}
+@media (min-width: 1536px) {
+    .logo {
+        width: 16rem; /* 2xl:w-[16rem] */
+    }
+}
+@media (min-width: 1600px) {
+    .logo {
+        width: 18rem; /* 3xl:w-[18rem] */
+    }
+}
+@media (min-width: 1920px) {
+    .logo {
+        width: 20rem; /* 4xl:w-[20rem] */
+    }
+}
+@media (min-width: 2560px) {
+    .logo {
+        width: 24rem; /* 5xl:w-[24rem] */
+    }
+}
