@@ -76,7 +76,7 @@ const NavbarProfile = () => {
                 to={`/update-profile`}
                 onClick={() => setIsProfileMenuOpen(false)}
               >
-                Update Profile
+                Account
               </Link>
             </Button>
             <Button

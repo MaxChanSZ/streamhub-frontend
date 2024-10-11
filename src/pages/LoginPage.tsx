@@ -8,7 +8,6 @@ import { User } from "@/utils/types";
 import WordleLoginButton from "@/components/WordleLoginButton";
 import { useNavigate } from "react-router-dom";
 
-
 export type LoginFormData = {
   username: string;
   password: string;
@@ -30,10 +29,7 @@ const LoginPage = () => {
         title: "Success",
         description: "Logged in successfully!",
       });
-      setUser({
-        id: data.id,
-        username: data.username,
-      });
+      setUser(data);
       setIsLoggedIn(true);
       navigate("/");
     },
