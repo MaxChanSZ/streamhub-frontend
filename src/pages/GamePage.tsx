@@ -3,8 +3,8 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/shadcn/ui
 import { Input } from "@/components/shadcn/ui/input";
 import { Button } from "@/components/shadcn/ui/button";
 import TicTacToe from '../components/TicTacToe';
-import GuessTheNumber from '../components/GuessTheNumber';
-import MemoryGame from '../components/MemoryGame';
+import Chess from '../components/Chess';
+import Tetris from '../components/Tetris';
 
 const GamePage: React.FC = () => {
   const [password, setPassword] = useState('');
@@ -56,17 +56,17 @@ const GamePage: React.FC = () => {
       <Tabs defaultValue="tictactoe" className="w-full">
         <TabsList className="grid w-full grid-cols-3">
           <TabsTrigger value="tictactoe">Tic Tac Toe</TabsTrigger>
-          <TabsTrigger value="guessthenumber">Guess the Number</TabsTrigger>
-          <TabsTrigger value="memorygame">Memory Game</TabsTrigger>
+          <TabsTrigger value="chess">Chess</TabsTrigger>
+          <TabsTrigger value="tetris">Tetris</TabsTrigger>
         </TabsList>
         <TabsContent value="tictactoe">
           <TicTacToe />
         </TabsContent>
-        <TabsContent value="guessthenumber">
-          <GuessTheNumber />
+        <TabsContent value="chess">
+          <Chess />
         </TabsContent>
-        <TabsContent value="memorygame">
-          <MemoryGame />
+        <TabsContent value="tetris">
+          <Tetris />
         </TabsContent>
       </Tabs>
     </div>
