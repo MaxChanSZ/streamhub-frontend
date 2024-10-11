@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { Button } from "@/components/shadcn/ui/button";
-import { Input } from "@/components/shadcn/ui/input";
+
 import { 
   createPoll,
   createWatchParty,
@@ -10,6 +10,7 @@ import {
 import { useAppContext } from "@/contexts/AppContext";
 import PollForm, { PollOptionRequestData, PollRequestData, Poll } from "@/components/PollForm";
 import { useNavigate } from "react-router-dom";
+import WatchPartyForm from "@/components/WatchPartyForm";
 
 export type WatchPartyFormData = {
   partyName: string;
@@ -58,11 +59,13 @@ export const Label: React.FC<React.LabelHTMLAttributes<HTMLLabelElement>> = ({ c
  * @return {JSX.Element} The rendered CreateWatchPartyPage component.
  */
 const CreateWatchPartyPage = () => {
-  const [partyName, setPartyName] = useState<string>('');
-  const [scheduledDate, setScheduledDate] = useState<string>('');
-  const [scheduledTime, setScheduledTime] = useState<string>('');
+  const [watchParty, setWatchParty] = useState<WatchPartyForm>({
+    partyName: "",
+    scheduledDate: "",
+    scheduledTime: "",
+    password: "",
+  });
   const [partyCode, setPartyCode] = useState<string>('');
-  const [password, setPassword] = useState<string>('');
   // add properties for video source and host
   const [videoSource, setVideoSource] = useState<string>('');
   const [ isHost, setIsHost ] = useState<boolean>(false); 
@@ -153,11 +156,11 @@ const CreateWatchPartyPage = () => {
     }
 
     const formData: WatchPartyFormData = {
-      partyName,
+      partyName: watchParty.partyName,
       accountID,
-      password,
-      scheduledDate,
-      scheduledTime
+      password: watchParty.password,
+      scheduledDate: watchParty.scheduledDate,
+      scheduledTime: watchParty.scheduledTime
     };
   
     try {
@@ -189,52 +192,11 @@ const CreateWatchPartyPage = () => {
         Create Watch Party
       </h2>
       <form onSubmit={onFormSubmit} className="space-y-4">
-        <div>
-          <Label htmlFor="partyName">Watch Party Name</Label>
-          <Input
-            id="partyName"
-            type="text"
-            placeholder="e.g., Horror Night"
-            value={partyName}
-            onChange={(e) => setPartyName(e.target.value)}
-            className="w-full font-alatsi"
-            required
-          />
-        </div>
-        <div>
-          <Label htmlFor="password">Password</Label>
-          <Input
-            id="password"
-            type="password"
-            placeholder="Watchparty Password"
-            value={password}
-            onChange={(e) => setPassword(e.target.value)}
-            className="w-full font-alatsi"
-            required
-          />
-        </div>
-        <div>
-          <Label htmlFor="scheduledDate">Date</Label>
-          <Input
-            id="scheduledDate"
-            type="date"
-            value={scheduledDate}
-            onChange={(e) => setScheduledDate(e.target.value)}
-            className="w-full font-alatsi"
-            required
-          />
-        </div>
-        <div>
-          <Label htmlFor="scheduledTime">Time</Label>
-          <Input
-            id="scheduledTime"
-            type="time"
-            value={scheduledTime}
-            onChange={(e) => setScheduledTime(e.target.value)}
-            className="w-full font-alatsi"
-            required
-          />
-        </div>
+       {/* WATCHPARTY FORM */}
+       <WatchPartyForm 
+          watchParty={watchParty}
+          setWatchParty={setWatchParty}
+       />
         
         {/* POLL FOR WATCH PARTY */}
         {poll ? (
@@ -244,13 +206,13 @@ const CreateWatchPartyPage = () => {
               setPoll={setPoll}
             />
             <Button
-              type="button"
-              variant="default"
-              className="w-full text-base py-2 font-alatsi border"
-              onClick={() => setPoll(null)}
-            >
-            Cancel Poll
-          </Button>
+                type="button"
+                variant="default"
+                className="w-full text-base py-2 font-alatsi border"
+                onClick={() => setPoll(null)}
+              >
+              Cancel Poll
+            </Button>
           </div>
         ) : (
           <Button

@@ -21,6 +21,7 @@ import { ProtectedRoute } from "./ProtectedRoute";
 import LandingPage from "@/pages/LandingPage";
 import JoinWatchPartyPage from "@/pages/JoinWatchPartyPage";
 import NotFoundPage from "@/pages/NotFoundPage";
+import ManageWatchPartyPage from "@/pages/ManageWatchPartyPage";
 
 interface ReactDOMRunProps {
 }
@@ -126,6 +127,10 @@ const router = createBrowserRouter([
       {
         path: "join-watch-party",
         element: <JoinWatchPartyPage />,
+      },
+      {
+        path: "manage-watch-party",
+        element: <ManageWatchPartyPage />,
       },
     ],
   },
