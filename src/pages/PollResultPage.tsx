@@ -1,7 +1,7 @@
 import React, { useState, useRef, useEffect } from 'react';
 import { ChevronDown, ChevronUp } from 'lucide-react';
 import { useAppContext } from "@/contexts/AppContext";
-import { fetchWatchParties, getWatchpartyPoll } from '@/utils/api-client';
+import { fetchWatchPartiesWithPoll, getWatchpartyPoll } from '@/utils/api-client';
 import { PollOptionResponse, PollResponse } from './WatchPartyPage';
 import { useLocation } from 'react-router-dom';
 
@@ -120,14 +120,14 @@ const WatchPartyDropdown: React.FC<{ onSelect: (partyCode: string) => void, setE
 
   useEffect(() => {
     if (user) {
-      fetchAllWatchParties();
+      fetchAllWatchPartiesWithPoll();
     }
   }, [user]);
 
-  const fetchAllWatchParties = async () => {
+  const fetchAllWatchPartiesWithPoll = async () => {
     try {
       if (user && user.id) {
-        const response = await fetchWatchParties();
+        const response = await fetchWatchPartiesWithPoll();
         setWatchParties(response);
       }
     } catch (error) {
@@ -137,23 +137,32 @@ const WatchPartyDropdown: React.FC<{ onSelect: (partyCode: string) => void, setE
   };
 
   return (
-      <select
-        onChange={(e) => onSelect(e.target.value)}
-        className="w-full p-2 mb-4 bg-gray-700 text-white border border-gray-600 rounded-md"
-      >
-        <option value={selectedWatchPartyCode}>Select a watch party to view Poll Results</option>
-        {watchParties.map((party) => (
-          <option key={party.id} value={party.code} selected={party.code == selectedWatchPartyCode}>
-            {party.partyName} - {party.scheduledDate} {party.scheduledTime}
-          </option>
-        ))}
-      </select>
+    <div>
+      {watchParties.length > 0 &&
+        <select
+          onChange={(e) => onSelect(e.target.value)}
+          className="w-full p-2 mb-4 bg-gray-700 text-white border border-gray-600 rounded-md"
+        >
+          <option value={selectedWatchPartyCode}>Select a watch party to view Poll Results</option>
+          {watchParties.map((party) => (
+            <option key={party.id} value={party.code} selected={party.code == selectedWatchPartyCode}>
+              {party.partyName} - {party.scheduledDate} {party.scheduledTime}
+            </option>
+          ))}
+        </select>
+      }
+      {watchParties.length == 0 && (
+          <div className="mt-4 p-4 bg-yellow-100 border border-yellow-400 text-yellow-700 rounded">
+            <p>No watchparty poll created yet!</p>
+          </div>
+      )}
+    </div>
   );
 };
 
 const PollResultPage: React.FC = () => {
   let location = useLocation();
-  const code = location.state.watchPartyCode ? location.state.watchPartyCode : "";
+  const code = location.state?.watchPartyCode ? location.state.watchPartyCode : "";
   window.scrollTo(0, 0);
   
   const [selectedWatchPartyCode, setSelectedWatchPartyCode] = useState<string>(code);

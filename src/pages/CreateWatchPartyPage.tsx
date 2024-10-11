@@ -294,7 +294,7 @@ const CreateWatchPartyPage = () => {
       )}
        {isPollCreated && (
         <div className="mt-4 p-4 bg-green-100 border border-green-400 text-green-700 rounded">
-          <p className="mt-2 text-sm">Poll successfully created!</p>
+          <p>Poll successfully created!</p>
         </div>
       )}
     </div>
