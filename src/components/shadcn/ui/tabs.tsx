@@ -59,17 +59,18 @@ export const TabsTrigger: React.FC<TabsTriggerProps> = ({ value, children, class
 };
 
 interface TabsContentProps {
-  value: string;
-  children: ReactNode;
-}
-
-export const TabsContent: React.FC<TabsContentProps> = ({ value, children }) => {
-  const context = useContext(TabsContext);
-  if (!context) throw new Error('TabsContent must be used within a Tabs component');
-
-  const { activeTab } = context;
-
-  if (activeTab !== value) return null;
-
-  return <div>{children}</div>;
-};
+    value: string;
+    children: ReactNode;
+    className?: string;  
+  }
+  
+  export const TabsContent: React.FC<TabsContentProps> = ({ value, children, className }) => {
+    const context = useContext(TabsContext);
+    if (!context) throw new Error('TabsContent must be used within a Tabs component');
+  
+    const { activeTab } = context;
+  
+    if (activeTab !== value) return null;
+  
+    return <div className={className}>{children}</div>;  
+  };
