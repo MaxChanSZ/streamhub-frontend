@@ -186,7 +186,7 @@ export const PollOptionView = ({
                     {pollOptionView.description && isOverflowing && (
                         <button 
                             onClick={onClickReadMoreOrShowLess} 
-                            className="text-blue-400 text-sm flex items-center mt-1 hover:text-blue-300 relative z-20"
+                            className="text-blue-600 text-sm flex items-center mt-1 hover:text-blue-300 relative z-20"
                         >
                             {expanded ? (
                             <>

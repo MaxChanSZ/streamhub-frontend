@@ -184,10 +184,12 @@ export const PollForm: React.FC<PollProps> = ({ poll, setPoll }) => {
       if (e.target.files) {
         // check file size -> throw error if too large size
         if (e.target.files[0].size >= 1048576) {
+          onOptionChange({...option, image: null, imageOptionUrl: ""}, id);
           setImageUploadError(true);
         } else {
           const imageUrl = URL.createObjectURL(e.target.files[0]);
-          onOptionChange({...option, image: e.target.files[0], imageOptionUrl: imageUrl}, id)
+          onOptionChange({...option, image: e.target.files[0], imageOptionUrl: imageUrl}, id);
+          setImageUploadError(false);
         }
       }
     }
