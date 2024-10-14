@@ -1,16 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import { useAppContext } from "@/contexts/AppContext";
-
-interface WatchParty {
-  id: number;
-  partyName: string;
-  scheduledDate: string;
-  scheduledTime: string;
-  code: string; 
-  createdDate: number[]; 
-  password: string;
-}
+import { WatchParty } from './WatchPartyPage';
 
 const SendEmailPage: React.FC = () => {
   const [watchParties, setWatchParties] = useState<WatchParty[]>([]);

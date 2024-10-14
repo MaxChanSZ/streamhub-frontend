@@ -3,7 +3,6 @@ import { RegisterFormData } from "../pages/RegisterPage";
 import {
   PollOptionResponseData,
   PollResponseData,
-  UpdatePollOptionRequestData,
   WatchPartyFormData,
   WatchPartyResponseData,
 } from "@/pages/CreateWatchPartyPage";
@@ -14,6 +13,7 @@ import { useAppContext } from "../contexts/AppContext";
 import { PollRequestData } from "@/components/PollForm";
 import { PollResponse } from "@/pages/WatchPartyPage";
 import { WatchPartyResponse } from "@/pages/PollResultPage";
+import { UpdateWatchPartyForm, UpdateWatchPartyPasswordForm } from "@/pages/ManageWatchPartyPage";
 
 const API_BASE_URL = "http://localhost:8080";
 
@@ -202,6 +202,74 @@ export const createWatchParty = async (
   }
 };
 
+export const updateWatchParty = async (
+  formData: UpdateWatchPartyForm
+): Promise<WatchPartyResponse> => {
+  try {
+    const response = await axios.post(
+      "http://localhost:8080/api/watch-party/update",
+      formData,
+      {
+        headers: {
+          "Content-Type": "application/json",
+        },
+        withCredentials: true,
+      }
+    );
+    return response.data;
+  } catch (error) {
+    if (axios.isAxiosError(error)) {
+      if (error.response) {
+        console.log(error.response.data);
+        console.log(error.response.status);
+        console.log(error.response.headers);
+      } else if (error.request) {
+        console.log(error.request);
+      } else {
+        console.log("Error", error.message);
+      }
+      console.log(error.config);
+    } else {
+      console.log("Unexpected error:", error);
+    }
+    throw error;
+  }
+};
+
+export const updateWatchPartyPassword = async (
+  formData: UpdateWatchPartyPasswordForm
+): Promise<WatchPartyResponse> => {
+  try {
+    const response = await axios.post(
+      "http://localhost:8080/api/watch-party/update-password",
+      formData,
+      {
+        headers: {
+          "Content-Type": "application/json",
+        },
+        withCredentials: true,
+      }
+    );
+    return response.data;
+  } catch (error) {
+    if (axios.isAxiosError(error)) {
+      if (error.response) {
+        console.log(error.response.data);
+        console.log(error.response.status);
+        console.log(error.response.headers);
+      } else if (error.request) {
+        console.log(error.request);
+      } else {
+        console.log("Error", error.message);
+      }
+      console.log(error.config);
+    } else {
+      console.log("Unexpected error:", error);
+    }
+    throw error;
+  }
+};
+
 export const fetchWatchParties = async (): Promise<WatchPartyResponse[]> => {
   try {
     const response = await axios.get(`${API_BASE_URL}/api/watch-party/get`, {
@@ -213,6 +281,37 @@ export const fetchWatchParties = async (): Promise<WatchPartyResponse[]> => {
     return response.data;
   } catch (error) {
     // Error handling code remains the same
+    throw error;
+  }
+};
+
+export const fetchWatchPartiesWithPoll = async (): Promise<WatchPartyResponse[]> => {
+  try {
+    const response = await axios.get(
+      "http://localhost:8080/api/watch-party/get/with-poll",
+      {
+        headers: {
+          "Content-Type": "application/json",
+        },
+        withCredentials: true,
+      }
+    );
+    return response.data;
+  } catch (error) {
+    if (axios.isAxiosError(error)) {
+      if (error.response) {
+        console.log(error.response.data);
+        console.log(error.response.status);
+        console.log(error.response.headers);
+      } else if (error.request) {
+        console.log(error.request);
+      } else {
+        console.log("Error", error.message);
+      }
+      console.log(error.config);
+    } else {
+      console.log("Unexpected error:", error);
+    }
     throw error;
   }
 };

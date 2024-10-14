@@ -3,6 +3,7 @@ import { Button } from "./shadcn/ui/button";
 import { ChevronDown, ChevronUp } from "lucide-react";
 import { useEffect, useRef, useState } from "react";
 import { PollOptionResponse, PollResponse } from "@/pages/WatchPartyPage";
+import { useNavigate } from "react-router-dom";
 
 interface PollViewProps {
     poll: PollResponse;
@@ -11,6 +12,7 @@ interface PollViewProps {
     setOptionChecked: (optionChecked: PollOptionResponse) => void;
     onCreateVote: () => void;
     onChangeVote: () => void;
+    watchPartyCode: string;
 };
 
 type PollOptionProps = {
@@ -20,9 +22,10 @@ type PollOptionProps = {
     setOptionChecked: (optionChecked: PollOptionResponse) => void;
 };
   
-export const PollView : React.FC<PollViewProps> = ({ poll, optionChecked, onCreateVote, onChangeVote, setOptionChecked, voteSaved }) => {
+export const PollView : React.FC<PollViewProps> = ({ poll, optionChecked, onCreateVote, onChangeVote, setOptionChecked, voteSaved, watchPartyCode }) => {
     const [voteable, setVoteable] = useState(!poll?.voted);
-    
+    const navigate = useNavigate();
+
     function voteCreate() {
         setVoteable(false);
         onCreateVote();
@@ -31,6 +34,17 @@ export const PollView : React.FC<PollViewProps> = ({ poll, optionChecked, onCrea
     function voteUpdate() {
         setVoteable(false);
         onChangeVote();
+    }
+
+    function viewPollResult () {
+        // navigate to poll result page
+        navigate("/pollResults",
+            {
+              state : {
+                watchPartyCode: watchPartyCode
+              }
+            }
+        );
     }
     
     return (
@@ -83,6 +97,18 @@ export const PollView : React.FC<PollViewProps> = ({ poll, optionChecked, onCrea
                         </Button>
                     </div>
                 }
+
+                {/* VIEW POLL RESULT BUTTON */}
+                <div className="space-y-4">
+                        <Button
+                        type="button"
+                        variant="default"
+                        className="w-full text-white py-2 font-alatsi border"
+                        onClick={viewPollResult}
+                        >
+                           View Poll Result
+                        </Button>
+                </div>
             </form>
       </div>
     );
@@ -133,11 +159,11 @@ export const PollOptionView = ({
             <div className="p-4 flex-grow flex flex-col justify-between relative z-10 gap-6">
                 {/* OPTION IMAGE */}
                 {image && 
-                    <div style={{width: 200, height: 200}}>
+                    <div className="relative pt-[100%]">
                         <img 
                             src={image}
                             alt={pollOptionView.value} 
-                            className=""
+                            className="absolute top-0 left-0 w-full h-full object-cover object-top"
                             
                         />
                     </div>
@@ -160,7 +186,7 @@ export const PollOptionView = ({
                     {pollOptionView.description && isOverflowing && (
                         <button 
                             onClick={onClickReadMoreOrShowLess} 
-                            className="text-blue-400 text-sm flex items-center mt-1 hover:text-blue-300 relative z-20"
+                            className="text-blue-600 text-sm flex items-center mt-1 hover:text-blue-300 relative z-20"
                         >
                             {expanded ? (
                             <>

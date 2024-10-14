@@ -35,7 +35,7 @@ export type PollOptionProps = {
 // for api calls
 // to create poll in backend
 export type PollRequestData = {
-  watchPartyID: number | undefined;
+  partyCode: string;
   question: string;
   pollOptionRequests: PollOptionRequestData[];
 };
@@ -144,7 +144,7 @@ export const PollForm: React.FC<PollProps> = ({ poll, setPoll }) => {
               <RadioGroup defaultValue="option-0">
                  {/* RENDERED LIST OF POLL OPTIONS BASED ON SIZE */}
                  {options.map((option, id) => 
-                    <PollOptionList
+                    <PollOption
                       key={id}
                       value={option.value}
                       description={option.description}
@@ -160,7 +160,7 @@ export const PollForm: React.FC<PollProps> = ({ poll, setPoll }) => {
     );
   };
 
-  export const PollOptionList = ({
+  export const PollOption = ({
     value,
     id,
     onOptionValueChange
@@ -171,6 +171,7 @@ export const PollForm: React.FC<PollProps> = ({ poll, setPoll }) => {
       image: null,
       imageOptionUrl: ""
     });
+    const [imageUploadError, setImageUploadError] = useState<boolean>(false);
 
     // event handler triggered when value or description is changed
     function onOptionChange(newOption: PollOption, id: number) {
@@ -180,10 +181,16 @@ export const PollForm: React.FC<PollProps> = ({ poll, setPoll }) => {
 
     // event handler for image upload
     function onImageUpload(e: React.ChangeEvent<HTMLInputElement>, id: number) {
-      console.log(e.target.files);
       if (e.target.files) {
-        const imageUrl = URL.createObjectURL(e.target.files[0]);
-        onOptionChange({...option, image: e.target.files[0], imageOptionUrl: imageUrl}, id)
+        // check file size -> throw error if too large size
+        if (e.target.files[0].size >= 1048576) {
+          onOptionChange({...option, image: null, imageOptionUrl: ""}, id);
+          setImageUploadError(true);
+        } else {
+          const imageUrl = URL.createObjectURL(e.target.files[0]);
+          onOptionChange({...option, image: e.target.files[0], imageOptionUrl: imageUrl}, id);
+          setImageUploadError(false);
+        }
       }
     }
 
@@ -231,6 +238,11 @@ export const PollForm: React.FC<PollProps> = ({ poll, setPoll }) => {
                 width={100}
                 height={100}/>
             }
+            {imageUploadError && (
+              <div className="mt-4 p-4 bg-red-100 border border-red-400 text-red-700 rounded">
+                <p>Image size is too large. Please upload a file less than 1MB.</p>
+              </div>
+            )}
         </div>
       </div>
     );

@@ -6,6 +6,16 @@ import { useEffect, useState } from "react";
 import { useLocation, useParams } from "react-router";
 import { useAppContext } from "@/contexts/AppContext";
 
+export interface WatchParty {
+  id: number;
+  partyName: string;
+  scheduledDate: string;
+  scheduledTime: string;
+  code: string; 
+  createdDate: number[]; 
+  password: string;
+}
+
 export type PollResponse = {
   pollId: number;
   pollQuestion: string;
@@ -31,7 +41,6 @@ const WatchPartyPage = () => {
   console.log("Video url is: " + data.videoSource);
 
   const sessionId = params.sessionId ? params.sessionId.toString() : "1";
-
   const videoJsOptions = {
     sources: [
       {
@@ -116,7 +125,7 @@ const WatchPartyPage = () => {
             options={videoJsOptions}
             roomID={roomID}
             setRoomID={setRoomID}
-          isHost={isHost}
+            isHost={isHost}
           />
         </div>
         <div className="col-span-1">
@@ -126,6 +135,7 @@ const WatchPartyPage = () => {
       {pollLoaded && watchpartyPoll && user &&
         <div>
           <PollView
+            watchPartyCode={sessionId}
             poll={watchpartyPoll}
             optionChecked={optionChecked}
             voteSaved={voteSaved}
