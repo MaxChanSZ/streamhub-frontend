@@ -13,7 +13,7 @@ import { useAppContext } from "../contexts/AppContext";
 import { PollRequestData } from "@/components/PollForm";
 import { PollResponse } from "@/pages/WatchPartyPage";
 import { WatchPartyResponse } from "@/pages/PollResultPage";
-import { UpdateWatchPartyForm } from "@/pages/ManageWatchPartyPage";
+import { UpdateWatchPartyForm, UpdateWatchPartyPasswordForm } from "@/pages/ManageWatchPartyPage";
 
 export const register = async (formData: RegisterFormData) => {
   const response = await axios
@@ -275,6 +275,40 @@ export const updateWatchParty = async (
   try {
     const response = await axios.post(
       "http://localhost:8080/api/watch-party/update",
+      formData,
+      {
+        headers: {
+          "Content-Type": "application/json",
+        },
+        withCredentials: true,
+      }
+    );
+    return response.data;
+  } catch (error) {
+    if (axios.isAxiosError(error)) {
+      if (error.response) {
+        console.log(error.response.data);
+        console.log(error.response.status);
+        console.log(error.response.headers);
+      } else if (error.request) {
+        console.log(error.request);
+      } else {
+        console.log("Error", error.message);
+      }
+      console.log(error.config);
+    } else {
+      console.log("Unexpected error:", error);
+    }
+    throw error;
+  }
+};
+
+export const updateWatchPartyPassword = async (
+  formData: UpdateWatchPartyPasswordForm
+): Promise<WatchPartyResponse> => {
+  try {
+    const response = await axios.post(
+      "http://localhost:8080/api/watch-party/update-password",
       formData,
       {
         headers: {
