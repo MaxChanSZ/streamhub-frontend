@@ -6,7 +6,6 @@ import { useEffect, useState } from "react";
 import { useLocation, useParams } from "react-router";
 import { useAppContext } from "@/contexts/AppContext";
 
-
 export interface WatchParty {
   id: number;
   partyName: string;
@@ -16,7 +15,6 @@ export interface WatchParty {
   createdDate: number[]; 
   password: string;
 }
-
 
 export type PollResponse = {
   pollId: number;

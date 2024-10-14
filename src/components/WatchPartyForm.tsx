@@ -9,13 +9,13 @@ export type WatchPartyForm = {
     password: string;
     watchPartyId?: number;
 }
-interface PollProps {
+export interface WatchPartyProps {
   watchParty: WatchPartyForm
   setWatchParty: (watchParty: WatchPartyForm) => void;
   hidePasswordField?: boolean;
 };
 
-export const WatchPartyForm: React.FC<PollProps> = ({ watchParty, setWatchParty, hidePasswordField }) => {
+export const WatchPartyForm: React.FC<WatchPartyProps> = ({ watchParty, setWatchParty, hidePasswordField }) => {
     // WATCHPARTY FORM RENDERER
     return (
         <div id="watchparty-form" className="space-y-4">

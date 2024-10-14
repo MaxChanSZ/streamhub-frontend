@@ -153,7 +153,7 @@ const WatchPartyDropdown: React.FC<{ onSelect: (partyCode: string) => void, setE
       }
       {watchParties.length == 0 && (
           <div className="mt-4 p-4 bg-yellow-100 border border-yellow-400 text-yellow-700 rounded">
-            <p>No watchparty poll created yet!</p>
+            <p>No watchparty poll created!</p>
           </div>
       )}
     </div>

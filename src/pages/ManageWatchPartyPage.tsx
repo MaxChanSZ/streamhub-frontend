@@ -23,9 +23,9 @@ export type UpdateWatchPartyPasswordForm = {
 };
 
 type AlertMessages = {
-    type: "success" | "error",
+    type: "success" | "error" | "warning",
     message: string
-}
+};
 
 const ManageWatchPartyPage: React.FC = () => {
     const { user } = useAppContext();
@@ -93,6 +93,9 @@ const ManageWatchPartyPage: React.FC = () => {
             const response = await axios.get<WatchParty[]>(`http://localhost:8080/api/watch-party/get/${user.id}`);
             console.log("Retrieved watch parties:", response.data);
             setWatchParties(response.data);
+            if (response.data.length == 0) {
+                setAlertMessages({type: "warning", message: "No watch party created!"});
+            }
           }
         } catch (error) {
           console.error('Error fetching watch parties:', error);
@@ -238,6 +241,11 @@ const ManageWatchPartyPage: React.FC = () => {
                     <p>{alertMessages.message}</p>
                 </div>
             )}
+            {alertMessages?.type == "warning" && (
+                <div className="mt-4 p-4 bg-yellow-100 border border-yellow-400 text-yellow-700 rounded">
+                    <p>{alertMessages.message}</p>
+                </div>
+            )}
         </div>
     );
 };
@@ -263,10 +271,3 @@ const ChangePasswordField: React.FC<WatchPartyProps> = ({ watchParty, setWatchPa
 };
 
 export default ManageWatchPartyPage;
-
-
-
-
-
-
-
