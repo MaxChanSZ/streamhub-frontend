@@ -1,13 +1,14 @@
 import { Button } from "@/components/shadcn/ui/button";
 import { toast } from "@/components/shadcn/ui/use-toast";
 import { useAppContext } from "@/contexts/AppContext";
-import { useForm } from "react-hook-form";
+import { set, useForm } from "react-hook-form";
 import { useMutation } from "react-query";
 import * as apiClient from "@/utils/api-client";
 import { User } from "@/utils/types";
 import WordleLoginButton from "@/components/WordleLoginButton";
 import { useNavigate } from "react-router-dom";
-
+import { useState } from "react";
+import { LoadingSpinner } from "@/components/LoadingSpinner";
 
 export type LoginFormData = {
   username: string;
@@ -17,6 +18,7 @@ export type LoginFormData = {
 const LoginPage = () => {
   const { setIsLoggedIn, setUser } = useAppContext();
   const navigate = useNavigate();
+  const [isLoading, setIsLoading] = useState<boolean>(false);
 
   const {
     register,
@@ -26,14 +28,13 @@ const LoginPage = () => {
 
   const mutation = useMutation<User, Error, LoginFormData>(apiClient.login, {
     onSuccess: (data) => {
+      setIsLoading(false);
+
       toast({
         title: "Success",
         description: "Logged in successfully!",
       });
-      setUser({
-        id: data.id,
-        username: data.username,
-      });
+      setUser(data);
       setIsLoggedIn(true);
       navigate("/");
     },
@@ -48,6 +49,7 @@ const LoginPage = () => {
   });
 
   const onFormSubmit = handleSubmit((data) => {
+    setIsLoading(true);
     mutation.mutate(data);
   });
 
@@ -105,6 +107,13 @@ const LoginPage = () => {
           </Button>
         </div>
       </form>
+      {/* Loading overlay */}
+      {isLoading && (
+        <div className="absolute inset-0 z-10 flex flex-col justify-center items-center bg-black bg-opacity-70">
+          <h2 className="text-s font-bold font-alatsi">Loading</h2>
+          <LoadingSpinner className="size-12 my-2" />
+        </div>
+      )}
 
       <div className="text-center">
         <WordleLoginButton />

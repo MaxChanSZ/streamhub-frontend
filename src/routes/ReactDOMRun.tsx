@@ -15,6 +15,7 @@ import UpdateProfilePage from "@/pages/UpdateProfilePage.tsx";
 import SearchPage from "@/pages/SearchPage";
 import RegisterPage from "@/pages/RegisterPage";
 import ContactPage from "@/pages/ContactPage.tsx";
+import GamePage from "@/pages/GamePage.tsx";
 import PollResultPage from "@/pages/PollResultPage.tsx";
 import SendEmailPage from "@/pages/SendEmailPage.tsx";
 import { ProtectedRoute } from "./ProtectedRoute";
@@ -121,6 +122,14 @@ const router = createBrowserRouter([
         element: (
           <ProtectedRoute>
             <SearchPage />
+          </ProtectedRoute>
+        ),
+      },
+      {
+        path: "game",
+        element: (
+          <ProtectedRoute>
+            <GamePage />
           </ProtectedRoute>
         ),
       },
