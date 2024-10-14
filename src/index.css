@@ -101,3 +101,12 @@ body,
     @apply bg-background text-foreground;
   }
 }
+
+@keyframes moveLeft {
+  from { right: -50px; }
+  to { right: 100%; }
+}
+
+.animate-obstacle {
+  animation: moveLeft 2s linear infinite;
+}
