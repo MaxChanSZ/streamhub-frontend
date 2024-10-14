@@ -3,7 +3,7 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/shadcn/ui
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/shadcn/ui/card";
 import { Gamepad2, Swords, Grid3X3 } from 'lucide-react';
 import TicTacToe from '../components/TicTacToe';
-import Chess from '../components/Chess';
+import Checkers from '../components/Checkers';
 import Tetris from '../components/Tetris';
 
 const GamePage: React.FC = () => {
@@ -23,9 +23,9 @@ const GamePage: React.FC = () => {
               <Grid3X3 className="mr-2" />
               Tic Tac Toe
             </TabsTrigger>
-            <TabsTrigger value="chess" className="text-lg flex items-center justify-center">
+            <TabsTrigger value="checkers" className="text-lg flex items-center justify-center">
               <Swords className="mr-2" />
-              Chess
+              Checkers
             </TabsTrigger>
             <TabsTrigger value="tetris" className="text-lg flex items-center justify-center">
               <Gamepad2 className="mr-2" />
@@ -46,14 +46,14 @@ const GamePage: React.FC = () => {
               </Card>
             </TabsContent>
 
-            <TabsContent value="chess">
+            <TabsContent value="checkers">
               <Card>
                 <CardHeader>
-                  <CardTitle>Chess</CardTitle>
-                  <CardDescription>Strategic board game for two players. Checkmate your opponent to win!</CardDescription>
+                  <CardTitle>Checkers</CardTitle>
+                  <CardDescription>Strategic board game for two players.</CardDescription>
                 </CardHeader>
                 <CardContent>
-                  <Chess />
+                  <Checkers />
                 </CardContent>
               </Card>
             </TabsContent>
