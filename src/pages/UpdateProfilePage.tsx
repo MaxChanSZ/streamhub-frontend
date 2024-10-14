@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState } from "react";
 import { useForm } from "react-hook-form";
 import { Button } from "@/components/shadcn/ui/button";
 import { useNavigate } from "react-router-dom";
@@ -9,6 +9,7 @@ import { useAppContext } from "@/contexts/AppContext";
 import DeleteAccountButton from "@/components/DeleteAccountButton";
 
 export type UpdateFormData = {
+  id: number;
   username: string;
   email: string;
   password: string;
@@ -16,9 +17,15 @@ export type UpdateFormData = {
 };
 
 const UpdateProfilePage = () => {
-  const inputFieldFormat = "border rounded w-full py-2 px-3.5 my-2 text-black text-lg";
+  const inputFieldFormat =
+    "border rounded w-full py-2 px-3.5 my-2 text-black text-lg";
   const errorTextFormat = "text-red-500";
-  const { register, watch, handleSubmit, formState: { errors } } = useForm<UpdateFormData>();
+  const {
+    register,
+    watch,
+    handleSubmit,
+    formState: { errors },
+  } = useForm<UpdateFormData>();
   const { setIsLoggedIn, setUser, user } = useAppContext();
   const navigate = useNavigate();
   const [isLoading, setIsLoading] = useState(false);
@@ -32,7 +39,7 @@ const UpdateProfilePage = () => {
       console.log("Update success");
       setIsLoggedIn(false);
       setUser(null);
-      navigate("start");
+      navigate("/");
     },
     onError: (error: Error) => {
       console.log("Update error:", error);
@@ -45,6 +52,8 @@ const UpdateProfilePage = () => {
   });
 
   const onFormSubmit = handleSubmit((data) => {
+    console.log(user);
+    data.id = user?.id ?? 0;
     mutation.mutate(data);
   });
 
@@ -122,7 +131,10 @@ const UpdateProfilePage = () => {
   };
 
   const handleCancelSubscription = () => {
-    if (subscriptionStatus?.status === "active" && subscriptionStatus.subscriptionId) {
+    if (
+      subscriptionStatus?.status === "active" &&
+      subscriptionStatus.subscriptionId
+    ) {
       cancelSubscriptionMutation.mutate(subscriptionStatus.subscriptionId);
     } else {
       toast({
@@ -135,23 +147,41 @@ const UpdateProfilePage = () => {
 
   return (
     <div className="max-w-4xl mx-auto mt-8 px-4">
-      <h1 className="text-4xl font-bold mb-8 text-center text-white">Account Management</h1>
+      <h1 className="text-4xl font-bold mb-8 text-center text-white">
+        Account Management
+      </h1>
       <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
         <div className="bg-gray-800 p-6 rounded-lg shadow-md">
-          <h2 className="text-2xl font-semibold mb-4 text-white">Personal Information</h2>
+          <h2 className="text-2xl font-semibold mb-4 text-white">
+            Personal Information
+          </h2>
           <form onSubmit={onFormSubmit} className="space-y-4">
             <div>
-              <label htmlFor="username" className="block mb-1 font-medium text-white">Username</label>
+              <label
+                htmlFor="username"
+                className="block mb-1 font-medium text-white"
+              >
+                Username
+              </label>
               <input
                 id="username"
                 className={inputFieldFormat}
                 {...register("username")}
                 placeholder="Enter your username"
               />
-              {errors.username && <span className={errorTextFormat}>{errors.username.message}</span>}
+              {errors.username && (
+                <span className={errorTextFormat}>
+                  {errors.username.message}
+                </span>
+              )}
             </div>
             <div>
-              <label htmlFor="email" className="block mb-1 font-medium text-white">Email Address</label>
+              <label
+                htmlFor="email"
+                className="block mb-1 font-medium text-white"
+              >
+                Email Address
+              </label>
               <input
                 id="email"
                 className={inputFieldFormat}
@@ -159,10 +189,17 @@ const UpdateProfilePage = () => {
                 type="email"
                 placeholder="Enter your email"
               />
-              {errors.email && <span className={errorTextFormat}>{errors.email.message}</span>}
+              {errors.email && (
+                <span className={errorTextFormat}>{errors.email.message}</span>
+              )}
             </div>
             <div>
-              <label htmlFor="password" className="block mb-1 font-medium text-white">New Password</label>
+              <label
+                htmlFor="password"
+                className="block mb-1 font-medium text-white"
+              >
+                New Password
+              </label>
               <input
                 id="password"
                 className={inputFieldFormat}
@@ -186,10 +223,19 @@ const UpdateProfilePage = () => {
                 type="password"
                 placeholder="Enter new password"
               />
-              {errors.password && <span className={errorTextFormat}>{errors.password.message}</span>}
+              {errors.password && (
+                <span className={errorTextFormat}>
+                  {errors.password.message}
+                </span>
+              )}
             </div>
             <div>
-              <label htmlFor="confirmPassword" className="block mb-1 font-medium text-white">Confirm New Password</label>
+              <label
+                htmlFor="confirmPassword"
+                className="block mb-1 font-medium text-white"
+              >
+                Confirm New Password
+              </label>
               <input
                 id="confirmPassword"
                 className={inputFieldFormat}
@@ -205,26 +251,46 @@ const UpdateProfilePage = () => {
                 type="password"
                 placeholder="Confirm new password"
               />
-              {errors.confirmPassword && <span className={errorTextFormat}>{errors.confirmPassword.message}</span>}
+              {errors.confirmPassword && (
+                <span className={errorTextFormat}>
+                  {errors.confirmPassword.message}
+                </span>
+              )}
             </div>
-            <Button type="submit" variant="secondary" className="w-full">Update Profile</Button>
+            <Button type="submit" variant="secondary" className="w-full">
+              Update Profile
+            </Button>
           </form>
         </div>
-        
+        {/* Subscription  */}
         <div className="bg-gray-800 p-6 rounded-lg shadow-md">
-          <h2 className="text-2xl font-semibold mb-4 text-white">Subscription Management</h2>
+          <h2 className="text-2xl font-semibold mb-4 text-white">
+            Subscription Management
+          </h2>
           <div className="bg-gray-700 p-6 rounded-lg">
             {subscriptionStatus?.status === "active" ? (
               <div>
-                <p className="text-lg mb-4 text-white">You have an active subscription.</p>
-                <Button onClick={handleCancelSubscription} variant="destructive" className="w-full">
+                <p className="text-lg mb-4 text-white">
+                  You have an active subscription.
+                </p>
+                <Button
+                  onClick={handleCancelSubscription}
+                  variant="destructive"
+                  className="w-full"
+                >
                   Cancel Subscription
                 </Button>
               </div>
             ) : (
               <div>
-                <p className="text-lg mb-4 text-white">Upgrade to our premium plan for just $4.99 USD!</p>
-                <Button onClick={handleSubscribe} disabled={isLoading} className="w-full">
+                <p className="text-lg mb-4 text-white">
+                  Upgrade to our premium plan for just $4.99 USD!
+                </p>
+                <Button
+                  onClick={handleSubscribe}
+                  disabled={isLoading}
+                  className="w-full"
+                >
                   {isLoading ? "Processing..." : "Subscribe Now"}
                 </Button>
               </div>
@@ -232,7 +298,7 @@ const UpdateProfilePage = () => {
           </div>
         </div>
       </div>
-      <div className="mt-12 flex justify-center"> 
+      <div className="mt-12 flex justify-center">
         <DeleteAccountButton />
       </div>
     </div>
@@ -240,6 +306,3 @@ const UpdateProfilePage = () => {
 };
 
 export default UpdateProfilePage;
-
-
-

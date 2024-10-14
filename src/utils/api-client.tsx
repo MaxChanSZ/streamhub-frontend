@@ -64,11 +64,16 @@ export const login = async (formData: LoginFormData): Promise<User> => {
   return { ...response.data, ...fullUserInfo };
 };
 
-export const getFullAccountInfo = async (userId: number): Promise<Partial<User>> => {
+export const getFullAccountInfo = async (
+  userId: number
+): Promise<Partial<User>> => {
   try {
-    const response = await axios.get(`${API_BASE_URL}/api/payment/user/${userId}`, {
-      withCredentials: true,
-    });
+    const response = await axios.get(
+      `${API_BASE_URL}/api/payment/user/${userId}`,
+      {
+        withCredentials: true,
+      }
+    );
     return response.data;
   } catch (error) {
     console.error("Error fetching full account information:", error);
@@ -77,13 +82,13 @@ export const getFullAccountInfo = async (userId: number): Promise<Partial<User>>
 };
 
 export const update = async (formData: UpdateFormData) => {
-  const appContext = useAppContext();
-  const user = appContext.user;
+  // const { user } = useAppContext();
+  // const user = appContext.user;
   const response = await axios
     .put(
       `${API_BASE_URL}/account/api/update`,
       {
-        id: user?.id,
+        id: formData.id,
         username: formData.username,
         email: formData.email,
         password: formData.password,
@@ -112,7 +117,6 @@ export const deleteUser = async (id: number) => {
       console.log(response.data);
     })
     .catch((error) => {
-      
       throw new Error(error);
     });
 };
@@ -200,15 +204,12 @@ export const createWatchParty = async (
 
 export const fetchWatchParties = async (): Promise<WatchPartyResponse[]> => {
   try {
-    const response = await axios.get(
-      `${API_BASE_URL}/api/watch-party/get`,
-      {
-        headers: {
-          "Content-Type": "application/json",
-        },
-        withCredentials: true,
-      }
-    );
+    const response = await axios.get(`${API_BASE_URL}/api/watch-party/get`, {
+      headers: {
+        "Content-Type": "application/json",
+      },
+      withCredentials: true,
+    });
     return response.data;
   } catch (error) {
     // Error handling code remains the same
@@ -303,12 +304,12 @@ export const getWatchpartyPoll = async (
         withCredentials: true,
         params: {
           code,
-          userId
-        }
+          userId,
+        },
       }
     );
     console.log(response.data);
-    return response.data; 
+    return response.data;
   } catch (error) {
     // Error handling code remains the same
     throw error;
@@ -321,23 +322,19 @@ export const addVote = async (
   accountId: number
 ): Promise<any> => {
   try {
-    const response = await axios.post(
-      `${API_BASE_URL}/api/vote/create`,
-      null,
-      {
-        headers: {
-          "Content-Type": "application/json",
-        },
-        withCredentials: true,
-        params: {
-          pollId,
-          pollOptionId,
-          accountId
-        }
-      }
-    );
+    const response = await axios.post(`${API_BASE_URL}/api/vote/create`, null, {
+      headers: {
+        "Content-Type": "application/json",
+      },
+      withCredentials: true,
+      params: {
+        pollId,
+        pollOptionId,
+        accountId,
+      },
+    });
     console.log(response.data);
-    return response.data; 
+    return response.data;
   } catch (error) {
     // Error handling code remains the same
     throw error;
@@ -350,89 +347,100 @@ export const changeVote = async (
   accountId: number
 ): Promise<any> => {
   try {
-    const response = await axios.post(
-      `${API_BASE_URL}/api/vote/change`,
-      null,
-      {
-        headers: {
-          "Content-Type": "application/json",
-        },
-        withCredentials: true,
-        params: {
-          pollId,
-          newPollOptionId,
-          accountId
-        }
-      }
-    );
+    const response = await axios.post(`${API_BASE_URL}/api/vote/change`, null, {
+      headers: {
+        "Content-Type": "application/json",
+      },
+      withCredentials: true,
+      params: {
+        pollId,
+        newPollOptionId,
+        accountId,
+      },
+    });
     console.log(response.data);
-    return response.data; 
+    return response.data;
   } catch (error) {
     throw error;
   }
 };
 
 export const createOrGetCustomer = async (email: string) => {
-  console.log('Creating or getting customer for email:', email);
+  console.log("Creating or getting customer for email:", email);
   try {
-    const response = await axios.post(`${API_BASE_URL}/api/payment/create-or-get-customer`, { email }, {
-      headers: { 
-        'Content-Type': 'application/json',
-      },
-      withCredentials: true,
-    });
-    console.log('Create or get customer response:', response.data);
+    const response = await axios.post(
+      `${API_BASE_URL}/api/payment/create-or-get-customer`,
+      { email },
+      {
+        headers: {
+          "Content-Type": "application/json",
+        },
+        withCredentials: true,
+      }
+    );
+    console.log("Create or get customer response:", response.data);
     return response.data.customerId;
   } catch (error) {
-    console.error('Error in createOrGetCustomer:', error);
+    console.error("Error in createOrGetCustomer:", error);
     throw error;
   }
 };
 
 export const createSubscription = async (customerId: string) => {
   try {
-    const response = await axios.post(`${API_BASE_URL}/api/payment/create-subscription`, { customerId }, {
-      headers: { 
-        'Content-Type': 'application/json',
-      },
-      withCredentials: true,
-    });
-    console.log('Create subscription response:', response.data);
+    const response = await axios.post(
+      `${API_BASE_URL}/api/payment/create-subscription`,
+      { customerId },
+      {
+        headers: {
+          "Content-Type": "application/json",
+        },
+        withCredentials: true,
+      }
+    );
+    console.log("Create subscription response:", response.data);
     return response.data;
   } catch (error) {
-    console.error('Error in createSubscription:', error);
+    console.error("Error in createSubscription:", error);
     throw error;
   }
 };
 
 export const cancelSubscription = async (subscriptionId: string) => {
   try {
-    const response = await axios.post(`${API_BASE_URL}/api/payment/cancel-subscription`, { subscriptionId }, {
-      headers: { 
-        'Content-Type': 'application/json',
-      },
-      withCredentials: true,
-    });
-    console.log('Cancel subscription response:', response.data);
+    const response = await axios.post(
+      `${API_BASE_URL}/api/payment/cancel-subscription`,
+      { subscriptionId },
+      {
+        headers: {
+          "Content-Type": "application/json",
+        },
+        withCredentials: true,
+      }
+    );
+    console.log("Cancel subscription response:", response.data);
     return response.data;
   } catch (error) {
-    console.error('Error in cancelSubscription:', error);
+    console.error("Error in cancelSubscription:", error);
     throw error;
   }
 };
 
 export const getSubscriptionStatus = async (email: string) => {
   try {
-    const response = await axios.get(`${API_BASE_URL}/api/payment/subscription/status?email=${email}`, {
-      headers: { 
-        'Content-Type': 'application/json',
-      },
-      withCredentials: true,
-    });
-    console.log('Get subscription status response:', response.data);
+    const response = await axios.get(
+      `${API_BASE_URL}/api/payment/subscription/status?email=${email}`,
+      {
+        headers: {
+          "Content-Type": "application/json",
+        },
+        withCredentials: true,
+      }
+    );
+    console.log("Get subscription status response:", response.data);
     return response.data;
   } catch (error) {
-    console.error('Error in getSubscriptionStatus:', error);
+    console.error("Error in getSubscriptionStatus:", error);
     throw error;
   }
 };
