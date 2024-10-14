@@ -1,7 +1,6 @@
 import React from 'react';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/shadcn/ui/tabs";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/shadcn/ui/card";
-import { Button } from "@/components/shadcn/ui/button";
 import { Gamepad2, Swords, Grid3X3 } from 'lucide-react';
 import TicTacToe from '../components/TicTacToe';
 import Chess from '../components/Chess';

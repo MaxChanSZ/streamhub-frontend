@@ -3,7 +3,11 @@ import GoogleMap from '../components/GoogleMap';
 import { MapPin, Phone, Mail, Linkedin } from 'lucide-react';
 
 const ContactPage: React.FC = () => {
-  const GOOGLE_MAPS_API_KEY = "AIzaSyA3VvqWQtoTo1BRW-jz77pEpikJe6BQ6Lo";
+  const GOOGLE_MAPS_API_KEY = import.meta.env.VITE_GOOGLE_MAPS_API_KEY || '';
+
+  if (!GOOGLE_MAPS_API_KEY) {
+    console.error('Google Maps API key is not set in environment variables');
+  }
 
   return (
     <div className="container mx-auto p-4 text-white">
@@ -38,13 +42,19 @@ const ContactPage: React.FC = () => {
           </div>
         </div>
         <div className="h-[400px] rounded-lg overflow-hidden shadow-lg">
-          <GoogleMap 
-            apiKey={GOOGLE_MAPS_API_KEY}
-            latitude={1.2956544}
-            longitude={103.8564952}
-            zoom={15}
-            markerTitle="FDM Singapore Office"
-          />
+          {GOOGLE_MAPS_API_KEY ? (
+            <GoogleMap 
+              apiKey={GOOGLE_MAPS_API_KEY}
+              latitude={1.2956544}
+              longitude={103.8564952}
+              zoom={15}
+              markerTitle="FDM Singapore Office"
+            />
+          ) : (
+            <div className="flex items-center justify-center h-full bg-gray-800">
+              <p>Google Maps API key is not set</p>
+            </div>
+          )}
         </div>
       </div>
       <div className="mt-8 text-center">

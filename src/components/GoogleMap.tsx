@@ -1,8 +1,9 @@
-import React, { useEffect, useRef } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 
 declare global {
   interface Window {
-    google: any;
+    google?: any;
+    initMap?: () => void;
   }
 }
 
@@ -16,39 +17,23 @@ interface MapProps {
 
 const GoogleMap: React.FC<MapProps> = ({ apiKey, latitude, longitude, zoom, markerTitle }) => {
   const mapRef = useRef<HTMLDivElement>(null);
+  const [mapLoaded, setMapLoaded] = useState(false);
 
   useEffect(() => {
     const loadGoogleMaps = () => {
-      const script = document.createElement('script');
-      script.src = `https://maps.googleapis.com/maps/api/js?key=${apiKey}`;
-      script.async = true;
-      script.defer = true;
-      document.head.appendChild(script);
-
-      script.onload = initializeMap;
-    };
-
-    const initializeMap = () => {
-      if (mapRef.current && window.google) {
-        const location = { lat: latitude, lng: longitude };
-        const map = new window.google.maps.Map(mapRef.current, {
-          center: location,
-          zoom: zoom,
-        });
-
-        new window.google.maps.Marker({
-          position: location,
-          map: map,
-          title: markerTitle
-        });
+      if (!window.google) {
+        const script = document.createElement('script');
+        script.src = `https://maps.googleapis.com/maps/api/js?key=${apiKey}`;
+        script.async = true;
+        script.defer = true;
+        script.addEventListener('load', () => setMapLoaded(true));
+        document.head.appendChild(script);
+      } else {
+        setMapLoaded(true);
       }
     };
 
-    if (window.google && window.google.maps) {
-      initializeMap();
-    } else {
-      loadGoogleMaps();
-    }
+    loadGoogleMaps();
 
     return () => {
       const script = document.querySelector(`script[src^="https://maps.googleapis.com/maps/api/js?key="]`);
@@ -56,7 +41,33 @@ const GoogleMap: React.FC<MapProps> = ({ apiKey, latitude, longitude, zoom, mark
         document.head.removeChild(script);
       }
     };
-  }, [apiKey, latitude, longitude, zoom, markerTitle]);
+  }, [apiKey]);
+
+  useEffect(() => {
+    if (mapLoaded && mapRef.current && window.google) {
+      const location = { lat: latitude, lng: longitude };
+      const map = new window.google.maps.Map(mapRef.current, {
+        center: location,
+        zoom: zoom,
+      });
+
+      // Check if AdvancedMarkerElement is available
+      if (window.google.maps.marker && window.google.maps.marker.AdvancedMarkerElement) {
+        new window.google.maps.marker.AdvancedMarkerElement({
+          map: map,
+          position: location,
+          title: markerTitle,
+        });
+      } else {
+        // Fallback to regular Marker
+        new window.google.maps.Marker({
+          map: map,
+          position: location,
+          title: markerTitle,
+        });
+      }
+    }
+  }, [mapLoaded, latitude, longitude, zoom, markerTitle]);
 
   return <div ref={mapRef} style={{ width: '100%', height: '400px' }} />;
 };
