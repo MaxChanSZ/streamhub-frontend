@@ -25,6 +25,7 @@ const TicTacToe: React.FC = () => {
 
   const renderSquare = (i: number) => (
     <div
+      key={i}  // Add this line
       className="w-16 h-16 flex items-center justify-center text-2xl font-bold text-white border border-white cursor-pointer"
       onClick={() => handleClick(i)}
     >
