@@ -78,7 +78,7 @@ const LandingPage = () => {
         />
 
         <div className={`text-white `}>
-          <div className="py-4">
+          <div className="py-4 text-center">
             <Button
               onClick={() => handleButtonClick("login")}
               variant="ghost"
@@ -93,19 +93,19 @@ const LandingPage = () => {
             >
               Register
             </Button>
-            <Button
+            {/* <Button
               variant="ghost"
               className={buttonTextFormat}
               onClick={() => handleButtonClick("watch")}
             >
               Join Watch Party
-            </Button>
+            </Button> */}
           </div>
         </div>
       </div>
 
       <div
-        className={`w-7/12 items-center justify-center transition-opacity duration-300 ${
+        className={`items-center transition-opacity duration-300 ${
           transitioning ? "opacity-0" : "opacity-100"
         }`}
       >
