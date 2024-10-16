@@ -46,7 +46,7 @@ const VideoChatbot: React.FC = () => {
       {!isOpen ? (
         <button 
           onClick={() => setIsOpen(true)}
-          className="bg-blue-500 text-white p-2 rounded-full shadow-lg"
+          className="bg-blue-600 text-white p-2 rounded-full shadow-lg hover:bg-blue-700 transition-colors duration-200"
           aria-label="Open chat"
         >
           <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
@@ -54,36 +54,36 @@ const VideoChatbot: React.FC = () => {
           </svg>
         </button>
       ) : (
-        <div className="bg-white rounded-lg shadow-xl w-80 h-96 flex flex-col">
-          <div className="flex justify-between items-center p-2 border-b">
-            <h2 className="text-lg font-semibold">Video Chatbot</h2>
-            <button onClick={() => setIsOpen(false)} className="text-gray-500 hover:text-gray-700" aria-label="Close chat">
+        <div className="bg-gray-800 rounded-lg shadow-xl w-80 h-96 flex flex-col">
+          <div className="flex justify-between items-center p-2 border-b border-gray-700">
+            <h2 className="text-lg font-semibold text-white">Video Chatbot</h2>
+            <button onClick={() => setIsOpen(false)} className="text-gray-400 hover:text-gray-200 transition-colors duration-200" aria-label="Close chat">
               <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
               </svg>
             </button>
           </div>
-          <div className="flex-grow overflow-y-auto p-2">
+          <div className="flex-grow overflow-y-auto p-2 bg-gray-900">
             {messages.map((message, index) => (
               <div key={index} className={`mb-2 ${message.sender === 'user' ? 'text-right' : 'text-left'}`}>
-                <span className={`inline-block p-2 rounded-lg ${message.sender === 'user' ? 'bg-blue-500 text-white' : 'bg-gray-200'}`}>
+                <span className={`inline-block p-2 rounded-lg ${message.sender === 'user' ? 'bg-blue-600 text-white' : 'bg-gray-700 text-gray-200'}`}>
                   {message.text}
                 </span>
               </div>
             ))}
             <div ref={messagesEndRef} />
           </div>
-          <form onSubmit={handleSubmit} className="p-2 border-t">
+          <form onSubmit={handleSubmit} className="p-2 border-t border-gray-700">
             <div className="flex">
               <input
                 type="text"
                 value={input}
                 onChange={(e) => setInput(e.target.value)}
                 placeholder="Ask a question..."
-                className="flex-grow border p-2 mr-2 rounded"
+                className="flex-grow bg-gray-700 text-white border border-gray-600 p-2 mr-2 rounded placeholder-gray-400"
                 disabled={isLoading}
               />
-              <button type="submit" className="bg-blue-500 text-white p-2 rounded" disabled={isLoading}>
+              <button type="submit" className="bg-blue-600 text-white p-2 rounded hover:bg-blue-700 transition-colors duration-200" disabled={isLoading}>
                 {isLoading ? (
                   <svg className="animate-spin h-5 w-5 text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
                     <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle>
@@ -104,7 +104,6 @@ const VideoChatbot: React.FC = () => {
 };
 
 export default VideoChatbot;
-
 
 
 
