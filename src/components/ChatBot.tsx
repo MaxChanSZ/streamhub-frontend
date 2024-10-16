@@ -1,83 +1,41 @@
-import React, { useState, useEffect } from 'react';
-import axios from 'axios';
-import { GoogleGenerativeAI } from '@google/generative-ai';
-
-import steamboatWillieVideo from '../video/steamboatwillie_001.webm';
-
-const API_KEY = import.meta.env.VITE_GOOGLE_AI_API_KEY || '';
-const genAI = new GoogleGenerativeAI(API_KEY);
+import React, { useState, useRef, useEffect } from 'react';
+import { sendChatMessage } from '@/utils/api-client';
 
 interface Message {
   text: string;
   sender: 'user' | 'bot';
 }
 
-const VideoChatbot = () => {
-  const [videoUri, setVideoUri] = useState('');
-  const [messages, setMessages] = useState<Message[]>([]); 
+const VideoChatbot: React.FC = () => {
+  const [messages, setMessages] = useState<Message[]>([]);
   const [input, setInput] = useState('');
   const [isLoading, setIsLoading] = useState(false);
   const [isOpen, setIsOpen] = useState(false);
+  const messagesEndRef = useRef<HTMLDivElement>(null);
 
-  useEffect(() => {
-    uploadVideo();
-  }, []);
-
-  const uploadVideo = async () => {
-    setIsLoading(true);
-    try {
-      // Fetch the video file
-      const response = await fetch(steamboatWillieVideo);
-      const blob = await response.blob();
-      const file = new File([blob], 'steamboatwillie_001.webm', { type: 'video/webm' });
-
-      const formData = new FormData();
-      formData.append('file', file);
-
-      const uploadResponse = await axios.post('https://generativelanguage.googleapis.com/v1beta/files:upload', formData, {
-        headers: {
-          'Content-Type': 'multipart/form-data',
-          'Authorization': `Bearer ${API_KEY}`,
-        },
-        params: {
-          mimeType: 'video/webm',
-        },
-      });
-
-      setVideoUri(uploadResponse.data.uri);
-      setMessages([{ text: 'Video uploaded successfully. You can now ask questions about it.', sender: 'bot' }]);
-    } catch (error) {
-      console.error('Error uploading video:', error);
-      setMessages([{ text: 'Error uploading video. Please try again.', sender: 'bot' }]);
-    }
-    setIsLoading(false);
+  const scrollToBottom = () => {
+    messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
   };
+
+  useEffect(scrollToBottom, [messages]);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    if (!input.trim() || !videoUri) return;
+    if (!input.trim()) return;
 
-    setMessages(prevMessages => [...prevMessages, { text: input, sender: 'user' }]);
+    const userMessage = { text: input, sender: 'user' as const };
+    setMessages(prevMessages => [...prevMessages, userMessage]);
     setInput('');
     setIsLoading(true);
 
     try {
-      const model = genAI.getGenerativeModel({ model: "gemini-1.5-pro" });
-      const result = await model.generateContent([
-        {
-          fileData: {
-            mimeType: 'video/webm',
-            fileUri: videoUri
-          }
-        },
-        { text: input },
-      ]);
-
-      const response = result.response.text();
-      setMessages(prevMessages => [...prevMessages, { text: response, sender: 'bot' }]);
+      const response = await sendChatMessage(input);
+      const botMessage = { text: response, sender: 'bot' as const };
+      setMessages(prevMessages => [...prevMessages, botMessage]);
     } catch (error) {
       console.error('Error generating response:', error);
-      setMessages(prevMessages => [...prevMessages, { text: 'Sorry, I encountered an error. Please try again.', sender: 'bot' }]);
+      const errorMessage = { text: 'Sorry, I encountered an error. Please try again.', sender: 'bot' as const };
+      setMessages(prevMessages => [...prevMessages, errorMessage]);
     }
 
     setIsLoading(false);
@@ -89,15 +47,20 @@ const VideoChatbot = () => {
         <button 
           onClick={() => setIsOpen(true)}
           className="bg-blue-500 text-white p-2 rounded-full shadow-lg"
+          aria-label="Open chat"
         >
-          Chat
+          <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8 10h.01M12 10h.01M16 10h.01M9 16H5a2 2 0 01-2-2V6a2 2 0 012-2h14a2 2 0 012 2v8a2 2 0 01-2 2h-5l-5 5v-5z" />
+          </svg>
         </button>
       ) : (
         <div className="bg-white rounded-lg shadow-xl w-80 h-96 flex flex-col">
           <div className="flex justify-between items-center p-2 border-b">
             <h2 className="text-lg font-semibold">Video Chatbot</h2>
-            <button onClick={() => setIsOpen(false)} className="text-gray-500 hover:text-gray-700">
-              ×
+            <button onClick={() => setIsOpen(false)} className="text-gray-500 hover:text-gray-700" aria-label="Close chat">
+              <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
+              </svg>
             </button>
           </div>
           <div className="flex-grow overflow-y-auto p-2">
@@ -108,6 +71,7 @@ const VideoChatbot = () => {
                 </span>
               </div>
             ))}
+            <div ref={messagesEndRef} />
           </div>
           <form onSubmit={handleSubmit} className="p-2 border-t">
             <div className="flex">
@@ -117,10 +81,19 @@ const VideoChatbot = () => {
                 onChange={(e) => setInput(e.target.value)}
                 placeholder="Ask a question..."
                 className="flex-grow border p-2 mr-2 rounded"
-                disabled={isLoading || !videoUri}
+                disabled={isLoading}
               />
-              <button type="submit" className="bg-blue-500 text-white p-2 rounded" disabled={isLoading || !videoUri}>
-                {isLoading ? '...' : 'Send'}
+              <button type="submit" className="bg-blue-500 text-white p-2 rounded" disabled={isLoading}>
+                {isLoading ? (
+                  <svg className="animate-spin h-5 w-5 text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+                    <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle>
+                    <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+                  </svg>
+                ) : (
+                  <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
+                    <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-8.707l-3-3a1 1 0 00-1.414 1.414L10.586 9H7a1 1 0 100 2h3.586l-1.293 1.293a1 1 0 101.414 1.414l3-3a1 1 0 000-1.414z" clipRule="evenodd" />
+                  </svg>
+                )}
               </button>
             </div>
           </form>
@@ -131,5 +104,8 @@ const VideoChatbot = () => {
 };
 
 export default VideoChatbot;
+
+
+
 
 

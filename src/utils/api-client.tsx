@@ -543,3 +543,24 @@ export const getSubscriptionStatus = async (email: string) => {
     throw error;
   }
 };
+
+export const sendChatMessage = async (userInput: string) => {
+  try {
+    const response = await axios.post(
+      `${API_BASE_URL}/api/videochatbot/chat`,
+      { userInput },
+      {
+        headers: {
+          "Content-Type": "application/json",
+        },
+        withCredentials: true,
+      }
+    );
+    console.log("Chat response:", response.data);
+    return response.data;
+  } catch (error) {
+    console.error("Error in sendChatMessage:", error);
+    throw error;
+  }
+};
+
