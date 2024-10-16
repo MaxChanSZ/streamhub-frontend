@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import { GoogleGenerativeAI } from '@google/generative-ai';
 
-import steamboatWillieVideo from '../video/steamboatwillie_001.mp4';
+import steamboatWillieVideo from '../video/steamboatwillie_001.webm';
 
 const API_KEY = import.meta.env.VITE_GOOGLE_AI_API_KEY || '';
 const genAI = new GoogleGenerativeAI(API_KEY);
