@@ -29,7 +29,7 @@ const VideoChatbot = () => {
       // Fetch the video file
       const response = await fetch(steamboatWillieVideo);
       const blob = await response.blob();
-      const file = new File([blob], 'steamboatwillie_001.mp4', { type: 'video/mp4' });
+      const file = new File([blob], 'steamboatwillie_001.webm', { type: 'video/webm' });
 
       const formData = new FormData();
       formData.append('file', file);
@@ -40,7 +40,7 @@ const VideoChatbot = () => {
           'Authorization': `Bearer ${API_KEY}`,
         },
         params: {
-          mimeType: 'video/mp4',
+          mimeType: 'video/webm',
         },
       });
 
@@ -66,7 +66,7 @@ const VideoChatbot = () => {
       const result = await model.generateContent([
         {
           fileData: {
-            mimeType: 'video/mp4',
+            mimeType: 'video/webm',
             fileUri: videoUri
           }
         },
