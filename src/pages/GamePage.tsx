@@ -2,7 +2,7 @@ import React from 'react';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/shadcn/ui/tabs";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/shadcn/ui/card";
 import { Gamepad2, Dices, Grid3X3, Calculator } from 'lucide-react';
-import TicTacToe from '../components/TicTacToe';
+import Pong from '../components/Pong';
 import Checkers from '../components/Checkers';
 import Tetris from '../components/Tetris';
 import Game2048 from '../components/2048';
@@ -18,10 +18,10 @@ const GamePage: React.FC = () => {
           <p className="text-xl text-gray-300">Select a game and start playing!</p>
         </header>
 
-        <Tabs defaultValue="tictactoe" className="w-full">
+        <Tabs defaultValue="pong" className="w-full">
           <TabsList className="grid w-full grid-cols-4 mb-8">
-            <TabsTrigger value="tictactoe" className="text-lg flex items-center justify-center">
-              <Grid3X3 className="mr-2" /> Tic Tac Toe
+            <TabsTrigger value="pong" className="text-lg flex items-center justify-center">
+              <Grid3X3 className="mr-2" /> Pong
             </TabsTrigger>
             <TabsTrigger value="checkers" className="text-lg flex items-center justify-center">
               <Gamepad2 className="mr-2" /> Checkers
@@ -35,14 +35,14 @@ const GamePage: React.FC = () => {
           </TabsList>
 
           <div className="game-content bg-gray-800 p-6 rounded-lg shadow-lg">
-            <TabsContent value="tictactoe">
+            <TabsContent value="pong">
               <Card>
                 <CardHeader>
-                  <CardTitle>Tic Tac Toe</CardTitle>
-                  <CardDescription>Classic 3x3 grid game. Get three in a row to win!</CardDescription>
+                  <CardTitle>2 Player Pong</CardTitle>
+                  <CardDescription>Classic 1 vs 1 game. Beat your opponent</CardDescription>
                 </CardHeader>
                 <CardContent>
-                  <TicTacToe />
+                  <Pong />
                 </CardContent>
               </Card>
             </TabsContent>
