@@ -1,168 +1,135 @@
-import LiveChat from "@/components/LiveChat";
-import PollView from "@/components/PollView";
-import VideoJSSynced from "@/components/VideoJSSynced";
-import VideoChatbot from "@/components/ChatBot";
-import { addVote, changeVote, getWatchpartyPoll } from "@/utils/api-client";
-import { useEffect, useState } from "react";
-import { useLocation, useParams } from "react-router";
-import { useAppContext } from "@/contexts/AppContext";
+import React, { useState, useEffect } from 'react';
+import axios from 'axios';
+import { GoogleGenerativeAI } from '@google/generative-ai';
 
-export interface WatchParty {
-  id: number;
-  partyName: string;
-  scheduledDate: string;
-  scheduledTime: string;
-  code: string; 
-  createdDate: number[]; 
-  password: string;
+import steamboatWillieVideo from '../video/steamboatwillie_001.mp4';
+
+const API_KEY = import.meta.env.VITE_GOOGLE_AI_API_KEY || '';
+const genAI = new GoogleGenerativeAI(API_KEY);
+
+interface Message {
+  text: string;
+  sender: 'user' | 'bot';
 }
 
-export type PollResponse = {
-  pollId: number;
-  pollQuestion: string;
-  pollOptionList: PollOptionResponse[];
-  voted: boolean;
-  selectedPollOption: PollOptionResponse;
-}
-
-export type PollOptionResponse = {
-  pollOptionId: number;
-  value: string;
-  description: string;
-  imageUrl: string;
-  voteCount: number;
-}
-
-const WatchPartyPage = () => {
-  const params = useParams();
-  const location = useLocation();
-  const { user } = useAppContext();
-
-  // Provide default values if location.state is not available
-  const data = location.state || {};
-  const isHost = data.isHost || false;
-  const videoSource = data.videoSource || ''; // Provide a default video source or handle this case appropriately
-
-  console.log("User is host: " + isHost);
-  console.log("Video url is: " + videoSource);
-
-  const sessionId = params.sessionId ? params.sessionId.toString() : "1";
-  const videoJsOptions = {
-    sources: [
-      {
-        src: videoSource,
-        type: "application/x-mpegURL",
-      },
-    ],
-  };
-
-  const [roomID, setRoomID] = useState(sessionId);
-  const [watchpartyPoll, setWatchPartyPoll] = useState<PollResponse|null>(null);
-  const [optionChecked, setOptionChecked] = useState<PollOptionResponse|null>(null);
-  const [blockDisposePlayer, setBlockDisposePlayer] = useState<boolean>(false);
-  const [voteSaved, setVoteSaved] = useState(false);
-  const [pollLoaded, setPollLoaded] = useState(false);
-  const [error, setError] = useState<string | null>(null);
-  const [success, setSuccess] = useState<string | null>(null);
+const VideoChatbot = () => {
+  const [videoUri, setVideoUri] = useState('');
+  const [messages, setMessages] = useState<Message[]>([]); 
+  const [input, setInput] = useState('');
+  const [isLoading, setIsLoading] = useState(false);
+  const [isOpen, setIsOpen] = useState(false);
 
   useEffect(() => {
-    setBlockDisposePlayer(true);
-  }, [optionChecked]);
+    uploadVideo();
+  }, []);
 
-  const onPollLoad = async() => {
+  const uploadVideo = async () => {
+    setIsLoading(true);
     try {
-      if(user) {
-        const response = await getWatchpartyPoll(sessionId, user?.id);
-        setWatchPartyPoll(response);
-        setPollLoaded(true);
-        if (response.selectedPollOption) {
-          setOptionChecked(response.selectedPollOption);
-          setVoteSaved(true);
-        } else {
-          setVoteSaved(false);
-        }
-      }
+      // Fetch the video file
+      const response = await fetch(steamboatWillieVideo);
+      const blob = await response.blob();
+      const file = new File([blob], 'steamboatwillie_001.mp4', { type: 'video/mp4' });
+
+      const formData = new FormData();
+      formData.append('file', file);
+
+      const uploadResponse = await axios.post('https://generativelanguage.googleapis.com/v1beta/files:upload', formData, {
+        headers: {
+          'Content-Type': 'multipart/form-data',
+          'Authorization': `Bearer ${API_KEY}`,
+        },
+        params: {
+          mimeType: 'video/mp4',
+        },
+      });
+
+      setVideoUri(uploadResponse.data.uri);
+      setMessages([{ text: 'Video uploaded successfully. You can now ask questions about it.', sender: 'bot' }]);
     } catch (error) {
-        setError("Error retrieving poll");
+      console.error('Error uploading video:', error);
+      setMessages([{ text: 'Error uploading video. Please try again.', sender: 'bot' }]);
     }
-  }
-
-  const onVoteCreate = async () => {
-    if (watchpartyPoll && optionChecked && user) {
-      try {
-        addVote(watchpartyPoll?.pollId, optionChecked?.pollOptionId, user?.id);
-        setSuccess("Voting done successfully!");
-        setVoteSaved(true);
-      } catch (error) {
-        setError("Error creating vote on this poll");
-      }
-    }
+    setIsLoading(false);
   };
 
-  const onVoteChange = async () => {
-    if (watchpartyPoll && optionChecked && user) {
-      try {
-        changeVote(watchpartyPoll?.pollId, optionChecked?.pollOptionId, user?.id);
-        setSuccess("Voting updated successfully!");
-      } catch (error) {
-        setError("Error updating vote on this poll");
-      }
+  const handleSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+    if (!input.trim() || !videoUri) return;
+
+    setMessages(prevMessages => [...prevMessages, { text: input, sender: 'user' }]);
+    setInput('');
+    setIsLoading(true);
+
+    try {
+      const model = genAI.getGenerativeModel({ model: "gemini-1.5-pro" });
+      const result = await model.generateContent([
+        {
+          fileData: {
+            mimeType: 'video/mp4',
+            fileUri: videoUri
+          }
+        },
+        { text: input },
+      ]);
+
+      const response = result.response.text();
+      setMessages(prevMessages => [...prevMessages, { text: response, sender: 'bot' }]);
+    } catch (error) {
+      console.error('Error generating response:', error);
+      setMessages(prevMessages => [...prevMessages, { text: 'Sorry, I encountered an error. Please try again.', sender: 'bot' }]);
     }
+
+    setIsLoading(false);
   };
-
-  if (!pollLoaded) {
-    onPollLoad();
-  }
-
-  // Check if we have a valid video source before rendering
-  if (!videoSource) {
-    return <div>Error: No video source provided</div>;
-  }
 
   return (
-    <div>
-      <div className="grid grid-cols-1 gap-y-2 md:grid-cols-4 md:gap-x-4 ">
-        <div className="col-span-3 min-h-80">
-          <VideoJSSynced
-            blockDisposePlayer={blockDisposePlayer}
-            options={videoJsOptions}
-            roomID={roomID}
-            setRoomID={setRoomID}
-            isHost={isHost}
-          />
-        </div>
-        <div className="col-span-1">
-          <LiveChat roomID={roomID} />
-        </div>
-      </div>
-      {pollLoaded && watchpartyPoll && user &&
-        <div>
-          <PollView
-            watchPartyCode={sessionId}
-            poll={watchpartyPoll}
-            optionChecked={optionChecked}
-            voteSaved={voteSaved}
-            setOptionChecked={setOptionChecked}
-            onCreateVote={onVoteCreate}
-            onChangeVote={onVoteChange}
-          />
-          {error && (
-            <div className="mt-4 p-4 bg-red-100 border border-red-400 text-red-700 rounded">
-              <p>{error}</p>
+    <div className="fixed bottom-4 right-4 z-50">
+      {!isOpen ? (
+        <button 
+          onClick={() => setIsOpen(true)}
+          className="bg-blue-500 text-white p-2 rounded-full shadow-lg"
+        >
+          Chat
+        </button>
+      ) : (
+        <div className="bg-white rounded-lg shadow-xl w-80 h-96 flex flex-col">
+          <div className="flex justify-between items-center p-2 border-b">
+            <h2 className="text-lg font-semibold">Video Chatbot</h2>
+            <button onClick={() => setIsOpen(false)} className="text-gray-500 hover:text-gray-700">
+              ×
+            </button>
+          </div>
+          <div className="flex-grow overflow-y-auto p-2">
+            {messages.map((message, index) => (
+              <div key={index} className={`mb-2 ${message.sender === 'user' ? 'text-right' : 'text-left'}`}>
+                <span className={`inline-block p-2 rounded-lg ${message.sender === 'user' ? 'bg-blue-500 text-white' : 'bg-gray-200'}`}>
+                  {message.text}
+                </span>
+              </div>
+            ))}
+          </div>
+          <form onSubmit={handleSubmit} className="p-2 border-t">
+            <div className="flex">
+              <input
+                type="text"
+                value={input}
+                onChange={(e) => setInput(e.target.value)}
+                placeholder="Ask a question..."
+                className="flex-grow border p-2 mr-2 rounded"
+                disabled={isLoading || !videoUri}
+              />
+              <button type="submit" className="bg-blue-500 text-white p-2 rounded" disabled={isLoading || !videoUri}>
+                {isLoading ? '...' : 'Send'}
+              </button>
             </div>
-          )}
-          {success && (
-            <div className="mt-4 p-4 bg-green-100 border border-green-400 text-green-700 rounded">
-              <p>{success}</p>
-            </div>
-          )}
+          </form>
         </div>
-      }
-      <VideoChatbot />
+      )}
     </div>
   );
 };
 
-export default WatchPartyPage;
+export default VideoChatbot;
 
 
