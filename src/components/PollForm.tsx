@@ -1,7 +1,7 @@
 import { Label } from "@/pages/CreateWatchPartyPage";
 import { Input } from "./shadcn/ui/input";
 import { RadioGroup, RadioGroupItem } from "./shadcn/ui/radio-group"
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { Textarea } from "./shadcn/ui/textarea";
 
 export type Poll = {
@@ -15,22 +15,32 @@ export type PollOption = {
   description: string;
   image: File|null;
   imageOptionUrl: string;
+  id: number;
 };
 
 interface PollProps {
-  poll: Poll;
-  setPoll: (poll: Poll) => void;
-  optionSize?: number;
+  question: string;
+  setQuestion: (question: string) => void;
+  optionSize: number;
+  setOptionSize: (optionSize: number) => void;
+  pollOptions: PollOption[];
+  setPollOptions: (pollOptions: PollOption[]) => void;
+  imageList: ImageObject[];
+  setImageList: (imageList: ImageObject[]) => void;
 };
 
 export type PollOptionProps = {
   id: number;
-  value: string;
-  description: string;
-  image: Blob|null;
+  pollOptionValue: PollOption;
   onOptionValueChange(option: PollOption, id: number): void;
+  imageList: ImageObject[];
+  setImageList: (imageList: ImageObject[]) => void;
 };
 
+export type ImageObject = {
+  image?: File | null;
+  imageUrl?: string;
+};
 
 // for api calls
 // to create poll in backend
@@ -52,58 +62,51 @@ export type PollOptionRequestData = {
 const MIN_SIZE = 2;
 const MAX_SIZE = 8;
 
-export const PollForm: React.FC<PollProps> = ({ poll, setPoll }) => {
-    const [question, setQuestion] = useState<string>('');
-    const [optionSize, setOptionSize] = useState<number>(2);
-    const [options, setOptions] = useState<PollOption[]>([
-      {value: "", description: "", image: null, imageOptionUrl: ""},
-      {value: "", description: "", image: null, imageOptionUrl: ""},
-    ]);
-
-    // EVENT HANDLERS FOR POLL
-    function handleQuestionChange(newValue: string) {
-      setQuestion(newValue);
-      setPoll({
-        ...poll,
-        question: newValue
-      })
-    }
-
+export const PollForm: React.FC<PollProps> = ({ question, setQuestion, optionSize, setOptionSize, pollOptions, setPollOptions, imageList, setImageList }) => {
     function handleOptionSizeChange(newSize: number) {
-      setOptionSize(newSize);
+      
+      let updatedPollOptions: PollOption[] = pollOptions;
       if (newSize >= MIN_SIZE && newSize <= MAX_SIZE) {
         // if option size increased -> push n elements in options with n being diff between old and new option size
-        if (newSize > options.length) {
-          for (var i=options.length; i < newSize; i++) {
-            options.push({
+        if (newSize > pollOptions.length) {
+          for (var i=pollOptions.length; i < newSize; i++) {
+            updatedPollOptions.push({
               value: "",
               description: "",
               image: null,
-              imageOptionUrl: ""
+              imageOptionUrl: "",
+              id: 0
             });
           }
+          // add image object
+          const imageListUpdated = imageList;
+          imageListUpdated.push({
+            image: null,
+            imageUrl: ""
+          });
+          setImageList(imageListUpdated);
         }
         // if option size decreased -> pop n elements in options with n being diff between old and new option size
-        if (newSize < options.length) {
-          for (var i=options.length-1; i >= newSize; i--) {
-            options.pop();
+        if (newSize < pollOptions.length) {
+          for (var i=pollOptions.length-1; i >= newSize; i--) {
+            updatedPollOptions.pop();
+            // remove image
+            const imageListUpdated = imageList;
+            imageListUpdated.pop();
+            setImageList(imageListUpdated);
           }
         }
-        setPoll({
-          ...poll,
-          options: options,
-          optionSize: newSize
-        })
+        setPollOptions(updatedPollOptions);
+        
       }
+      setOptionSize(newSize);
     }
+  
 
-    function handleOptionChange(newValue: PollOption, id: number) {
-      options[id] = newValue;
-      setOptions(options);
-      setPoll({
-        ...poll,
-        options,
-      })
+    function handleOptionChange(newValue: PollOption, id: number,) {
+      let updatedPollOptions: PollOption[] = pollOptions;
+      updatedPollOptions[id] = newValue;
+      setPollOptions(updatedPollOptions);
     }
 
     // POLL RENDERER
@@ -117,8 +120,7 @@ export const PollForm: React.FC<PollProps> = ({ poll, setPoll }) => {
               placeholder="e.g, Which do you prefer?"
               type="text"
               value={question}
-              onChange={(e) => handleQuestionChange(e.target.value)}
-              className="w-full font-alatsi"
+              onChange={(e) => setQuestion(e.target.value)}
             />
           </div>
           {/* OPTION SIZE */}
@@ -140,19 +142,23 @@ export const PollForm: React.FC<PollProps> = ({ poll, setPoll }) => {
         {/* OPTIONS */}
          <div>
             <Label htmlFor="poll-watchparty-options">Options</Label>
-            <div style={{padding: "8px"}}>
+            <div>
               <RadioGroup defaultValue="option-0">
+                <div className="grid grid-cols-2 md:grid-cols-2 lg:grid-cols-2 gap-6 mb-8">
                  {/* RENDERED LIST OF POLL OPTIONS BASED ON SIZE */}
-                 {options.map((option, id) => 
-                    <PollOption
+                 {pollOptions.map((option, id) => 
+                 <div className="flex flex-col h-full">
+                  <PollOption
                       key={id}
-                      value={option.value}
-                      description={option.description}
-                      image={option.image}
+                      pollOptionValue={option}
                       id={id}
                       onOptionValueChange={handleOptionChange}
+                      imageList={imageList}
+                      setImageList={setImageList}
                   />
+                 </div>
                 )}
+                </div>
               </RadioGroup>
             </div>
         </div>
@@ -161,56 +167,78 @@ export const PollForm: React.FC<PollProps> = ({ poll, setPoll }) => {
   };
 
   export const PollOption = ({
-    value,
     id,
-    onOptionValueChange
+    pollOptionValue,
+    onOptionValueChange,
+    imageList,
+    setImageList
   }: PollOptionProps) => {
-    const [option, setOption] = useState<PollOption>({
-      value: "",
-      description: "",
-      image: null,
-      imageOptionUrl: ""
-    });
     const [imageUploadError, setImageUploadError] = useState<boolean>(false);
+    const [value, setValue] = useState<string>('');
+    const [description, setDescription] = useState<string>('');
+    const [image, setImage] = useState<File|null>(null);
+    const [imageOptionUrl, setImageOptionUrl] = useState<string>('');
+    const [pollOptionId, setPollOptionId] = useState<number>(0);
 
-    // event handler triggered when value or description is changed
-    function onOptionChange(newOption: PollOption, id: number) {
-      setOption(newOption);
-      onOptionValueChange(newOption, id);
-    }
-
+    useEffect(() => {
+       // to set values if passed in -> for manage purposes
+        if (pollOptionValue.id != pollOptionId) {
+          setPollOptionId(pollOptionValue.id);
+          setValue(pollOptionValue.value);
+          setDescription(pollOptionValue.description ? pollOptionValue.description : "");
+          setImageOptionUrl(pollOptionValue.imageOptionUrl);
+        }
+        // trigger option change when any of these input are changed
+        onOptionValueChange({
+          value,
+          description,
+          image,
+          imageOptionUrl,
+          id: pollOptionId
+        }, id);
+    }, [value, description, image, imageOptionUrl, pollOptionId, pollOptionValue]);
+    
+    function uploadNewImage(file: File) {
+      const imageUrl = URL.createObjectURL(file);
+          setImage(file);
+          setImageOptionUrl(imageUrl);
+          // update new image
+          const imageListUpdated = imageList;
+          imageListUpdated[id].image = file;
+          imageListUpdated[id].imageUrl = imageUrl;
+          setImageList(imageListUpdated);
+      }
+  
     // event handler for image upload
-    function onImageUpload(e: React.ChangeEvent<HTMLInputElement>, id: number) {
+    function onImageUpload(e: React.ChangeEvent<HTMLInputElement>) {
       if (e.target.files) {
-        // check file size -> throw error if too large size
+
         if (e.target.files[0].size >= 1048576) {
-          onOptionChange({...option, image: null, imageOptionUrl: ""}, id);
           setImageUploadError(true);
         } else {
-          const imageUrl = URL.createObjectURL(e.target.files[0]);
-          onOptionChange({...option, image: e.target.files[0], imageOptionUrl: imageUrl}, id);
+          uploadNewImage(e.target.files[0]);
           setImageUploadError(false);
         }
       }
     }
 
     return (
-      <div>
+      <div className="p-4 flex-grow flex flex-col justify-between relative z-10">
         {/* RADIO BUTTON WITH OPTION VALUE */}
         <div className="flex items-center space-x-2">
           <RadioGroupItem
             style={{backgroundColor: "white"}}
-            value={value}
+            value={pollOptionValue.value}
             id={"option-" + id}
             disabled
             checked={false}/>
             <Input
               id={"input-" + id}
-              value={option?.value}
+              value={value}
               type="text"
               className="w-full font-alatsi"
               placeholder={"Option " + (id+1)}
-              onChange={(e) => onOptionChange({...option, value: e.target.value}, id)}
+              onChange={(e) => setValue(e.target.value)}
               required
             />
         </div>
@@ -219,10 +247,10 @@ export const PollForm: React.FC<PollProps> = ({ poll, setPoll }) => {
           <Label htmlFor="poll-option-description">Description</Label>
           <Textarea 
             id={"description-" + id}
-            value={option?.description}
+            value={description}
             className="w-full font-alatsi"
             placeholder={"Please indicate a description."}
-            onChange={(e) => onOptionChange({...option, description: e.target.value}, id)}
+            onChange={(e) => setDescription(e.target.value)}
           />
         </div>
         {/* IMAGE UPLOAD */}
@@ -231,10 +259,10 @@ export const PollForm: React.FC<PollProps> = ({ poll, setPoll }) => {
           <input 
             type="file" 
             name="option-image"
-            onChange={(e) => onImageUpload(e, id)} />
-            {option?.image &&
+            onChange={(e) => onImageUpload(e)} />
+            {imageOptionUrl &&
               <img
-                src={option?.imageOptionUrl} 
+                src={imageOptionUrl} 
                 width={100}
                 height={100}/>
             }

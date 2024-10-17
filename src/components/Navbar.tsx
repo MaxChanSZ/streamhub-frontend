@@ -163,10 +163,34 @@ const Navbar = () => {
               </NavigationMenuContent>
             </NavigationMenuItem>
             {/* Rest of Buttons */}
-            <NavigationMenuItem>
+            <NavigationMenuItem className="relative">
               <Button variant="ghost" className={buttonTextFormat} asChild>
-                <Link to={`/pollResults`}>Poll Results</Link>
+                <NavigationMenuTrigger className="relative z-10">
+                  Poll
+                </NavigationMenuTrigger>
               </Button>
+              <NavigationMenuContent className="bg-black w-fit">
+                <ul className="flex flex-col items-center w-full p-2 space-y-2">
+                  {pollCategories.map((category) => (
+                    <li key={category.title} className="w-full">
+                      <Button
+                        variant="ghost"
+                        className={categoryButtonFormat}
+                        asChild
+                      >
+                        <Link
+                          to={category.href}
+                          className="text-white hover:underline block w-full py-2 px-4 text-center"
+                        >
+                          <div>
+                            <h3 className="font-bold">{category.title}</h3>
+                          </div>
+                        </Link>
+                      </Button>
+                    </li>
+                  ))}
+                </ul>
+              </NavigationMenuContent>
             </NavigationMenuItem>
           </NavigationMenuList>
         </NavigationMenu>
@@ -259,19 +283,38 @@ const Navbar = () => {
                   </NavigationMenuContent>
                 </NavigationMenuItem>
 
-                <Button
-                  variant="ghost"
-                  className={`${buttonTextFormat} text-white`}
-                  asChild
-                >
-                  <Link
-                    to={`/pollResults`}
-                    className="block py-2"
-                    onClick={() => setMenuOpen(false)}
+                <NavigationMenuItem className="relative">
+                  <Button
+                    variant="ghost"
+                    className={`${buttonTextFormat} text-white`}
+                    asChild
                   >
-                    Poll Results
-                  </Link>
-                </Button>
+                    <NavigationMenuTrigger className="relative z-10">
+                      Poll
+                    </NavigationMenuTrigger>
+                  </Button>
+                  <NavigationMenuContent className="bg-black w-fit">
+                    <ul className="flex flex-col items-center w-full gap-2 p-2">
+                      {pollCategories.map((category) => (
+                        <li key={category.title} className="w-full">
+                          <Button
+                            variant="ghost"
+                            className={`${categoryButtonFormat} text-white`}
+                            asChild
+                          >
+                            <Link
+                              to={category.href}
+                              className="text-white hover:underline block w-full py-2 px-4 text-center"
+                              onClick={() => setMenuOpen(false)} // Add this line
+                            >
+                              <h3 className="font-bold">{category.title}</h3>
+                            </Link>
+                          </Button>
+                        </li>
+                      ))}
+                    </ul>
+                  </NavigationMenuContent>
+                </NavigationMenuItem>
               </NavigationMenu>
             </li>
           </ul>
@@ -332,4 +375,10 @@ const wpCategories: { title: string; href: string }[] = [
   { title: "Create Watch Party", href: "/create-watch-party" },
   { title: "Manage Watch Party", href: "/manage-watch-party" },
   { title: "Send Invitation", href: "/send-email" },
+];
+
+const pollCategories: { title: string; href: string }[] = [
+  { title: "Create Poll", href: "/create-poll" },
+  { title: "Manage Poll", href: "/manage-poll" },
+  { title: "View Poll Results", href: "/view-poll-results" },
 ];

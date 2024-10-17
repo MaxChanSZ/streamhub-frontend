@@ -23,6 +23,8 @@ import LandingPage from "@/pages/LandingPage";
 import JoinWatchPartyPage from "@/pages/JoinWatchPartyPage";
 import NotFoundPage from "@/pages/NotFoundPage";
 import ManageWatchPartyPage from "@/pages/ManageWatchPartyPage";
+import CreatePollPage from "@/pages/CreatePollPage";
+import ManagePollPage from "@/pages/ManagePollPage";
 
 interface ReactDOMRunProps {
 }
@@ -98,7 +100,23 @@ const router = createBrowserRouter([
         ),
       },
       {
-        path: "pollResults",
+        path: "create-poll",
+        element: (
+          <ProtectedRoute>
+            <CreatePollPage />
+          </ProtectedRoute>
+        ),
+      },
+      {
+        path: "manage-poll",
+        element: (
+          <ProtectedRoute>
+            <ManagePollPage />
+          </ProtectedRoute>
+        ),
+      },
+      {
+        path: "view-poll-results",
         element: (
           <ProtectedRoute>
             <PollResultPage />
