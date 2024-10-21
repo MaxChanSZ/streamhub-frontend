@@ -1,19 +1,85 @@
 import React, { useState, useRef, useCallback, useEffect } from 'react';
 import { Button } from "@/components/shadcn/ui/button";
-import { Camera, Video, Square, Download } from 'lucide-react';
+import { Camera, Video, Square, Download, Wifi } from 'lucide-react';
+import { io, Socket } from 'socket.io-client';
 
 const WebcamStudio: React.FC = () => {
   const [isWebcamOn, setIsWebcamOn] = useState(false);
   const [isRecording, setIsRecording] = useState(false);
+  const [isStreaming, setIsStreaming] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const videoRef = useRef<HTMLVideoElement>(null);
   const streamRef = useRef<MediaStream | null>(null);
   const mediaRecorderRef = useRef<MediaRecorder | null>(null);
   const [recordedChunks, setRecordedChunks] = useState<Blob[]>([]);
+  const peerConnectionsRef = useRef<{ [id: string]: RTCPeerConnection }>({});
+  const socketRef = useRef<Socket | null>(null);
 
   useEffect(() => {
+    socketRef.current = io('http://localhost:3000', {
+      transports: ['websocket'],
+      upgrade: false
+    });
+
+    socketRef.current.on('connect', () => {
+      console.log('Connected to server');
+    });
+
+    socketRef.current.on('connect_error', (error) => {
+      console.error('Connection error:', error);
+      setError(`Failed to connect to server: ${error.message}`);
+    });
+
+    socketRef.current.on('watcher', (id: string) => {
+      console.log('New watcher:', id);
+      const peerConnection = new RTCPeerConnection({
+        iceServers: [{ urls: 'stun:stun.l.google.com:19302' }]
+      });
+      peerConnectionsRef.current[id] = peerConnection;
+
+      if (streamRef.current) {
+        streamRef.current.getTracks().forEach(track => {
+          peerConnection.addTrack(track, streamRef.current!);
+        });
+      }
+
+      peerConnection.onicecandidate = (event) => {
+        if (event.candidate) {
+          socketRef.current?.emit('candidate', id, event.candidate);
+        }
+      };
+
+      peerConnection
+        .createOffer()
+        .then(sdp => peerConnection.setLocalDescription(sdp))
+        .then(() => {
+          if (peerConnection.localDescription) {
+            socketRef.current?.emit('offer', id, peerConnection.localDescription);
+          }
+        })
+        .catch(error => console.error(`Error creating offer:`, error));
+    });
+
+    socketRef.current.on('answer', (id: string, description: RTCSessionDescriptionInit) => {
+      peerConnectionsRef.current[id]?.setRemoteDescription(new RTCSessionDescription(description))
+        .catch(error => console.error(`Error setting remote description:`, error));
+    });
+
+    socketRef.current.on('candidate', (id: string, candidate: RTCIceCandidateInit) => {
+      peerConnectionsRef.current[id]?.addIceCandidate(new RTCIceCandidate(candidate))
+        .catch(error => console.error(`Error adding ICE candidate:`, error));
+    });
+
+    socketRef.current.on('disconnectPeer', (id: string) => {
+      if (peerConnectionsRef.current[id]) {
+        peerConnectionsRef.current[id].close();
+        delete peerConnectionsRef.current[id];
+      }
+    });
+
     return () => {
       stopWebcam();
+      socketRef.current?.disconnect();
     };
   }, []);
 
@@ -41,6 +107,8 @@ const WebcamStudio: React.FC = () => {
       videoRef.current.srcObject = null;
     }
     setIsWebcamOn(false);
+    setIsStreaming(false);
+    socketRef.current?.emit('stopBroadcasting');
   }, []);
 
   const captureScreenshot = useCallback(() => {
@@ -91,6 +159,24 @@ const WebcamStudio: React.FC = () => {
     }
   }, [recordedChunks]);
 
+  const startStreaming = useCallback(() => {
+    if (isWebcamOn && streamRef.current && streamRef.current.active) {
+      socketRef.current?.emit('startBroadcasting');
+      setIsStreaming(true);
+    } else {
+      setError("Please ensure the webcam is started and the stream is active before streaming.");
+    }
+  }, [isWebcamOn]);
+
+  const stopStreaming = useCallback(() => {
+    setIsStreaming(false);
+    Object.keys(peerConnectionsRef.current).forEach((id) => {
+      peerConnectionsRef.current[id].close();
+      delete peerConnectionsRef.current[id];
+    });
+    socketRef.current?.emit('stopBroadcasting');
+  }, []);
+
   return (
     <div className="container mx-auto p-4">
       <h1 className="text-3xl font-bold mb-6">Webcam Studio</h1>
@@ -120,6 +206,11 @@ const WebcamStudio: React.FC = () => {
           <Download className="mr-2 h-4 w-4" />
           Download Recording
         </Button>
+
+        <Button onClick={isStreaming ? stopStreaming : startStreaming} disabled={!isWebcamOn}>
+          <Wifi className="mr-2 h-4 w-4" />
+          {isStreaming ? 'Stop Streaming' : 'Start Streaming'}
+        </Button>
       </div>
       
       <div className="relative">
@@ -134,6 +225,8 @@ const WebcamStudio: React.FC = () => {
           <li>Click "Start Recording" to begin video capture.</li>
           <li>Click "Stop Recording" when you're done.</li>
           <li>Use "Download Recording" to save your video.</li>
+          <li>Click "Start Streaming" to begin live streaming.</li>
+          <li>Click "Stop Streaming" to end the live stream.</li>
           <li>Click "Stop Webcam" to turn off the camera when finished.</li>
         </ol>
       </div>
