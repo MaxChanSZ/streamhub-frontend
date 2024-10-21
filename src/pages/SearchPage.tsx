@@ -1,9 +1,8 @@
-import React, { useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import * as apiClient from "@/utils/api-client";
 import { LoadingSpinner } from "@/components/LoadingSpinner";
 import { ThumbnailsView } from "@/components/ThumbnailsView";
-import pic1 from "/pic1.jpeg";
 
 type SearchResult = {
   id: number;
@@ -18,16 +17,19 @@ type SearchResult = {
 const SearchPage = () => {
   const queryString = window.location.search;
   const urlParams = new URLSearchParams(queryString);
-  const title = urlParams.get(`title`);
+  const value = urlParams.get(`value`);
+  const category = urlParams.get(`category`);
   const [isLoading, setIsLoading] = useState(true);
   const [searchResults, setSearchResults] = useState<[SearchResult]>();
   const navigate = useNavigate();
   useEffect(() => {
-    if (title !== null && title !== "") {
+
+    // search by search bar
+    if (value !== null && value !== "") {
       console.log("Start fetching");
-      console.log(title);
+      console.log(value);
       apiClient
-        .searchSeries(title)
+        .searchSeries(value)
         .then((response) => {
           setSearchResults(response.data);
           setIsLoading(false);
@@ -36,11 +38,27 @@ const SearchPage = () => {
         .catch((error) => {
           console.log(error);
         });
-    } else {
+    } 
+    // search by categories
+    else if (category !== null && category !== "") {
+      console.log("Start fetching");
+      console.log(category);
+      apiClient
+        .searchSeriesByCategory(category)
+        .then((response) => {
+          setSearchResults(response.data);
+          setIsLoading(false);
+          console.log(searchResults);
+        })
+        .catch((error) => {
+          console.log(error);
+        });
+    } 
+    else {
       console.log("Empty Search Value");
       navigate("/");
     }
-  }, [isLoading]);
+  }, [isLoading, value, category]);
 
   return (
     <div>

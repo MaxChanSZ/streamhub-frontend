@@ -11,6 +11,14 @@ import { Link, useNavigate } from "react-router-dom";
 import { useEffect, useRef, useState, FormEvent } from "react";
 import logo from "/streamhub-logo.svg";
 import NavbarProfile from "@/components/NavbarProfile.tsx";
+import { useQuery } from "react-query";
+import { useAppContext } from "@/contexts/AppContext";
+import { getSeriesCategories, getSubscriptionStatus } from "@/utils/api-client";
+
+type NavbarItem = {
+  title: string;
+  href: string 
+};
 
 const Navbar = () => {
   const [menuOpen, setMenuOpen] = useState(false);
@@ -22,6 +30,8 @@ const Navbar = () => {
   );
   const [searchValue, setSearchValue] = useState<string | null>(null);
   const navigate = useNavigate();
+  const { user } = useAppContext();
+  const [categories, setCategories] = useState<NavbarItem[]>([]);
 
   const buttonTextFormat =
     "text-xl xl:text-xl 2xl:text-2xl 3xl:text-3xl 4xl:text-4xl 5xl:text-4xl " + // Text size
@@ -53,11 +63,14 @@ const Navbar = () => {
   };
 
   useEffect(() => {
+    if (user) {
+      fetchCategories();
+    }
     document.addEventListener("mousedown", handleClickOutside);
     return () => {
       document.removeEventListener("mousedown", handleClickOutside);
     };
-  }, []);
+  }, [user]);
   const handleSubmit = (e: FormEvent) => {
     e.preventDefault();
     // console.log(searchValue);
@@ -65,7 +78,33 @@ const Navbar = () => {
       console.log("Empty Search Value");
       return;
     } else {
-      navigate(`/search?title=${searchValue}`);
+      navigate(`/search?value=${searchValue}`);
+    }
+  };
+
+  const { data: subscriptionStatus } = useQuery(
+    ["subscriptionStatus", user?.email],
+    () => getSubscriptionStatus(user?.email || ""),
+    {
+      enabled: !!user?.email,
+    }
+  );
+  
+  const fetchCategories = async () => {
+    try {
+      if (user && user.id) {
+        const response = await getSeriesCategories();
+        let categoriesNavItemList: NavbarItem[] = [];
+        for(let i=0; i<response.length; i++) {
+          categoriesNavItemList.push({
+            title: response[i],
+            href: `/search?category=${response[i]}`
+          })
+        }
+        setCategories(categoriesNavItemList);
+      }
+    } catch (error) {
+      console.error('Error fetching categories:', error);
     }
   };
 
@@ -192,6 +231,39 @@ const Navbar = () => {
                 </ul>
               </NavigationMenuContent>
             </NavigationMenuItem>
+            
+            {subscriptionStatus?.status === "active" &&
+              <NavigationMenuItem className="relative">
+                <Button variant="ghost" className={buttonTextFormat} asChild>
+                  <NavigationMenuTrigger className="relative z-10">
+                  Premium Features ⭐
+                  </NavigationMenuTrigger>
+                </Button>
+                <NavigationMenuContent className="bg-black w-fit">
+                  <ul className="flex flex-col items-center w-full p-2 space-y-2">
+                    {premiumFeatures.map((features) => (
+                      <li key={features.title} className="w-full">
+                        <Button
+                          variant="ghost"
+                          className={categoryButtonFormat}
+                          asChild
+                        >
+                          <Link
+                            to={features.href}
+                            className="text-white hover:underline block w-full py-2 px-4 text-center"
+                          >
+                            <div>
+                              <h3 className="font-bold">{features.title}</h3>
+                            </div>
+                          </Link>
+                        </Button>
+                      </li>
+                    ))}
+                  </ul>
+                </NavigationMenuContent>
+              </NavigationMenuItem>
+            }
+
           </NavigationMenuList>
         </NavigationMenu>
       </div>
@@ -315,6 +387,42 @@ const Navbar = () => {
                     </ul>
                   </NavigationMenuContent>
                 </NavigationMenuItem>
+
+                {subscriptionStatus?.status === "active" &&    
+                  <NavigationMenuItem className="relative">
+                    <Button
+                      variant="ghost"
+                      className={`${buttonTextFormat} text-white`}
+                      asChild
+                    >
+                      <NavigationMenuTrigger className="relative z-10">
+                        Premium Features ⭐
+                      </NavigationMenuTrigger>
+                    </Button>
+                    <NavigationMenuContent className="bg-black w-fit">
+                      <ul className="flex flex-col items-center w-full gap-2 p-2">
+                        {premiumFeatures.map((features) => (
+                          <li key={features.title} className="w-full">
+                            <Button
+                              variant="ghost"
+                              className={`${categoryButtonFormat} text-white`}
+                              asChild
+                            >
+                              <Link
+                                to={features.href}
+                                className="text-white hover:underline block w-full py-2 px-4 text-center"
+                                onClick={() => setMenuOpen(false)} // Add this line
+                              >
+                                <h3 className="font-bold">{features.title}</h3>
+                              </Link>
+                            </Button>
+                          </li>
+                        ))}
+                      </ul>
+                    </NavigationMenuContent>
+                  </NavigationMenuItem>
+                }
+
               </NavigationMenu>
             </li>
           </ul>
@@ -361,24 +469,20 @@ const Navbar = () => {
 
 export default Navbar;
 
-const categories: { title: string; href: string }[] = [
-  { title: "Category 1", href: "/watch/1/1" },
-  { title: "Category 2", href: "/watch/1/1" },
-  { title: "Category 3", href: "/watch/1/1" },
-  { title: "Category 4", href: "/watch/1/1" },
-  { title: "Category 5", href: "/webcam" },
-  { title: "Category 6", href: "/game" },
-];
-
-const wpCategories: { title: string; href: string }[] = [
+const wpCategories: NavbarItem[] = [
   { title: "Join Watch Party", href: "/join-watch-party" },
   { title: "Create Watch Party", href: "/create-watch-party" },
   { title: "Manage Watch Party", href: "/manage-watch-party" },
   { title: "Send Invitation", href: "/send-email" },
 ];
 
-const pollCategories: { title: string; href: string }[] = [
+const pollCategories: NavbarItem[] = [
   { title: "Create Poll", href: "/create-poll" },
   { title: "Manage Poll", href: "/manage-poll" },
   { title: "View Poll Results", href: "/view-poll-results" },
+];
+
+const premiumFeatures: NavbarItem[] = [
+  { title: "Games", href: "/game" },
+  { title: "Webcam Studio", href: "/webcam-studio" }
 ];

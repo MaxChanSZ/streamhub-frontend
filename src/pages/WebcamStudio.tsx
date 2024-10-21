@@ -2,6 +2,9 @@ import React, { useState, useRef, useCallback, useEffect } from 'react';
 import { Button } from "@/components/shadcn/ui/button";
 import { Camera, Video, Square, Download, Wifi } from 'lucide-react';
 import { io, Socket } from 'socket.io-client';
+import { useAppContext } from '@/contexts/AppContext';
+import { useQuery } from 'react-query';
+import { getSubscriptionStatus } from '@/utils/api-client';
 
 const WebcamStudio: React.FC = () => {
   const [isWebcamOn, setIsWebcamOn] = useState(false);
@@ -14,6 +17,15 @@ const WebcamStudio: React.FC = () => {
   const [recordedChunks, setRecordedChunks] = useState<Blob[]>([]);
   const peerConnectionsRef = useRef<{ [id: string]: RTCPeerConnection }>({});
   const socketRef = useRef<Socket | null>(null);
+  const { user } = useAppContext();
+
+  const { data: subscriptionStatus } = useQuery(
+    ["subscriptionStatus", user?.email],
+    () => getSubscriptionStatus(user?.email || ""),
+    {
+      enabled: !!user?.email,
+    }
+  );
 
   useEffect(() => {
     socketRef.current = io('http://localhost:3000', {
@@ -179,6 +191,7 @@ const WebcamStudio: React.FC = () => {
 
   return (
     <div className="min-h-screen p-8">
+      {subscriptionStatus?.status == "active" &&
       <div className="max-w-4xl mx-auto bg-white rounded-2xl shadow-xl overflow-hidden">
         <div className="p-8">
           <h1 className="text-4xl font-bold mb-6 text-indigo-800">Webcam Studio</h1>
@@ -255,6 +268,14 @@ const WebcamStudio: React.FC = () => {
           </ol>
         </div>
       </div>
+    }
+    {subscriptionStatus?.status == "inactive" &&
+        <div className="container mx-auto p-4">
+          <div className="mt-4 p-4 bg-yellow-100 border border-yellow-400 text-yellow-700 rounded">
+            <p>Please subscribe to our premium plan to access webcam studio!</p>
+          </div>
+        </div>
+      }
     </div>
   );
 };
