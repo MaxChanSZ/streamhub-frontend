@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Webcam Viewer</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/4.5.1/socket.io.js"></script>
+    <style>
+        body {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+            background-color: #f0f0f0;
+            font-family: Arial, sans-serif;
+        }
+        #video {
+            max-width: 100%;
+            max-height: 80vh;
+            border: 2px solid #333;
+            border-radius: 8px;
+        }
+        #status {
+            position: fixed;
+            top: 20px;
+            left: 20px;
+            padding: 10px;
+            background-color: rgba(0, 0, 0, 0.5);
+            color: white;
+            border-radius: 5px;
+        }
+    </style>
+</head>
+<body>
+    <div id="status">Waiting for broadcaster...</div>
+    <video id="video" autoplay playsinline></video>
+    <script>
+        const socket = io('http://localhost:3000');
+        const video = document.getElementById('video');
+        const statusElement = document.getElementById('status');
+        let peerConnection;
+
+        socket.on('connect', () => {
+            statusElement.textContent = 'Connected to server. Waiting for broadcaster...';
+        });
+
+        socket.on('broadcasterAvailable', (broadcasterId) => {
+            statusElement.textContent = 'Broadcaster available. Connecting...';
+            socket.emit('watcher', broadcasterId);
+        });
+
+        socket.on('offer', (id, description) => {
+            peerConnection = new RTCPeerConnection({
+                iceServers: [{ urls: 'stun:stun.l.google.com:19302' }]
+            });
+            peerConnection
+                .setRemoteDescription(description)
+                .then(() => peerConnection.createAnswer())
+                .then(sdp => peerConnection.setLocalDescription(sdp))
+                .then(() => {
+                    socket.emit('answer', id, peerConnection.localDescription);
+                });
+
+            peerConnection.ontrack = event => {
+                video.srcObject = event.streams[0];
+                statusElement.textContent = 'Connected to broadcaster';
+            };
+
+            peerConnection.onicecandidate = event => {
+                if (event.candidate) {
+                    socket.emit('candidate', id, event.candidate);
+                }
+            };
+        });
+
+        socket.on('candidate', (id, candidate) => {
+            peerConnection
+                .addIceCandidate(new RTCIceCandidate(candidate))
+                .catch(e => console.error(e));
+        });
+
+        socket.on('broadcasterUnavailable', () => {
+            if (peerConnection) {
+                peerConnection.close();
+            }
+            video.srcObject = null;
+            statusElement.textContent = 'Broadcaster disconnected. Waiting for new broadcaster...';
+        });
+
+        socket.on('disconnect', () => {
+            if (peerConnection) {
+                peerConnection.close();
+            }
+            video.srcObject = null;
+            statusElement.textContent = 'Disconnected from server. Trying to reconnect...';
+        });
+
+        window.onunload = window.onbeforeunload = () => {
+            socket.close();
+            if (peerConnection) {
+                peerConnection.close();
+            }
+        };
+    </script>
+</body>
+</html>
