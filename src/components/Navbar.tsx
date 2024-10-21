@@ -366,7 +366,7 @@ const categories: { title: string; href: string }[] = [
   { title: "Category 2", href: "/watch/1/1" },
   { title: "Category 3", href: "/watch/1/1" },
   { title: "Category 4", href: "/watch/1/1" },
-  { title: "Category 5", href: "/watch/1/1" },
+  { title: "Category 5", href: "/webcam" },
   { title: "Category 6", href: "/game" },
 ];
 

@@ -1,6 +1,7 @@
 import LiveChat from "@/components/LiveChat";
 import PollView from "@/components/PollView";
 import VideoJSSynced from "@/components/VideoJSSynced";
+import VideoChatbot from "@/components/ChatBot";
 import { addVote, changeVote, getWatchpartyPoll } from "@/utils/api-client";
 import { useEffect, useState } from "react";
 import { useLocation, useParams } from "react-router";
@@ -155,6 +156,7 @@ const WatchPartyPage = () => {
           )}
         </div>
       }
+      <VideoChatbot />
     </div>
   );
 };

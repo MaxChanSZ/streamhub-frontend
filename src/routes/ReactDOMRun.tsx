@@ -16,6 +16,7 @@ import SearchPage from "@/pages/SearchPage";
 import RegisterPage from "@/pages/RegisterPage";
 import ContactPage from "@/pages/ContactPage.tsx";
 import GamePage from "@/pages/GamePage.tsx";
+import WebcamStudioPage from "@/pages/WebcamStudio.tsx";
 import PollResultPage from "@/pages/PollResultPage.tsx";
 import SendEmailPage from "@/pages/SendEmailPage.tsx";
 import { ProtectedRoute } from "./ProtectedRoute";
@@ -148,6 +149,14 @@ const router = createBrowserRouter([
         element: (
           <ProtectedRoute>
             <GamePage />
+          </ProtectedRoute>
+        ),
+      },
+      {
+        path: "webcam",
+        element: (
+          <ProtectedRoute>
+            <WebcamStudioPage />
           </ProtectedRoute>
         ),
       },
