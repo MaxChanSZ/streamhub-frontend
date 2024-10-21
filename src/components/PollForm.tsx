@@ -64,7 +64,6 @@ const MAX_SIZE = 8;
 
 export const PollForm: React.FC<PollProps> = ({ question, setQuestion, optionSize, setOptionSize, pollOptions, setPollOptions, imageList, setImageList }) => {
     function handleOptionSizeChange(newSize: number) {
-      
       let updatedPollOptions: PollOption[] = pollOptions;
       if (newSize >= MIN_SIZE && newSize <= MAX_SIZE) {
         // if option size increased -> push n elements in options with n being diff between old and new option size
@@ -97,12 +96,10 @@ export const PollForm: React.FC<PollProps> = ({ question, setQuestion, optionSiz
           }
         }
         setPollOptions(updatedPollOptions);
-        
       }
       setOptionSize(newSize);
     }
   
-
     function handleOptionChange(newValue: PollOption, id: number,) {
       let updatedPollOptions: PollOption[] = pollOptions;
       updatedPollOptions[id] = newValue;
@@ -212,7 +209,6 @@ export const PollForm: React.FC<PollProps> = ({ question, setQuestion, optionSiz
     // event handler for image upload
     function onImageUpload(e: React.ChangeEvent<HTMLInputElement>) {
       if (e.target.files) {
-
         if (e.target.files[0].size >= 1048576) {
           setImageUploadError(true);
         } else {

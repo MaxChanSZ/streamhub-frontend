@@ -301,7 +301,7 @@ const onPollUpdate = async(e: React.FormEvent<HTMLFormElement>) => {
                     Update Poll
                 </Button>
         </form>
-        }
+      }
        {error && (
         <div className="mt-4 p-4 bg-red-100 border border-red-400 text-red-700 rounded">
           <p>{error}</p>
@@ -312,7 +312,6 @@ const onPollUpdate = async(e: React.FormEvent<HTMLFormElement>) => {
           <p>Poll successfully updated!</p>
         </div>
       )}
-
     </div>
   );
 };

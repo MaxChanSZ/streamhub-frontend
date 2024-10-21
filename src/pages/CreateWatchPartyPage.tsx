@@ -30,7 +30,7 @@ export interface WatchParty {
   scheduledTime: string;
   code: string;
   createdDate: number[];
-}
+};
 
 export const Label: React.FC<React.LabelHTMLAttributes<HTMLLabelElement>> = ({ children, className, ...props }) => (
   <label className={`block text-sm font-medium text-stone-50 mb-1 ${className}`} {...props}>

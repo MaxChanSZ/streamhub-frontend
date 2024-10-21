@@ -126,7 +126,6 @@ const CreatePollPage: React.FC = () => {
         }
     }
     return true;
-
   }
 
 const onPollCreate = async(e: React.FormEvent<HTMLFormElement>) => {
@@ -227,7 +226,6 @@ const onPollCreate = async(e: React.FormEvent<HTMLFormElement>) => {
           <p>Poll successfully created!</p>
         </div>
       )}
-
     </div>
   );
 };
