@@ -38,7 +38,7 @@ export const PollView : React.FC<PollViewProps> = ({ poll, optionChecked, onCrea
 
     function viewPollResult () {
         // navigate to poll result page
-        navigate("/pollResults",
+        navigate("/view-poll-results",
             {
               state : {
                 watchPartyCode: watchPartyCode

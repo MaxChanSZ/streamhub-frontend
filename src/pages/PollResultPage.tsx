@@ -4,15 +4,7 @@ import { useAppContext } from "@/contexts/AppContext";
 import { fetchWatchPartiesWithPoll, getWatchpartyPoll } from '@/utils/api-client';
 import { PollOptionResponse, PollResponse } from './WatchPartyPage';
 import { useLocation } from 'react-router-dom';
-
-interface WatchParty {
-  id: number;
-  partyName: string;
-  scheduledDate: string;
-  scheduledTime: string;
-  code: string;
-  createdDate: number[];
-}
+import { WatchParty } from './CreateWatchPartyPage';
 
 export type WatchPartyResponse = {
   id: number;
@@ -21,7 +13,7 @@ export type WatchPartyResponse = {
   scheduledTime: string;
   code: string;
   createdDate: number[];
-}
+};
 
 const PollOptionCard: React.FC<{ pollOption: PollOptionResponse; totalVotes: number; place: number }> = ({ pollOption, totalVotes }) => {
   const [expanded, setExpanded] = useState(false);
@@ -211,6 +203,5 @@ const PollResultPage: React.FC = () => {
     </div>
   );
 };
-
 
 export default PollResultPage;
