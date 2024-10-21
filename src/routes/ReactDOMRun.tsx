@@ -153,7 +153,7 @@ const router = createBrowserRouter([
         ),
       },
       {
-        path: "webcam",
+        path: "webcam-studio",
         element: (
           <ProtectedRoute>
             <WebcamStudioPage />

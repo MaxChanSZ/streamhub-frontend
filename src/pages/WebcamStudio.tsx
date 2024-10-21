@@ -1,6 +1,9 @@
 import React, { useState, useRef, useCallback, useEffect } from 'react';
 import { Button } from "@/components/shadcn/ui/button";
 import { Camera, Video, Square, Download } from 'lucide-react';
+import { useAppContext } from '@/contexts/AppContext';
+import { useQuery } from 'react-query';
+import { getSubscriptionStatus } from '@/utils/api-client';
 
 const WebcamStudio: React.FC = () => {
   const [isWebcamOn, setIsWebcamOn] = useState(false);
@@ -10,6 +13,16 @@ const WebcamStudio: React.FC = () => {
   const streamRef = useRef<MediaStream | null>(null);
   const mediaRecorderRef = useRef<MediaRecorder | null>(null);
   const [recordedChunks, setRecordedChunks] = useState<Blob[]>([]);
+
+  const { user } = useAppContext();
+
+  const { data: subscriptionStatus } = useQuery(
+    ["subscriptionStatus", user?.email],
+    () => getSubscriptionStatus(user?.email || ""),
+    {
+      enabled: !!user?.email,
+    }
+  );
 
   useEffect(() => {
     return () => {
@@ -92,52 +105,64 @@ const WebcamStudio: React.FC = () => {
   }, [recordedChunks]);
 
   return (
-    <div className="container mx-auto p-4">
-      <h1 className="text-3xl font-bold mb-6">Webcam Studio</h1>
-      
-      {error && <div className="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded relative mb-4" role="alert">
-        <strong className="font-bold">Error: </strong>
-        <span className="block sm:inline">{error}</span>
-      </div>}
-      
-      <div className="mb-4 flex items-center space-x-4">
-        <Button onClick={isWebcamOn ? stopWebcam : startWebcam}>
-          <Camera className="mr-2 h-4 w-4" />
-          {isWebcamOn ? 'Stop Webcam' : 'Start Webcam'}
-        </Button>
+    <div>
+      {subscriptionStatus?.status === "active" &&
+        <div className="container mx-auto p-4">
+        <h1 className="text-3xl font-bold mb-6">Webcam Studio</h1>
         
-        <Button onClick={captureScreenshot} disabled={!isWebcamOn}>
-          <Camera className="mr-2 h-4 w-4" />
-          Capture Screenshot
-        </Button>
+        {error && <div className="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded relative mb-4" role="alert">
+          <strong className="font-bold">Error: </strong>
+          <span className="block sm:inline">{error}</span>
+        </div>}
         
-        <Button onClick={isRecording ? stopRecording : startRecording} disabled={!isWebcamOn}>
-          {isRecording ? <Square className="mr-2 h-4 w-4" /> : <Video className="mr-2 h-4 w-4" />}
-          {isRecording ? 'Stop Recording' : 'Start Recording'}
-        </Button>
+        <div className="mb-4 flex items-center space-x-4">
+          <Button onClick={isWebcamOn ? stopWebcam : startWebcam}>
+            <Camera className="mr-2 h-4 w-4" />
+            {isWebcamOn ? 'Stop Webcam' : 'Start Webcam'}
+          </Button>
+          
+          <Button onClick={captureScreenshot} disabled={!isWebcamOn}>
+            <Camera className="mr-2 h-4 w-4" />
+            Capture Screenshot
+          </Button>
+          
+          <Button onClick={isRecording ? stopRecording : startRecording} disabled={!isWebcamOn}>
+            {isRecording ? <Square className="mr-2 h-4 w-4" /> : <Video className="mr-2 h-4 w-4" />}
+            {isRecording ? 'Stop Recording' : 'Start Recording'}
+          </Button>
+          
+          <Button onClick={downloadRecording} disabled={recordedChunks.length === 0}>
+            <Download className="mr-2 h-4 w-4" />
+            Download Recording
+          </Button>
+        </div>
         
-        <Button onClick={downloadRecording} disabled={recordedChunks.length === 0}>
-          <Download className="mr-2 h-4 w-4" />
-          Download Recording
-        </Button>
+        <div className="relative">
+          <video ref={videoRef} autoPlay playsInline muted className="w-full h-auto" />
+        </div>
+        
+        <div className="mt-4">
+          <h2 className="text-xl font-semibold mb-2">How to use:</h2>
+          <ol className="list-decimal list-inside">
+            <li>Click "Start Webcam" to turn on your camera.</li>
+            <li>Use "Capture Screenshot" to take a picture.</li>
+            <li>Click "Start Recording" to begin video capture.</li>
+            <li>Click "Stop Recording" when you're done.</li>
+            <li>Use "Download Recording" to save your video.</li>
+            <li>Click "Stop Webcam" to turn off the camera when finished.</li>
+          </ol>
+        </div>
       </div>
-      
-      <div className="relative">
-        <video ref={videoRef} autoPlay playsInline muted className="w-full h-auto" />
-      </div>
-      
-      <div className="mt-4">
-        <h2 className="text-xl font-semibold mb-2">How to use:</h2>
-        <ol className="list-decimal list-inside">
-          <li>Click "Start Webcam" to turn on your camera.</li>
-          <li>Use "Capture Screenshot" to take a picture.</li>
-          <li>Click "Start Recording" to begin video capture.</li>
-          <li>Click "Stop Recording" when you're done.</li>
-          <li>Use "Download Recording" to save your video.</li>
-          <li>Click "Stop Webcam" to turn off the camera when finished.</li>
-        </ol>
-      </div>
+      }
+      {subscriptionStatus?.status == "inactive" &&
+        <div className="container mx-auto p-4">
+          <div className="mt-4 p-4 bg-yellow-100 border border-yellow-400 text-yellow-700 rounded">
+            <p>Please subscribe to our premium plan to access webcam studio!</p>
+          </div>
+        </div>
+      }
     </div>
+    
   );
 };
 

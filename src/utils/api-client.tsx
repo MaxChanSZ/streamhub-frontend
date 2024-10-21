@@ -138,11 +138,21 @@ export const getChatMessagesByRoomID = async (roomID: string) => {
   }
 };
 
-export const searchSeries = async (title: string) => {
+export const searchSeries = async (value: string) => {
   const url =
-    title == null
+    value == null
       ? `${API_BASE_URL}/api/series`
-      : `${API_BASE_URL}/api/series?title=${title}`;
+      : `${API_BASE_URL}/api/series?title=${value}&description=${value}`;
+  return await axios.get(url, {
+    headers: {
+      "Content-Type": "application/json",
+    },
+    withCredentials: true,
+  });
+};
+
+export const searchSeriesByCategory = async (category: string) => {
+  const url = `${API_BASE_URL}/api/series?category=${category}`;
   return await axios.get(url, {
     headers: {
       "Content-Type": "application/json",
@@ -174,6 +184,20 @@ export const fetchTopRatedSeries = async () => {
     const data = await response.json();
     const shuffledSeries = data.sort(() => 0.5 - Math.random());
     return shuffledSeries.slice(0, 5);
+  } catch (error) {
+    console.error("Error fetching series:", error);
+    throw error;
+  }
+};
+
+export const getSeriesCategories = async () => {
+  try {
+    const response = await fetch(`${API_BASE_URL}/api/series/categories`);
+    if (!response.ok) {
+      throw new Error("Failed to fetch series categories");
+    }
+    const data = await response.json();
+    return data;
   } catch (error) {
     console.error("Error fetching series:", error);
     throw error;
