@@ -7,46 +7,88 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/4.5.1/socket.io.js"></script>
     <style>
         body {
+            font-family: 'Arial', sans-serif;
+            margin: 0;
+            padding: 0;
             display: flex;
             justify-content: center;
             align-items: center;
-            height: 100vh;
-            margin: 0;
-            background-color: #f0f0f0;
-            font-family: Arial, sans-serif;
+            min-height: 100vh;
+            background-color: #f0f4f8;
+            color: #333;
+        }
+        .container {
+            max-width: 800px;
+            width: 100%;
+            padding: 20px;
+            box-sizing: border-box;
+        }
+        #video-container {
+            position: relative;
+            width: 100%;
+            background-color: #000;
+            border-radius: 8px;
+            overflow: hidden;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
         }
         #video {
-            max-width: 100%;
-            max-height: 80vh;
-            border: 2px solid #333;
-            border-radius: 8px;
+            display: block;
+            width: 100%;
+            height: auto;
         }
         #status {
-            position: fixed;
-            top: 20px;
-            left: 20px;
-            padding: 10px;
-            background-color: rgba(0, 0, 0, 0.5);
+            position: absolute;
+            top: 10px;
+            left: 10px;
+            padding: 8px 12px;
+            background-color: rgba(0, 0, 0, 0.6);
             color: white;
-            border-radius: 5px;
+            border-radius: 20px;
+            font-size: 14px;
+            transition: opacity 0.3s ease;
+        }
+        #status.connected {
+            opacity: 0;
+        }
+        #status:hover {
+            opacity: 1;
+        }
+        h1 {
+            text-align: center;
+            color: #2c3e50;
+            margin-bottom: 20px;
         }
     </style>
 </head>
 <body>
-    <div id="status">Waiting for broadcaster...</div>
-    <video id="video" autoplay playsinline></video>
+    <div class="container">
+        <h1>Webcam Viewer</h1>
+        <div id="video-container">
+            <video id="video" autoplay playsinline></video>
+            <div id="status">Waiting for broadcaster...</div>
+        </div>
+    </div>
     <script>
         const socket = io('http://localhost:3000');
         const video = document.getElementById('video');
         const statusElement = document.getElementById('status');
         let peerConnection;
 
+        function updateStatus(message, isConnected = false) {
+            statusElement.textContent = message;
+            if (isConnected) {
+                statusElement.classList.add('connected');
+            } else {
+                statusElement.classList.remove('connected');
+            }
+        }
+
         socket.on('connect', () => {
-            statusElement.textContent = 'Connected to server. Waiting for broadcaster...';
+            updateStatus('Connected to server. Waiting for broadcaster...');
         });
 
         socket.on('broadcasterAvailable', (broadcasterId) => {
-            statusElement.textContent = 'Broadcaster available. Connecting...';
+            updateStatus('Broadcaster available. Connecting...');
             socket.emit('watcher', broadcasterId);
         });
 
@@ -64,7 +106,7 @@
 
             peerConnection.ontrack = event => {
                 video.srcObject = event.streams[0];
-                statusElement.textContent = 'Connected to broadcaster';
+                updateStatus('Connected to broadcaster', true);
             };
 
             peerConnection.onicecandidate = event => {
@@ -85,7 +127,7 @@
                 peerConnection.close();
             }
             video.srcObject = null;
-            statusElement.textContent = 'Broadcaster disconnected. Waiting for new broadcaster...';
+            updateStatus('Broadcaster disconnected. Waiting for new broadcaster...');
         });
 
         socket.on('disconnect', () => {
@@ -93,7 +135,7 @@
                 peerConnection.close();
             }
             video.srcObject = null;
-            statusElement.textContent = 'Disconnected from server. Trying to reconnect...';
+            updateStatus('Disconnected from server. Trying to reconnect...');
         });
 
         window.onunload = window.onbeforeunload = () => {
