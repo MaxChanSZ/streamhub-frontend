@@ -178,57 +178,82 @@ const WebcamStudio: React.FC = () => {
   }, []);
 
   return (
-    <div className="container mx-auto p-4">
-      <h1 className="text-3xl font-bold mb-6">Webcam Studio</h1>
-      
-      {error && <div className="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded relative mb-4" role="alert">
-        <strong className="font-bold">Error: </strong>
-        <span className="block sm:inline">{error}</span>
-      </div>}
-      
-      <div className="mb-4 flex items-center space-x-4">
-        <Button onClick={isWebcamOn ? stopWebcam : startWebcam}>
-          <Camera className="mr-2 h-4 w-4" />
-          {isWebcamOn ? 'Stop Webcam' : 'Start Webcam'}
-        </Button>
-        
-        <Button onClick={captureScreenshot} disabled={!isWebcamOn}>
-          <Camera className="mr-2 h-4 w-4" />
-          Capture Screenshot
-        </Button>
-        
-        <Button onClick={isRecording ? stopRecording : startRecording} disabled={!isWebcamOn}>
-          {isRecording ? <Square className="mr-2 h-4 w-4" /> : <Video className="mr-2 h-4 w-4" />}
-          {isRecording ? 'Stop Recording' : 'Start Recording'}
-        </Button>
-        
-        <Button onClick={downloadRecording} disabled={recordedChunks.length === 0}>
-          <Download className="mr-2 h-4 w-4" />
-          Download Recording
-        </Button>
+    <div className="min-h-screen p-8">
+      <div className="max-w-4xl mx-auto bg-white rounded-2xl shadow-xl overflow-hidden">
+        <div className="p-8">
+          <h1 className="text-4xl font-bold mb-6 text-indigo-800">Webcam Studio</h1>
+          
+          {error && (
+            <div className="bg-red-100 border-l-4 border-red-500 text-red-700 p-4 mb-6" role="alert">
+              <p className="font-bold">Error</p>
+              <p>{error}</p>
+            </div>
+          )}
+          
+          <div className="mb-6 flex flex-wrap items-center gap-4">
+            <Button 
+              onClick={isWebcamOn ? stopWebcam : startWebcam}
+              className={`${isWebcamOn ? 'bg-red-500 hover:bg-red-600' : 'bg-green-500 hover:bg-green-600'} text-white`}
+            >
+              <Camera className="mr-2 h-4 w-4" />
+              {isWebcamOn ? 'Stop Webcam' : 'Start Webcam'}
+            </Button>
+            
+            <Button 
+              onClick={captureScreenshot} 
+              disabled={!isWebcamOn}
+              className="bg-blue-500 hover:bg-blue-600 text-white disabled:opacity-50"
+            >
+              <Camera className="mr-2 h-4 w-4" />
+              Capture Screenshot
+            </Button>
+            
+            <Button 
+              onClick={isRecording ? stopRecording : startRecording} 
+              disabled={!isWebcamOn}
+              className={`${isRecording ? 'bg-red-500 hover:bg-red-600' : 'bg-blue-500 hover:bg-blue-600'} text-white disabled:opacity-50`}
+            >
+              {isRecording ? <Square className="mr-2 h-4 w-4" /> : <Video className="mr-2 h-4 w-4" />}
+              {isRecording ? 'Stop Recording' : 'Start Recording'}
+            </Button>
+            
+            <Button 
+              onClick={downloadRecording} 
+              disabled={recordedChunks.length === 0}
+              className="bg-purple-500 hover:bg-purple-600 text-white disabled:opacity-50"
+            >
+              <Download className="mr-2 h-4 w-4" />
+              Download Recording
+            </Button>
 
-        <Button onClick={isStreaming ? stopStreaming : startStreaming} disabled={!isWebcamOn}>
-          <Wifi className="mr-2 h-4 w-4" />
-          {isStreaming ? 'Stop Streaming' : 'Start Streaming'}
-        </Button>
-      </div>
-      
-      <div className="relative">
-        <video ref={videoRef} autoPlay playsInline muted className="w-full h-auto" />
-      </div>
-      
-      <div className="mt-4">
-        <h2 className="text-xl font-semibold mb-2">How to use:</h2>
-        <ol className="list-decimal list-inside">
-          <li>Click "Start Webcam" to turn on your camera.</li>
-          <li>Use "Capture Screenshot" to take a picture.</li>
-          <li>Click "Start Recording" to begin video capture.</li>
-          <li>Click "Stop Recording" when you're done.</li>
-          <li>Use "Download Recording" to save your video.</li>
-          <li>Click "Start Streaming" to begin live streaming.</li>
-          <li>Click "Stop Streaming" to end the live stream.</li>
-          <li>Click "Stop Webcam" to turn off the camera when finished.</li>
-        </ol>
+            <Button 
+              onClick={isStreaming ? stopStreaming : startStreaming} 
+              disabled={!isWebcamOn}
+              className={`${isStreaming ? 'bg-red-500 hover:bg-red-600' : 'bg-green-500 hover:bg-green-600'} text-white disabled:opacity-50`}
+            >
+              <Wifi className="mr-2 h-4 w-4" />
+              {isStreaming ? 'Stop Streaming' : 'Start Streaming'}
+            </Button>
+          </div>
+          
+          <div className="relative bg-gray-900 rounded-lg overflow-hidden shadow-lg">
+            <video ref={videoRef} autoPlay playsInline muted className="w-full h-auto" />
+          </div>
+        </div>
+        
+        <div className="bg-indigo-50 p-8">
+          <h2 className="text-2xl font-semibold mb-4 text-indigo-800">How to use:</h2>
+          <ol className="list-decimal list-inside space-y-2 text-indigo-900">
+            <li>Click "Start Webcam" to turn on your camera.</li>
+            <li>Use "Capture Screenshot" to take a picture.</li>
+            <li>Click "Start Recording" to begin video capture.</li>
+            <li>Click "Stop Recording" when you're done.</li>
+            <li>Use "Download Recording" to save your video.</li>
+            <li>Click "Start Streaming" to begin live streaming.</li>
+            <li>Click "Stop Streaming" to end the live stream.</li>
+            <li>Click "Stop Webcam" to turn off the camera when finished.</li>
+          </ol>
+        </div>
       </div>
     </div>
   );
