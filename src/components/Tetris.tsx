@@ -1,6 +1,5 @@
 import React, { useState, useEffect, useCallback, useRef } from 'react';
 import { Button } from "@/components/shadcn/ui/button";
-import { Input } from "@/components/shadcn/ui/input";
 
 const BOARD_WIDTH = 10;
 const BOARD_HEIGHT = 20;
@@ -8,7 +7,6 @@ const TICK_SPEED = 1000;
 
 type Piece = number[][];
 type Position = { x: number; y: number };
-type ScoreEntry = { name: string; score: number };
 
 const TETROMINOS: Piece[] = [
   [[1, 1, 1, 1]],
@@ -28,10 +26,6 @@ const TetrisGame: React.FC = () => {
   const [position, setPosition] = useState<Position>({ x: 0, y: 0 });
   const [gameOver, setGameOver] = useState(false);
   const [score, setScore] = useState(0);
-  const [playerName, setPlayerName] = useState('');
-  const [scoreboard, setScoreboard] = useState<ScoreEntry[]>([]);
-  const [showScoreboard, setShowScoreboard] = useState(false);
-  const [gameStarted, setGameStarted] = useState(false);
   const gameContainerRef = useRef<HTMLDivElement>(null);
 
   const spawnPiece = useCallback(() => {
@@ -114,21 +108,20 @@ const TetrisGame: React.FC = () => {
   }, [currentPiece, position, board, spawnPiece]);
 
   useEffect(() => {
-    if (gameStarted && !gameOver) {
+    if (!gameOver) {
       const timer = setInterval(gameLoop, TICK_SPEED);
       return () => clearInterval(timer);
     }
-  }, [gameLoop, gameOver, gameStarted]);
+  }, [gameLoop, gameOver]);
 
   useEffect(() => {
-    if (gameStarted) {
-      spawnPiece();
-    }
-  }, [spawnPiece, gameStarted]);
+    spawnPiece();
+  }, [spawnPiece]);
 
   const handleKeyPress = useCallback((event: React.KeyboardEvent<HTMLDivElement>) => {
-    if (gameOver || !gameStarted) return;
+    if (gameOver) return;
     
+    // Prevent default behavior for arrow keys
     if (["ArrowUp", "ArrowDown", "ArrowLeft", "ArrowRight"].includes(event.key)) {
       event.preventDefault();
     }
@@ -147,7 +140,7 @@ const TetrisGame: React.FC = () => {
         rotatePiece();
         break;
     }
-  }, [gameOver, gameStarted, movePiece, rotatePiece]);
+  }, [gameOver, movePiece, rotatePiece]);
 
   useEffect(() => {
     const handleKeyDown = (event: KeyboardEvent) => {
@@ -168,28 +161,11 @@ const TetrisGame: React.FC = () => {
     }
   }, []);
 
-  const startNewGame = () => {
+  const resetGame = () => {
     setBoard(createBoard());
     setGameOver(false);
     setScore(0);
-    setGameStarted(true);
-    setShowScoreboard(false);
     spawnPiece();
-  };
-
-  const addScoreToScoreboard = () => {
-    if (playerName.trim() !== '') {
-      const newScoreEntry: ScoreEntry = { name: playerName, score };
-      const newScoreboard = [...scoreboard, newScoreEntry].sort((a, b) => b.score - a.score).slice(0, 10);
-      setScoreboard(newScoreboard);
-      setShowScoreboard(true);
-    }
-  };
-
-  const startGame = () => {
-    if (playerName.trim() !== '') {
-      startNewGame();
-    }
   };
 
   return (
@@ -199,62 +175,27 @@ const TetrisGame: React.FC = () => {
       className="flex flex-col items-center justify-center min-h-screen bg-gray-100"
       onKeyDown={handleKeyPress}
     >
-      {!gameStarted && !gameOver && (
-        <div className="mb-4">
-          <Input
-            type="text"
-            placeholder="Enter your name"
-            value={playerName}
-            onChange={(e) => setPlayerName(e.target.value)}
-            className="mb-2"
-          />
-          <Button onClick={startGame} disabled={playerName.trim() === ''}>
-            Start Game
-          </Button>
-        </div>
+      <div className="mb-4 text-2xl font-bold">Score: {score}</div>
+      <div className="grid grid-cols-10 gap-px bg-gray-300 p-1">
+        {board.map((row, y) =>
+          row.map((cell, x) => (
+            <div
+              key={`${y}-${x}`}
+              className={`w-6 h-6 ${
+                cell || (currentPiece[y - position.y]?.[x - position.x])
+                  ? 'bg-blue-500'
+                  : 'bg-white'
+              }`}
+            />
+          ))
+        )}
+      </div>
+      {gameOver && (
+        <div className="mt-4 text-xl font-bold text-red-500">Game Over!</div>
       )}
-      {gameStarted && (
-        <>
-          <div className="mb-4 text-2xl font-bold">Score: {score}</div>
-          <div className="grid grid-cols-10 gap-px bg-gray-300 p-1">
-            {board.map((row, y) =>
-              row.map((cell, x) => (
-                <div
-                  key={`${y}-${x}`}
-                  className={`w-6 h-6 ${
-                    cell || (currentPiece[y - position.y]?.[x - position.x])
-                      ? 'bg-blue-500'
-                      : 'bg-white'
-                  }`}
-                />
-              ))
-            )}
-          </div>
-        </>
-      )}
-      {gameOver && !showScoreboard && (
-        <div className="mt-4 text-xl font-bold">
-          <p>Game Over!</p>
-          <Button onClick={addScoreToScoreboard} className="mt-2">
-            Submit Score
-          </Button>
-        </div>
-      )}
-      {showScoreboard && (
-        <div className="mt-4">
-          <h2 className="text-2xl font-bold mb-2">Scoreboard</h2>
-          <ul className="list-decimal list-inside">
-            {scoreboard.map((entry, index) => (
-              <li key={index} className="text-lg">
-                {entry.name}: {entry.score}
-              </li>
-            ))}
-          </ul>
-          <Button onClick={startNewGame} className="mt-4">
-            Play Again
-          </Button>
-        </div>
-      )}
+      <Button onClick={resetGame} className="mt-4">
+        {gameOver ? 'Play Again' : 'Reset Game'}
+      </Button>
     </div>
   );
 };
