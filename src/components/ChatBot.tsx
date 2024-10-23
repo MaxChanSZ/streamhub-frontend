@@ -46,6 +46,7 @@ declare global {
   interface Window {
     SpeechRecognition: new () => SpeechRecognition;
     webkitSpeechRecognition: new () => SpeechRecognition;
+    mozSpeechRecognition: new () => SpeechRecognition;
   }
 }
 
@@ -69,7 +70,7 @@ const VideoChatbot: React.FC = () => {
 
   useEffect(() => {
     if (typeof window !== 'undefined') {
-      const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
+      const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition || window.mozSpeechRecognition;
       if (SpeechRecognition) {
         recognitionRef.current = new SpeechRecognition();
         recognitionRef.current.continuous = true;
