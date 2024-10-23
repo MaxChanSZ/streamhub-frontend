@@ -1,6 +1,7 @@
+
 import React, { useState, useRef, useCallback, useEffect } from 'react';
 import { Button } from "@/components/shadcn/ui/button";
-import { Camera, Video, Square, Download, Wifi } from 'lucide-react';
+import { Camera, Video, Square, Download, Wifi, Monitor } from 'lucide-react';
 import { io, Socket } from 'socket.io-client';
 import { useAppContext } from '@/contexts/AppContext';
 import { useQuery } from 'react-query';
@@ -10,6 +11,7 @@ const WebcamStudio: React.FC = () => {
   const [isWebcamOn, setIsWebcamOn] = useState(false);
   const [isRecording, setIsRecording] = useState(false);
   const [isStreaming, setIsStreaming] = useState(false);
+  const [isScreenSharing, setIsScreenSharing] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const videoRef = useRef<HTMLVideoElement>(null);
   const streamRef = useRef<MediaStream | null>(null);
@@ -189,6 +191,32 @@ const WebcamStudio: React.FC = () => {
     socketRef.current?.emit('stopBroadcasting');
   }, []);
 
+  const startScreenShare = useCallback(async () => {
+    try {
+      const screenStream = await navigator.mediaDevices.getDisplayMedia({ video: true });
+      if (videoRef.current) {
+        videoRef.current.srcObject = screenStream;
+        streamRef.current = screenStream;
+        setIsScreenSharing(true);
+        setError(null);
+      }
+    } catch (err) {
+      console.error("Error accessing screen share:", err);
+      setError("Failed to start screen sharing. Please make sure you've granted permission.");
+    }
+  }, []);
+
+  const stopScreenShare = useCallback(() => {
+    if (streamRef.current) {
+      streamRef.current.getTracks().forEach(track => track.stop());
+      streamRef.current = null;
+    }
+    if (videoRef.current) {
+      videoRef.current.srcObject = null;
+    }
+    setIsScreenSharing(false);
+  }, []);
+
   return (
     <div className="min-h-screen p-8">
       {subscriptionStatus?.status == "active" &&
@@ -211,10 +239,18 @@ const WebcamStudio: React.FC = () => {
               <Camera className="mr-2 h-4 w-4" />
               {isWebcamOn ? 'Stop Webcam' : 'Start Webcam'}
             </Button>
+
+            <Button 
+              onClick={isScreenSharing ? stopScreenShare : startScreenShare} 
+              className={`${isScreenSharing ? 'bg-red-500 hover:bg-red-600' : 'bg-green-500 hover:bg-green-600'} text-white`}
+            >
+              <Monitor className="mr-2 h-4 w-4" />
+              {isScreenSharing ? 'Stop Screen Share' : 'Start Screen Share'}
+            </Button>
             
             <Button 
               onClick={captureScreenshot} 
-              disabled={!isWebcamOn}
+              disabled={!isWebcamOn && !isScreenSharing}
               className="bg-blue-500 hover:bg-blue-600 text-white disabled:opacity-50"
             >
               <Camera className="mr-2 h-4 w-4" />
@@ -223,7 +259,7 @@ const WebcamStudio: React.FC = () => {
             
             <Button 
               onClick={isRecording ? stopRecording : startRecording} 
-              disabled={!isWebcamOn}
+              disabled={!isWebcamOn && !isScreenSharing}
               className={`${isRecording ? 'bg-red-500 hover:bg-red-600' : 'bg-blue-500 hover:bg-blue-600'} text-white disabled:opacity-50`}
             >
               {isRecording ? <Square className="mr-2 h-4 w-4" /> : <Video className="mr-2 h-4 w-4" />}
@@ -241,12 +277,13 @@ const WebcamStudio: React.FC = () => {
 
             <Button 
               onClick={isStreaming ? stopStreaming : startStreaming} 
-              disabled={!isWebcamOn}
+              disabled={!isWebcamOn && !isScreenSharing}
               className={`${isStreaming ? 'bg-red-500 hover:bg-red-600' : 'bg-green-500 hover:bg-green-600'} text-white disabled:opacity-50`}
             >
               <Wifi className="mr-2 h-4 w-4" />
               {isStreaming ? 'Stop Streaming' : 'Start Streaming'}
             </Button>
+
           </div>
           
           <div className="relative bg-gray-900 rounded-lg overflow-hidden shadow-lg">
@@ -264,17 +301,12 @@ const WebcamStudio: React.FC = () => {
             <li>Use "Download Recording" to save your video.</li>
             <li>Click "Start Streaming" to begin live streaming.</li>
             <li>Click "Stop Streaming" to end the live stream.</li>
+            <li>Click "Start Screen Share" to share your screen.</li>
+            <li>Click "Stop Screen Share" to end screen sharing.</li>
             <li>Click "Stop Webcam" to turn off the camera when finished.</li>
           </ol>
         </div>
       </div>
-    }
-    {subscriptionStatus?.status == "inactive" &&
-        <div className="container mx-auto p-4">
-          <div className="mt-4 p-4 bg-yellow-100 border border-yellow-400 text-yellow-700 rounded">
-            <p>Please subscribe to our premium plan to access webcam studio!</p>
-          </div>
-        </div>
       }
     </div>
   );
