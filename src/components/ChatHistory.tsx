@@ -9,15 +9,15 @@ interface ChatHistoryProps {
 const ChatHistory: React.FC<ChatHistoryProps> = ({ chatMessages }) => {
   const messagesEndRef = useRef<HTMLDivElement>(null);
 
-  const scrollToBottom = () => {
-    setTimeout(() => {
-      messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
-    }, 0);
-  };
+  // const scrollToBottom = () => {
+  //   setTimeout(() => {
+  //     messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
+  //   }, 0);
+  // };
 
-  useEffect(() => {
-    scrollToBottom();
-  }, [chatMessages]);
+  // useEffect(() => {
+  //   scrollToBottom();
+  // }, [chatMessages]);
 
   return (
     <ScrollArea className="h-96">
