@@ -17,7 +17,7 @@ import { getSeriesCategories, getSubscriptionStatus } from "@/utils/api-client";
 
 type NavbarItem = {
   title: string;
-  href: string 
+  href: string;
 };
 
 const Navbar = () => {
@@ -89,22 +89,22 @@ const Navbar = () => {
       enabled: !!user?.email,
     }
   );
-  
+
   const fetchCategories = async () => {
     try {
       if (user && user.id) {
         const response = await getSeriesCategories();
         let categoriesNavItemList: NavbarItem[] = [];
-        for(let i=0; i<response.length; i++) {
+        for (let i = 0; i < response.length; i++) {
           categoriesNavItemList.push({
             title: response[i],
-            href: `/search?category=${response[i]}`
-          })
+            href: `/search?category=${response[i]}`,
+          });
         }
         setCategories(categoriesNavItemList);
       }
     } catch (error) {
-      console.error('Error fetching categories:', error);
+      console.error("Error fetching categories:", error);
     }
   };
 
@@ -231,12 +231,12 @@ const Navbar = () => {
                 </ul>
               </NavigationMenuContent>
             </NavigationMenuItem>
-            
-            {subscriptionStatus?.status === "active" &&
+
+            {subscriptionStatus?.status === "active" && (
               <NavigationMenuItem className="relative">
                 <Button variant="ghost" className={buttonTextFormat} asChild>
                   <NavigationMenuTrigger className="relative z-10">
-                  Premium Features ⭐
+                    Premium ⭐
                   </NavigationMenuTrigger>
                 </Button>
                 <NavigationMenuContent className="bg-black w-fit">
@@ -262,8 +262,7 @@ const Navbar = () => {
                   </ul>
                 </NavigationMenuContent>
               </NavigationMenuItem>
-            }
-
+            )}
           </NavigationMenuList>
         </NavigationMenu>
       </div>
@@ -388,7 +387,7 @@ const Navbar = () => {
                   </NavigationMenuContent>
                 </NavigationMenuItem>
 
-                {subscriptionStatus?.status === "active" &&    
+                {subscriptionStatus?.status === "active" && (
                   <NavigationMenuItem className="relative">
                     <Button
                       variant="ghost"
@@ -421,8 +420,7 @@ const Navbar = () => {
                       </ul>
                     </NavigationMenuContent>
                   </NavigationMenuItem>
-                }
-
+                )}
               </NavigationMenu>
             </li>
           </ul>
@@ -484,5 +482,5 @@ const pollCategories: NavbarItem[] = [
 
 const premiumFeatures: NavbarItem[] = [
   { title: "Games", href: "/game" },
-  { title: "Webcam Studio", href: "/webcam-studio" }
+  { title: "Webcam Studio", href: "/webcam-studio" },
 ];
