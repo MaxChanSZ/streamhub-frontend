@@ -1,6 +1,6 @@
 import React, { useState, useRef, useEffect } from 'react';
 import { sendChatMessage } from '@/utils/api-client';
-import { Mic, MicOff, Volume2, VolumeX } from 'lucide-react';
+import { Mic, MicOff, Volume2 } from 'lucide-react';
 
 interface Message {
   text: string;
@@ -64,7 +64,7 @@ const VideoChatbot: React.FC = () => {
   const [isLoading, setIsLoading] = useState(false);
   const [isOpen, setIsOpen] = useState(false);
   const [isListening, setIsListening] = useState(false);
-  const [isSpeaking, setIsSpeaking] = useState(false);
+  const [isSpeaking] = useState(false);
   const [selectedVoice, setSelectedVoice] = useState<Voice | null>(null);
   const [voices, setVoices] = useState<Voice[]>([]);
   const [selectedLanguage, setSelectedLanguage] = useState('en-US');
@@ -175,13 +175,6 @@ const VideoChatbot: React.FC = () => {
     }
   };
 
-  const toggleSpeaking = () => {
-    setIsSpeaking(!isSpeaking);
-    if (isSpeaking) {
-      synthRef.current?.cancel();
-    }
-  };
-
   const handleLanguageChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
     const newLang = e.target.value;
     setSelectedLanguage(newLang);
@@ -199,17 +192,13 @@ const VideoChatbot: React.FC = () => {
 
   const speakMessage = (text: string, messageId: number) => {
     if (synthRef.current && selectedVoice) {
-      // If there's already a message being spoken, stop it
       if (speakingMessageId !== null) {
         synthRef.current.cancel();
       }
-
-      // If we're clicking on the same message that's already speaking, just stop and reset
       if (speakingMessageId === messageId) {
         setSpeakingMessageId(null);
         return;
       }
-
       const utterance = new SpeechSynthesisUtterance(text);
       utterance.voice = selectedVoice;
       utterance.lang = selectedLanguage;
@@ -239,7 +228,7 @@ const VideoChatbot: React.FC = () => {
       ) : (
         <div className="bg-gray-800 rounded-lg shadow-xl w-96 h-[32rem] flex flex-col">
           <div className="flex justify-between items-center p-3 border-b border-gray-700">
-            <h2 className="text-xl font-semibold text-white">Multilingual Chatbot</h2>
+            <h2 className="text-xl font-semibold text-white">AI Chatbot</h2>
             <button onClick={() => setIsOpen(false)} className="text-gray-400 hover:text-gray-200 transition-colors duration-200" aria-label="Close chat">
               <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
