@@ -74,29 +74,28 @@ const VideoChatbot: React.FC = () => {
         recognitionRef.current = new SpeechRecognition();
         recognitionRef.current.continuous = true;
         recognitionRef.current.interimResults = true;
-
+  
         recognitionRef.current.onresult = (event: SpeechRecognitionEvent) => {
           const transcript = Array.from(event.results)
             .map(result => result[0].transcript)
             .join('');
           setInput(transcript);
         };
-
+  
         recognitionRef.current.onerror = (event: SpeechRecognitionErrorEvent) => {
           console.error('Speech recognition error:', event.error);
           setIsListening(false);
         };
-
+  
         recognitionRef.current.onend = () => {
-          if (isListening) {
-            recognitionRef.current?.start();
-          }
+          setIsListening(false);
         };
       }
-
+  
       synthRef.current = window.speechSynthesis;
     }
-  }, [isListening]);
+  }, []); 
+  
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -126,11 +125,14 @@ const VideoChatbot: React.FC = () => {
   const toggleListening = () => {
     if (isListening) {
       recognitionRef.current?.stop();
-    } else if (!isSpeaking) {
-      recognitionRef.current?.start();
+      setIsListening(false);
+    } else {
+      if (!isSpeaking) {
+        recognitionRef.current?.start();
+        setIsListening(true);
+      }
     }
-    setIsListening(!isListening && !isSpeaking);
-  };
+  };  
 
   const toggleSpeaking = () => {
     setIsSpeaking(!isSpeaking);
@@ -145,13 +147,11 @@ const VideoChatbot: React.FC = () => {
     if (synthRef.current) {
       const utterance = new SpeechSynthesisUtterance(text);
       utterance.onend = () => {
-        if (isListening) {
-          recognitionRef.current?.start();
-        }
       };
       synthRef.current.speak(utterance);
     }
   };
+  
 
   const handleInputChange = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
     setInput(e.target.value);
@@ -180,7 +180,7 @@ const VideoChatbot: React.FC = () => {
       ) : (
         <div className="bg-gray-800 rounded-lg shadow-xl w-96 h-[32rem] flex flex-col">
           <div className="flex justify-between items-center p-3 border-b border-gray-700">
-            <h2 className="text-xl font-semibold text-white">AI Assistant</h2>
+            <h2 className="text-xl font-semibold text-white">Video Chatbot</h2>
             <button onClick={() => setIsOpen(false)} className="text-gray-400 hover:text-gray-200 transition-colors duration-200" aria-label="Close chat">
               <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
@@ -250,6 +250,5 @@ const VideoChatbot: React.FC = () => {
 };
 
 export default VideoChatbot;
-
 
 
