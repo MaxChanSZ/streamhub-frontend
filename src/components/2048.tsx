@@ -11,6 +11,11 @@ interface Tile {
   mergedFrom: Tile[] | null;
 }
 
+interface ScoreEntry {
+  name: string;
+  score: number;
+}
+
 const AnimatedScore: React.FC<{ score: number }> = ({ score }) => {
   const [displayScore, setDisplayScore] = useState(score);
   const [isAnimating, setIsAnimating] = useState(false);
@@ -37,10 +42,20 @@ const Game2048: React.FC = () => {
   const [board, setBoard] = useState<Tile[]>([]);
   const [score, setScore] = useState(0);
   const [gameOver, setGameOver] = useState(false);
+  const [playerName, setPlayerName] = useState('');
+  const [showNameInput, setShowNameInput] = useState(true);
+  const [scoreboard, setScoreboard] = useState<ScoreEntry[]>([]);
 
   useEffect(() => {
-    initializeGame();
+    const savedScoreboard = localStorage.getItem('2048_scoreboard');
+    if (savedScoreboard) {
+      setScoreboard(JSON.parse(savedScoreboard));
+    }
   }, []);
+
+  useEffect(() => {
+    localStorage.setItem('2048_scoreboard', JSON.stringify(scoreboard));
+  }, [scoreboard]);
 
   const initializeGame = () => {
     const newBoard: Tile[] = [];
@@ -53,7 +68,6 @@ const Game2048: React.FC = () => {
       setGameOver(false);
     }, 50);
   };
-  
 
   const addNewTile = (tiles: Tile[]) => {
     const emptyPositions: Position[] = [];
@@ -136,6 +150,7 @@ const Game2048: React.FC = () => {
       setBoard(newBoard);
       if (isGameOver(newBoard)) {
         setGameOver(true);
+        updateScoreboard();
       }
     }
   };
@@ -186,10 +201,6 @@ const Game2048: React.FC = () => {
     return position.row >= 0 && position.row < 4 && position.col >= 0 && position.col < 4;
   };
 
-  const moveTile = (tile: Tile, position: Position) => {
-    tile.position = position;
-  };
-
   const isGameOver = (tiles: Tile[]): boolean => {
     if (tiles.length < 16) return false;
     for (let i = 0; i < tiles.length; i++) {
@@ -208,30 +219,35 @@ const Game2048: React.FC = () => {
     return true;
   };
 
-  const handleKeyDown = (event: React.KeyboardEvent) => {
-    if (gameOver) return;
-    switch (event.key) {
-      case 'ArrowLeft':
-        moveTiles('left');
-        break;
-      case 'ArrowRight':
-        moveTiles('right');
-        break;
-      case 'ArrowUp':
-        moveTiles('up');
-        break;
-      case 'ArrowDown':
-        moveTiles('down');
-        break;
+  const handleKeyDown = (event: KeyboardEvent) => {
+    if (gameOver || showNameInput) return;
+    
+    if (['ArrowLeft', 'ArrowRight', 'ArrowUp', 'ArrowDown'].includes(event.key)) {
+      event.preventDefault();
+      
+      switch (event.key) {
+        case 'ArrowLeft':
+          moveTiles('left');
+          break;
+        case 'ArrowRight':
+          moveTiles('right');
+          break;
+        case 'ArrowUp':
+          moveTiles('up');
+          break;
+        case 'ArrowDown':
+          moveTiles('down');
+          break;
+      }
     }
   };
-
+  
   useEffect(() => {
-    window.addEventListener('keydown', handleKeyDown as any);
+    window.addEventListener('keydown', handleKeyDown);
     return () => {
-      window.removeEventListener('keydown', handleKeyDown as any);
+      window.removeEventListener('keydown', handleKeyDown);
     };
-  }, [board, gameOver]);
+  }, [board, gameOver, showNameInput]);
 
   const getTileColor = (value: number): string => {
     const colors: { [key: number]: string } = {
@@ -250,12 +266,55 @@ const Game2048: React.FC = () => {
     return colors[value] || 'bg-gray-300 text-gray-800';
   };
 
+  const handleNameSubmit = (e: React.FormEvent) => {
+    e.preventDefault();
+    if (playerName.trim()) {
+      setShowNameInput(false);
+      initializeGame();
+    }
+  };
+
+  const updateScoreboard = () => {
+    const newEntry: ScoreEntry = { name: playerName, score };
+    const newScoreboard = [...scoreboard, newEntry].sort((a, b) => b.score - a.score).slice(0, 10);
+    setScoreboard(newScoreboard);
+  };
+
+  const resetGame = () => {
+    setShowNameInput(true);
+    setPlayerName('');
+    setScore(0);
+    setGameOver(false);
+    setBoard([]);
+  };
+
+  if (showNameInput) {
+    return (
+      <div className="flex flex-col items-center justify-center min-h-screen bg-gray-100 p-4">
+        <h1 className="text-4xl font-bold mb-6 text-indigo-600">2048 Game</h1>
+        <form onSubmit={handleNameSubmit} className="flex flex-col items-center">
+          <input
+            type="text"
+            value={playerName}
+            onChange={(e) => setPlayerName(e.target.value)}
+            placeholder="Enter your name"
+            className="p-2 border border-gray-300 rounded mb-4 text-center"
+          />
+          <button type="submit" className="p-2 bg-indigo-500 text-white rounded hover:bg-indigo-600 transition-colors">
+            Start Game
+          </button>
+        </form>
+      </div>
+    );
+  }
+
   return (
     <div className="flex flex-col items-center justify-center min-h-screen bg-gray-100 p-4">
       <h1 className="text-4xl font-bold mb-6 text-indigo-600">2048 Game</h1>
+      <div className="text-xl mb-4">Player: {playerName}</div>
       <AnimatedScore score={score} />
       <div className="relative w-80 h-80 bg-indigo-100 p-2 rounded-lg shadow-lg mt-4">
-              {board.map((tile, index) => (
+        {board.map((tile, index) => (
           <div
             key={index}
             className={`absolute w-18 h-18 flex items-center justify-center text-2xl font-bold rounded-lg shadow transition-all duration-200 ${getTileColor(tile.value)}`}
@@ -295,22 +354,37 @@ const Game2048: React.FC = () => {
         </button>
       </div>
       <button 
-        onClick={initializeGame} 
+        onClick={resetGame} 
         className="mt-6 p-3 bg-green-500 text-white rounded-lg hover:bg-green-600 transition-colors focus:outline-none focus:ring-2 focus:ring-green-400 flex items-center"
       >
         <RotateCcw size={20} className="mr-2" /> New Game
       </button>
       {gameOver && (
-        <div className="mt-6 text-2xl font-bold text-red-600 animate-fade-in">
-          Game Over! Final Score: {score}
-        </div>
+        <div className="mt-6 text-2xl font-bold text-red-600">Game Over!</div>
       )}
-      <div className="mt-6 text-center text-gray-600">
-        <p>Use arrow keys or buttons to move tiles.</p>
-        <p>Combine tiles with the same number to reach 2048!</p>
+      <div className="mt-8 w-full max-w-md">
+        <h2 className="text-2xl font-bold mb-4 text-indigo-600">Scoreboard</h2>
+        <table className="w-full bg-white shadow-md rounded-lg overflow-hidden">
+          <thead className="bg-indigo-500 text-white">
+            <tr>
+              <th className="py-2 px-4 text-left">Rank</th>
+              <th className="py-2 px-4 text-left">Name</th>
+              <th className="py-2 px-4 text-right">Score</th>
+            </tr>
+          </thead>
+          <tbody>
+            {scoreboard.map((entry, index) => (
+              <tr key={index} className={index % 2 === 0 ? 'bg-gray-100' : 'bg-white'}>
+                <td className="py-2 px-4">{index + 1}</td>
+                <td className="py-2 px-4">{entry.name}</td>
+                <td className="py-2 px-4 text-right">{entry.score}</td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
       </div>
     </div>
   );
-};
-
+  };
+  
 export default Game2048;
