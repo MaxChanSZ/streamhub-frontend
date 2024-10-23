@@ -68,6 +68,7 @@ const VideoChatbot: React.FC = () => {
   const [selectedVoice, setSelectedVoice] = useState<Voice | null>(null);
   const [voices, setVoices] = useState<Voice[]>([]);
   const [selectedLanguage, setSelectedLanguage] = useState('en-US');
+  const [speakingMessageId, setSpeakingMessageId] = useState<number | null>(null);
   const messagesEndRef = useRef<HTMLDivElement>(null);
   const recognitionRef = useRef<SpeechRecognition | null>(null);
   const synthRef = useRef<SpeechSynthesis | null>(null);
@@ -101,8 +102,7 @@ const VideoChatbot: React.FC = () => {
         };
   
         recognitionRef.current.onerror = (event: SpeechRecognitionErrorEvent) => {
-          console.error('Speech recognition error:', event.error);
-          setIsListening(false);
+          console.error('Speech recognition error', event.error);
         };
   
         recognitionRef.current.onend = () => {
@@ -111,86 +111,46 @@ const VideoChatbot: React.FC = () => {
       }
   
       synthRef.current = window.speechSynthesis;
-      
       const loadVoices = () => {
         const availableVoices = synthRef.current?.getVoices() || [];
         setVoices(availableVoices);
-        if (availableVoices.length > 0) {
-          setSelectedVoice(availableVoices[0]);
-        }
+        setSelectedVoice(availableVoices.find(voice => voice.lang === selectedLanguage) || null);
       };
-
-      loadVoices();
+  
       if (synthRef.current?.onvoiceschanged !== undefined) {
         synthRef.current.onvoiceschanged = loadVoices;
       }
+  
+      loadVoices();
     }
   }, [selectedLanguage]);
 
-  const scrollToBottom = () => {
-    messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
-  };
-
-  useEffect(scrollToBottom, [messages]);
-
-  const speak = (text: string) => {
-    if (synthRef.current && selectedVoice) {
-      const utterance = new SpeechSynthesisUtterance(text);
-      utterance.voice = selectedVoice;
-      utterance.lang = selectedLanguage;
-
-      utterance.onend = () => {
-        console.log('Speech finished');
-      };
-
-      synthRef.current.speak(utterance);
-    }
-  };
+  useEffect(() => {
+    messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' });
+  }, [messages]);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    if (!input.trim()) return;
-
-    const userMessage = { text: input, sender: 'user' as const };
+    if (input.trim() === '') return;
+  
+    const userMessage: Message = { text: input, sender: 'user' };
     setMessages(prevMessages => [...prevMessages, userMessage]);
     setInput('');
     setIsLoading(true);
-
+  
     try {
       const response = await sendChatMessage(input);
-      const botMessage = { text: response, sender: 'bot' as const };
+      const botMessage: Message = { text: response, sender: 'bot' };
       setMessages(prevMessages => [...prevMessages, botMessage]);
       if (isSpeaking) {
-        speak(response);
+        speakMessage(response, messages.length + 1);
       }
     } catch (error) {
-      console.error('Error generating response:', error);
-      const errorMessage = { text: 'Sorry, I encountered an error. Please try again.', sender: 'bot' as const };
+      console.error('Error sending message:', error);
+      const errorMessage: Message = { text: 'Sorry, there was an error processing your request.', sender: 'bot' };
       setMessages(prevMessages => [...prevMessages, errorMessage]);
-    }
-
-    setIsLoading(false);
-  };
-
-  const toggleListening = () => {
-    if (isListening) {
-      recognitionRef.current?.stop();
-      setIsListening(false);
-    } else {
-      if (!isSpeaking && recognitionRef.current) {
-        recognitionRef.current.lang = selectedLanguage;
-        recognitionRef.current.start();
-        setIsListening(true);
-      }
-    }
-  };  
-
-  const toggleSpeaking = () => {
-    setIsSpeaking(!isSpeaking);
-    if (isSpeaking) {
-      synthRef.current?.cancel();
-      setIsListening(false);
-      recognitionRef.current?.stop();
+    } finally {
+      setIsLoading(false);
     }
   };
 
@@ -206,17 +166,61 @@ const VideoChatbot: React.FC = () => {
     }
   };
 
-  const handleLanguageChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
-    setSelectedLanguage(e.target.value);
-    if (recognitionRef.current) {
-      recognitionRef.current.lang = e.target.value;
+  const toggleListening = () => {
+    if (isListening) {
+      recognitionRef.current?.stop();
+    } else {
+      recognitionRef.current?.start();
+      setIsListening(true);
     }
   };
 
+  const toggleSpeaking = () => {
+    setIsSpeaking(!isSpeaking);
+    if (isSpeaking) {
+      synthRef.current?.cancel();
+    }
+  };
+
+  const handleLanguageChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
+    const newLang = e.target.value;
+    setSelectedLanguage(newLang);
+    if (recognitionRef.current) {
+      recognitionRef.current.lang = newLang;
+    }
+    const newVoice = voices.find(voice => voice.lang === newLang);
+    setSelectedVoice(newVoice || null);
+  };
+
   const handleVoiceChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
-    const selectedVoice = voices.find(voice => voice.name === e.target.value);
-    if (selectedVoice) {
-      setSelectedVoice(selectedVoice);
+    const newVoice = voices.find(voice => voice.name === e.target.value);
+    setSelectedVoice(newVoice || null);
+  };
+
+  const speakMessage = (text: string, messageId: number) => {
+    if (synthRef.current && selectedVoice) {
+      // If there's already a message being spoken, stop it
+      if (speakingMessageId !== null) {
+        synthRef.current.cancel();
+      }
+
+      // If we're clicking on the same message that's already speaking, just stop and reset
+      if (speakingMessageId === messageId) {
+        setSpeakingMessageId(null);
+        return;
+      }
+
+      const utterance = new SpeechSynthesisUtterance(text);
+      utterance.voice = selectedVoice;
+      utterance.lang = selectedLanguage;
+
+      utterance.onend = () => {
+        console.log('Speech finished');
+        setSpeakingMessageId(null);
+      };
+
+      synthRef.current.speak(utterance);
+      setSpeakingMessageId(messageId);
     }
   };
 
@@ -245,9 +249,18 @@ const VideoChatbot: React.FC = () => {
           <div className="flex-grow overflow-y-auto p-3 bg-gray-900">
             {messages.map((message, index) => (
               <div key={index} className={`mb-3 ${message.sender === 'user' ? 'text-right' : 'text-left'}`}>
-                <span className={`inline-block p-2 rounded-lg ${message.sender === 'user' ? 'bg-blue-600 text-white' : 'bg-gray-700 text-gray-200'}`}>
+                <div className={`inline-block p-2 rounded-lg ${message.sender === 'user' ? 'bg-blue-600 text-white' : 'bg-gray-700 text-gray-200'}`}>
                   {message.text}
-                </span>
+                  {message.sender === 'bot' && (
+                    <button
+                      onClick={() => speakMessage(message.text, index)}
+                      className={`ml-2 text-gray-400 hover:text-gray-200 transition-colors duration-200 ${speakingMessageId === index ? 'text-blue-400' : ''}`}
+                      aria-label={speakingMessageId === index ? "Stop speaking" : "Speak message"}
+                    >
+                      <Volume2 size={16} />
+                    </button>
+                  )}
+                </div>
               </div>
             ))}
             <div ref={messagesEndRef} />
@@ -300,32 +313,18 @@ const VideoChatbot: React.FC = () => {
                     <button
                       type="button"
                       onClick={toggleListening}
-                      className={`bg-gray-700 text-white p-2 rounded hover:bg-gray-600 transition-colors duration-200 mr-2 ${isListening ? 'bg-red-600 hover:bg-red-700' : ''} ${isSpeaking ? 'opacity-50 cursor-not-allowed' : ''}`}
+                      className={`bg-gray-700 text-white p-2 rounded hover:bg-gray-600 transition-colors duration-200 mr-2 ${isListening ? 'bg-red-600 hover:bg-red-700' : ''}`}
                       aria-label={isListening ? "Stop listening" : "Start listening"}
-                      disabled={isSpeaking}
                     >
                       {isListening ? <MicOff size={20} /> : <Mic size={20} />}
                     </button>
-                    <button
-                      type="button"
-                      onClick={toggleSpeaking}
-                      className={`bg-gray-700 text-white p-2 rounded hover:bg-gray-600 transition-colors duration-200 ${isSpeaking ? 'bg-green-600 hover:bg-green-700' : ''}`}
-                      aria-label={isSpeaking ? "Mute" : "Unmute"}
-                    >
-                      {isSpeaking ? <Volume2 size={20} /> : <VolumeX size={20} />}
-                    </button>
                   </div>
-                  <button type="submit" className="bg-blue-600 text-white p-2 rounded hover:bg-blue-700 transition-colors duration-200" disabled={isLoading}>
-                    {isLoading ? (
-                      <svg className="animate-spin h-5 w-5 text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
-                        <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle>
-                        <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
-                      </svg>
-                    ) : (
-                      <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
-                        <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-8.707l-3-3a1 1 0 00-1.414 1.414L10.586 9H7a1 1 0 100 2h3.586l-1.293 1.293a1 1 0 101.414 1.414l3-3a1 1 0 000-1.414z" clipRule="evenodd" />
-                      </svg>
-                    )}
+                  <button
+                    type="submit"
+                    className="bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700 transition-colors duration-200"
+                    disabled={isLoading}
+                  >
+                    {isLoading ? 'Sending...' : 'Send'}
                   </button>
                 </div>
               </div>
